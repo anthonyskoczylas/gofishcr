@@ -307,3 +307,55 @@
   if (!CONFIG.whatsapp) $$('[data-wa]').forEach(function (a) { a.style.display = 'none'; });
   else $$('[data-wa]').forEach(function (a) { a.href = 'https://wa.me/' + CONFIG.whatsapp; });
 })();
+
+/* ---- THE DAY (home): sky, clock, rail, scrub, fleet rail ---- */
+(function () {
+  var day = document.getElementById('day'); if (!day) return;
+  var chapters = JSON.parse(day.getAttribute('data-chapters') || '[]');
+  var els = chapters.map(function (c) { return document.getElementById(c.id); });
+  var nav = document.querySelector('nav.top'), clock = document.querySelector('.nav-clock'), rail = document.querySelector('.rail');
+  var railLinks = rail ? Array.prototype.slice.call(rail.querySelectorAll('a')) : [];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = -1;
+  function setChapter(i) {
+    if (i === cur) return; cur = i; var c = chapters[i];
+    document.body.style.setProperty('--sky', c.sky);
+    if (nav) nav.classList.toggle('over-photo', !!c.photo);
+    if (clock) { clock.textContent = c.clock; clock.classList.toggle('on', i > 0 && c.id !== 'plan'); }
+    if (rail) { rail.classList.toggle('on', i > 0 && c.id !== 'plan'); rail.classList.toggle('photo', !!c.photo); railLinks.forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-ch') === c.id); }); }
+  }
+  function tick() {
+    var mid = window.innerHeight * 0.45, best = 0;
+    for (var i = 0; i < els.length; i++) { if (!els[i]) continue; var r = els[i].getBoundingClientRect(); if (r.top <= mid) best = i; }
+    setChapter(best);
+    // photo reveal for split chapters
+    document.querySelectorAll('.chapter .ph').forEach(function (p) { var r = p.getBoundingClientRect(); if (r.top < window.innerHeight * 0.9) p.classList.add('in'); });
+    scrub();
+  }
+  // lazy video sources: only load when near
+  var vids = Array.prototype.slice.call(document.querySelectorAll('.media video[data-src]'));
+  if (!reduce && 'IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var v = e.target; v.muted = true; if (!v.src) { v.src = v.getAttribute('data-src'); v.load(); } v.play().catch(function () { }); vio.unobserve(v); } }); }, { rootMargin: '60% 0px' });
+    vids.forEach(function (v) { vio.observe(v); });
+  }
+  // scroll scrub: Playa Grande frames drawn to canvas by chapter progress
+  var cv = document.getElementById('scrub'), ctx = cv && cv.getContext('2d'), frames = [], loaded = 0, count = cv ? +cv.getAttribute('data-count') : 0, base = cv && cv.getAttribute('data-frames'), lastIdx = -1;
+  if (cv && !reduce) {
+    var first = new Image(); first.src = base + '001.jpg'; first.onload = function () { frames[0] = first; draw(0); };
+    var started = false;
+    function preload() { if (started) return; started = true; for (var i = 2; i <= count; i++) (function (i) { var im = new Image(); im.src = base + ('00' + i).slice(-3) + '.jpg'; im.onload = function () { frames[i - 1] = im; loaded++; }; })(i); }
+    var pio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { preload(); pio.disconnect(); } }, { rootMargin: '120% 0px' });
+    pio.observe(cv);
+    function draw(i) { var im = frames[i]; if (!im) { for (var j = i; j >= 0; j--) if (frames[j]) { im = frames[j]; break; } } if (!im) return; var cw = cv.width, ch = cv.height, s = Math.max(cw / im.width, ch / im.height), w = im.width * s, h = im.height * s; ctx.drawImage(im, (cw - w) / 2, (ch - h) / 2, w, h); }
+  } else if (cv) { cv.style.display = 'none'; var po = cv.parentNode.querySelector('img.poster'); if (po) po.style.display = 'block'; }
+  function scrub() {
+    if (!cv || reduce) return; var sec = cv.closest('.chapter'); var r = sec.getBoundingClientRect(); var span = r.height + window.innerHeight; var p = (window.innerHeight - r.top) / span; p = Math.max(0, Math.min(1, p));
+    var idx = Math.round(p * (count - 1)); if (idx !== lastIdx) { lastIdx = idx; draw(idx); }
+  }
+  // fleet rail arrows
+  var fr = document.getElementById('fleet-rail');
+  document.querySelectorAll('[data-rail]').forEach(function (b) { b.addEventListener('click', function () { var card = fr.querySelector('.boat'); fr.scrollBy({ left: (card ? card.offsetWidth + 16 : 360) * +b.getAttribute('data-rail'), behavior: 'smooth' }); }); });
+  var raf = false;
+  window.addEventListener('scroll', function () { if (!raf) { raf = true; requestAnimationFrame(function () { raf = false; tick(); }); } }, { passive: true });
+  window.addEventListener('resize', tick); tick();
+})();

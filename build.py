@@ -5,6 +5,7 @@ Edit content in data/*.json; edit copy for discover pages below.
 """
 import json, os, re, html, datetime
 ROOT = os.path.dirname(os.path.abspath(__file__))
+BUILD = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 D = lambda n: json.load(open(os.path.join(ROOT, 'data', n)))
 FLEET, ADV, DINING, BLOG = D('fleet.json'), D('adventures.json'), D('dining.json'), D('blog.json')
 IMG = set(os.listdir(os.path.join(ROOT, 'img')))
@@ -47,12 +48,12 @@ def fleet_js():
 # ---------------------------------------------------------------- layout
 def nav(root, light=False):
     dd = ''.join('<li><a href="%sdiscover/%s.html">%s</a></li>' % (root, s, t) for s, t in [('about-us','About Steve & Liisa'),('our-pledge-to-you','Our Pledge'),('crews-equipment','Crews & Equipment'),('fish-seasons','Fish & Seasons'),('guanacaste-fishing','Guanacaste Fishing'),('weather','Weather'),('contact-us','Contact')])
-    return f'''<nav class="top{' light' if light else ''}"><div class="wrap">
+    return f'''<nav class="top over-photo{' light' if light else ''}"><div class="wrap">
 <a class="logo" href="{root}index.html" aria-label="Go Fish Costa Rica home"><img class="lm" src="{root}img/logo.svg" alt="Go Fish Costa Rica"></a>
 <ul class="nav-links">
 <li><a href="{root}charters/">Fishing Charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}dining/">Dining</a></li>
 <li><a href="{root}discover/">Discover</a><ul class="dd">{dd}</ul></li><li><a href="{root}gallery.html">Gallery</a></li><li><a href="{root}blog/">Blog</a></li></ul>
-<a class="nav-cta" href="{root}book.html">Plan my trip</a>
+<span class="nav-clock" aria-hidden="true"></span><a class="nav-cta" href="{root}book.html">Plan my trip</a>
 <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
 <div class="drawer"><button class="close" aria-label="Close">&times;</button>
 <a href="{root}charters/">Fishing Charters</a><a href="{root}adventures/">Adventures</a><a href="{root}dining/">Dining</a><a href="{root}gallery.html">Gallery</a><a href="{root}blog/">Blog</a><a href="{root}discover/">Discover</a>
@@ -79,14 +80,14 @@ def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
 <link rel="icon" type="image/svg+xml" href="{root}img/logo.svg">
 <meta property="og:title" content="{E(html.unescape(title))}"><meta property="og:description" content="{E(html.unescape(desc))}"><meta property="og:image" content="{root}video/hero-poster.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/style.css">{extra_head}
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@100..150,400..900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{root}assets/style.css?v={BUILD}">{extra_head}
 </head>
 <body>
 {nav(root, light)}
 {body}
 {footer(root)}{bookbar}
-<script src="{root}assets/site.js"></script>
+<script src="{root}assets/site.js?v={BUILD}"></script>
 </body></html>'''
 
 def write(path, content):
@@ -533,7 +534,8 @@ def extras():
     write('robots.txt', 'User-agent: *\nAllow: /\nSitemap: https://gofishcr.com/sitemap.xml\n')
 
 if __name__ == '__main__':
-    home(); charters(); adventures(); dining(); discover(); n = gallery(); blog(); planner(); extras()
+    import day
+    write('index.html', day.home(dict(E=E, img=img, FLEET=FLEET, ADV=ADV, boat_len=boat_len, SOCIAL=SOCIAL, EMAIL=EMAIL, PHONE=PHONE, PHONE_TEL=PHONE_TEL, REVIEWS=REVIEWS, page=page, fleet_js=fleet_js))); charters(); adventures(); dining(); discover(); n = gallery(); blog(); planner(); extras()
     pages = sum(len([f for f in fs if f.endswith('.html')]) for _, _, fs in os.walk(ROOT) if '/dl' not in _)
     print('built', pages, 'pages ·', n, 'gallery photos')
     if MISSING: print('MISSING IMAGES:', sorted(MISSING))
