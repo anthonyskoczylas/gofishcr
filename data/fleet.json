@@ -1,0 +1,479 @@
+[
+ {
+  "slug": "21-custom-center-console",
+  "name": "21' Custom Center Console",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": false,
+  "priced_for": 4,
+  "max_pax": 4,
+  "features": [
+   "Shaded deck with bimini top"
+  ],
+  "half": 700,
+  "three_quarter": 950,
+  "full": 1200,
+  "quote": false,
+  "images": [
+   "21_custom_center_console.jpg",
+   "21-center.jpg"
+  ]
+ },
+ {
+  "slug": "28-century",
+  "name": "28' Century",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 4,
+  "features": [
+   "Fish Finder",
+   "GPS",
+   "Depth Sounder",
+   "Bluetooth Stereo",
+   "Radio Communication",
+   "Livewell",
+   "Washroom"
+  ],
+  "half": 750,
+  "three_quarter": 925,
+  "full": 1150,
+  "quote": false,
+  "images": [
+   "28-century.jpg",
+   "img_3182-scaled-e1699813527457-copy.jpg",
+   "img_3171-scaled-e1699813422509-copy.jpg",
+   "img_3162-scaled-e1699813278418-copy.jpg",
+   "img_3187-scaled-e1699813580663-copy.jpg",
+   "img_3190-scaled-e1699813618186-copy.jpg"
+  ]
+ },
+ {
+  "slug": "28-whitewater-center-console",
+  "name": "28' Whitewater Center Console",
+  "locations": [
+   "Tamarindo",
+   "Flamingo"
+  ],
+  "top": true,
+  "washroom": false,
+  "priced_for": 4,
+  "max_pax": 6,
+  "features": [
+   "Twin 150 Mercury 4 stroke",
+   "Built to fish & run"
+  ],
+  "half": 975,
+  "three_quarter": 1200,
+  "full": 1400,
+  "quote": false,
+  "images": [
+   "dsc_0015.jpg",
+   "dsc_0010.jpg",
+   "418a3147.jpg",
+   "418a3152.jpg",
+   "418a3156.jpg"
+  ]
+ },
+ {
+  "slug": "29-center-console",
+  "name": "29' Center Console",
+  "locations": [
+   "Flamingo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 6,
+  "features": [
+   "Twin 150hp Yamaha outboards",
+   "Small washroom"
+  ],
+  "half": 775,
+  "three_quarter": 975,
+  "full": 1175,
+  "quote": false,
+  "images": [
+   "915da488-7060-43c6-b094-ca45ffa97d1a.jpg",
+   "b5cf3fe5-9c31-48e2-a7d7-8e5fa69cdb57.jpg",
+   "29_-1.jpg",
+   "29_-4.jpg",
+   "29_-5.jpg",
+   "29_-6.jpg",
+   "29_-cc.jpg",
+   "29_-cc..jpg",
+   "29_.jpg"
+  ]
+ },
+ {
+  "slug": "31-bertram-twin",
+  "name": "31' Bertram Classic",
+  "locations": [
+   "Flamingo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 5,
+  "features": [
+   "Twin cat diesels",
+   "Full washroom"
+  ],
+  "half": 1100,
+  "three_quarter": 1400,
+  "full": 1600,
+  "quote": false,
+  "images": [
+   "31-bertram-classic.jpg",
+   "1b836dcb-20c8-44e4-9c72-d8ffc86d9c80.jpg",
+   "2b525ecf-063e-4d5f-a437-9e0cb139a1bc.jpg",
+   "4f85564c-6c71-442b-803c-bf1b266d713d.jpg",
+   "7bd003cf-567b-44bc-aa89-e8e16906fd26.jpg",
+   "3985e860-e418-40ae-ae88-2a42792e8ee4.jpg",
+   "05173f55-f209-4018-bdf2-54d0885ae882.jpg",
+   "df979b0b-8d77-4c76-ae8a-0e272cbc0ab8.jpg"
+  ]
+ },
+ {
+  "slug": "31-chris-craft",
+  "name": "31' Chris Craft",
+  "locations": [
+   "Flamingo",
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 6,
+  "features": [
+   "Twin 6BTA Cummings engines",
+   "Washroom",
+   "Full Garmin electronics & radar"
+  ],
+  "half": 1100,
+  "three_quarter": 1400,
+  "full": 1600,
+  "quote": false,
+  "images": [
+   "418a3110-2.jpg",
+   "1.jpg",
+   "3.jpg",
+   "4.jpg",
+   "5.jpg",
+   "418a3070.jpg",
+   "418a3081.jpg",
+   "418a3090.jpg",
+   "418a3094.jpg"
+  ]
+ },
+ {
+  "slug": "31-custom-bertram-twin",
+  "name": "31' Custom Bertram",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 5,
+  "features": [
+   "Twin B210 Cummings engines",
+   "Washroom",
+   "Air Conditioning",
+   "Full Garmin electronics & radar"
+  ],
+  "half": 1100,
+  "three_quarter": 1400,
+  "full": 1600,
+  "quote": false,
+  "images": [
+   "31-custom-bertram.jpg"
+  ]
+ },
+ {
+  "slug": "31-gamefisher",
+  "name": "31' Gamefisher II",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": false,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 5,
+  "features": [
+   "Twin Cummings diesel engines",
+   "Washroom"
+  ],
+  "half": 950,
+  "three_quarter": 1250,
+  "full": 1450,
+  "quote": false,
+  "images": [
+   "31_gamefisherfb.jpg",
+   "31_-gamefisher.jpg",
+   "31_-gamefisher-coyote.jpg",
+   "31_-gamefisherfb.jpg",
+   "31_-gffb.jpg",
+   "31_-seating.jpg"
+  ]
+ },
+ {
+  "slug": "31-island-hopper",
+  "name": "31' Island Hopper",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 5,
+  "features": [
+   "450hp Turbo Diesel",
+   "Small Washroom"
+  ],
+  "half": 1050,
+  "three_quarter": 1350,
+  "full": 1550,
+  "quote": false,
+  "images": [
+   "31_-hopper.jpg",
+   "31_-island-hopper..jpg",
+   "31_-island..jpg",
+   "rhino6.jpg"
+  ]
+ },
+ {
+  "slug": "35-cabo",
+  "name": "35' Cabo Express",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 4,
+  "max_pax": 8,
+  "features": [
+   "A/C",
+   "Fish Finder",
+   "Out triggers"
+  ],
+  "half": 1380,
+  "three_quarter": 1850,
+  "full": 2050,
+  "quote": false,
+  "images": [
+   "35cabo2.jpg",
+   "35cabo1.jpg",
+   "35cabo3.jpg",
+   "35cabo4.jpg",
+   "35cabo5.jpg",
+   "35cabo6.jpg",
+   "35cabo7.jpg",
+   "35cabo8.jpg"
+  ]
+ },
+ {
+  "slug": "35-carolina-classic",
+  "name": "35' Carolina Classic",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 6,
+  "max_pax": 6,
+  "features": [
+   "Twin 500hp Cummins Engines",
+   "Full Electronics",
+   "Top Quality Tackle"
+  ],
+  "half": 1250,
+  "three_quarter": 1750,
+  "full": 1950,
+  "quote": false,
+  "images": [
+   "franks-35_.jpg",
+   "35_-carolina..jpg",
+   "35_-cc-seating-2..jpg",
+   "35_.jpg",
+   "11951100_1028601940491947_3219049044806104779_n.jpg"
+  ]
+ },
+ {
+  "slug": "38-riviera",
+  "name": "38' Riviera",
+  "locations": [
+   "Flamingo",
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 8,
+  "max_pax": 8,
+  "features": [
+   "Twin 350hp Cummins Diesel Engines",
+   "Full Washroom",
+   "Full Electronics",
+   "Professional Captain & Crew"
+  ],
+  "half": 1750,
+  "three_quarter": 2150,
+  "full": 2350,
+  "quote": false,
+  "images": [
+   "ce0839d8-7cbe-4969-832f-9cc988c93992.jpg",
+   "3b1bd27f-c955-4594-86ae-59b502e751f8-2.jpg",
+   "38-riveria-cabin-4.jpg",
+   "38-riveria-seating.jpg",
+   "c19ba385-d875-4998-981b-4504e58162df.jpg",
+   "full-washroom.jpg"
+  ]
+ },
+ {
+  "slug": "40-lagoon-private-catamaran",
+  "name": "40' Lagoon Private Catamaran",
+  "locations": [
+   "Flamingo"
+  ],
+  "top": false,
+  "washroom": true,
+  "priced_for": null,
+  "max_pax": null,
+  "features": [
+   "Morning or Sunset Tours Available"
+  ],
+  "half": null,
+  "three_quarter": null,
+  "full": null,
+  "quote": true,
+  "images": [
+   "p8.jpg",
+   "p4.jpg",
+   "p5.jpg",
+   "p6.jpg"
+  ]
+ },
+ {
+  "slug": "42-lagoon-private-catamaran",
+  "name": "42' Lagoon Private Catamaran",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": false,
+  "washroom": true,
+  "priced_for": null,
+  "max_pax": null,
+  "features": [
+   "Morning or Sunset Tours Available"
+  ],
+  "half": null,
+  "three_quarter": null,
+  "full": null,
+  "quote": true,
+  "images": [
+   "_42.-catamaran-k.jpg",
+   "_42-cat-covered-area.jpg",
+   "_42-front.jpg",
+   "_42-sunset.jpg",
+   "_img_8823.jpg",
+   "_img_8824.jpg",
+   "covered-seating.jpg",
+   "inside-seating.jpg"
+  ]
+ },
+ {
+  "slug": "43-ocean",
+  "name": "43' Ocean",
+  "locations": [
+   "Flamingo",
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 8,
+  "max_pax": 9,
+  "features": [
+   "A/C",
+   "Radio",
+   "GPS",
+   "Out triggers",
+   "2 bedrooms"
+  ],
+  "half": 2100,
+  "three_quarter": 2500,
+  "full": 2800,
+  "quote": false,
+  "images": [
+   "img_8443.jpg",
+   "summer-salt.jpg",
+   "80285c0c-690d-4889-b15a-1f5869f36b0d.jpg",
+   "11b2ddcf-86c0-4bd0-81d2-d1abcbcd0ddb.jpg",
+   "59027839-f3ab-40e0-934d-08c81bb596c0.jpg",
+   "d2c3efd3-2a22-40a4-810f-629c474bceb2.jpg",
+   "d26ff15c-d60a-4a65-bfa6-9ecc5a8672b5.jpg"
+  ]
+ },
+ {
+  "slug": "43-riviera-team-edition",
+  "name": "43' Riviera Team Edition",
+  "locations": [
+   "Flamingo",
+   "Tamarindo"
+  ],
+  "top": true,
+  "washroom": true,
+  "priced_for": 8,
+  "max_pax": 9,
+  "features": [
+   "Twin Inboared Cummins 480hp Diesel Engines",
+   "Full Cabin and Head",
+   "Flybridge / Marlin Tower",
+   "Full Electronics",
+   "Professional Captain & Crew"
+  ],
+  "half": 2100,
+  "three_quarter": 2500,
+  "full": 2800,
+  "quote": false,
+  "images": [
+   "43_-riviera-pics4.jpg",
+   "43_-interior.jpg",
+   "43_-riviera-pics.jpg",
+   "43_-riviera-pics2.jpg",
+   "43_-riviera-pics3-side-view.jpg",
+   "43_-riviera-pics5.jpg",
+   "43_-seating-area.jpg",
+   "43-riviera-mast.jpg",
+   "43-rivira-lounge.jpg",
+   "43-riviera-head.jpg"
+  ]
+ },
+ {
+  "slug": "65-private-catamaran",
+  "name": "65' Private Catamaran",
+  "locations": [
+   "Tamarindo"
+  ],
+  "top": false,
+  "washroom": true,
+  "priced_for": null,
+  "max_pax": null,
+  "features": [
+   "Morning or Sunset Tours Available"
+  ],
+  "half": null,
+  "three_quarter": null,
+  "full": null,
+  "quote": true,
+  "images": [
+   "65-catamaran.jpg",
+   "65.jpg",
+   "img_1365.jpg"
+  ]
+ }
+]
