@@ -2,14 +2,14 @@
 import json
 
 CHAPTERS = [  # (id, clock, sky color for the page background while this chapter is in view, over-photo)
-    ('dawn', '05:30', '#1b1f4e', True),
-    ('sand', '06:45', '#e8eef2', False),
-    ('launch', '07:00', '#0c1334', True),
-    ('shelf', '08:40', '#0c1334', True),
-    ('bite', '10:15', '#edf3f5', False),
-    ('lunch', '13:00', '#f6f3ea', False),
-    ('beach', '16:00', '#0c1334', True),
-    ('sunset', '17:45', '#f1e2c6', False),
+    ('dawn', 'Dawn', '#1b1f4e', True),
+    ('sand', 'Boats', '#e8eef2', False),
+    ('launch', 'Launch', '#0c1334', True),
+    ('shelf', 'Offshore', '#0c1334', True),
+    ('bite', 'Hookup', '#edf3f5', False),
+    ('lunch', 'Lunch', '#f6f3ea', False),
+    ('beach', 'Beach', '#0c1334', True),
+    ('sunset', 'Sunset', '#f1e2c6', False),
     ('plan', 'Your day', '#ede0c8', False),
 ]
 
@@ -28,67 +28,67 @@ def home(ctx):
     body = f'''<div class="day" id="day" data-chapters='{chapters_js}'>
 <nav class="rail" aria-label="Hours of the day">{rail}</nav>
 
-<!-- 05:30 -->
+<!-- chapter -->
 <section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/dawn.jpg" alt="Playa Tamarindo before sunrise, sport fishing boats moored in the bay" fetchpriority="high"><div class="scrim b"></div></div>
-<div class="wrap"><div class="ch-copy"><div class="t">05:30 · Playa Tamarindo</div>
+<div class="wrap"><div class="ch-copy"><div class="t">First light · Playa Tamarindo</div>
 <h1>One day on the water. <em>Let's plan yours.</em></h1>
-<p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, hour by hour. Scroll through it, then tell us your dates.</p>
+<p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, start to finish. Scroll through it, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
 <div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor, every year since 2018</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Costa Rica</div></div>
 </div></div></section>
 
-<!-- 06:45 -->
-<section class="chapter" id="sand"><div class="stamp" aria-hidden="true">06:45</div>
-<div class="wrap" style="padding-top:clamp(110px,16vh,180px);padding-bottom:clamp(48px,7vh,80px)"><div class="ch-copy"><div class="t">06:45 · On the sand</div>
+<!-- chapter -->
+<section class="chapter" id="sand"><div class="stamp" aria-hidden="true">Boats</div>
+<div class="wrap" style="padding-top:clamp(110px,16vh,180px);padding-bottom:clamp(48px,7vh,80px)"><div class="ch-copy"><div class="t">On the sand</div>
 <h2>Pick your boat. We already picked the captain.</h2>
 <p>Every hull here is one Steve and Liisa have fished from, and every captain is one they'd put their own family with. Rates are per boat and include gear, bait, drinks and lunch on the longer days. Tell us your group and budget, and we'll tell you which one.</p></div>
 <div class="fleet-rail" id="fleet-rail">{''.join(boat(b) for b in rail_boats)}</div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><a class="link" href="{r}charters/">All seventeen boats and rates</a><div class="rail-nav"><button type="button" data-rail="-1" aria-label="Previous boats">&#8249;</button><button type="button" data-rail="1" aria-label="More boats">&#8250;</button></div></div>
 </div></section>
 
-<!-- 07:00 -->
-<section class="chapter photo on-photo" id="launch"><div class="stamp" aria-hidden="true">07:00</div>
+<!-- chapter -->
+<section class="chapter photo on-photo" id="launch"><div class="stamp" aria-hidden="true">Launch</div>
 <div class="media"><video autoplay muted loop playsinline poster="{r}img/{img('35cabo2.jpg')}" data-src="{r}video/launch.mp4"></video><img class="poster" src="{r}img/{img('35cabo2.jpg')}" alt=""><div class="scrim"></div></div>
-<div class="wrap"><div class="ch-copy" style="max-width:56ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">07:00 · Lines off</div>
+<div class="wrap"><div class="ch-copy" style="max-width:56ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">Lines off</div>
 <h2>Off the beach. No marina, no waiting.</h2>
-<p>In Tamarindo the boats launch straight off the sand, a panga runs you out and you're fishing before the town wakes up. In Flamingo you step off the dock at the marina. Either way the crew has already loaded ice, bait and the lunch.</p>
+<p>In Tamarindo the boats launch straight off the sand, a panga runs you out and you're fishing while the town is still waking up. In Flamingo you step off the dock at the marina. Either way the crew has already loaded ice, bait and the lunch.</p>
 <p><a class="link" href="{r}charters/?base=Tamarindo">Tamarindo boats</a> &nbsp;&nbsp; <a class="link" href="{r}charters/?base=Flamingo">Flamingo boats</a></p></div></div></section>
 
-<!-- 08:40 -->
-<section class="chapter photo on-photo" id="shelf"><div class="stamp" aria-hidden="true">08:40</div>
+<!-- chapter -->
+<section class="chapter photo on-photo" id="shelf"><div class="stamp" aria-hidden="true">Offshore</div>
 <div class="media"><video autoplay muted loop playsinline poster="{r}img/offshore-aerial.jpg" data-src="{r}video/offshore.mp4"></video><img class="poster" src="{r}img/offshore-aerial.jpg" alt=""><div class="scrim r"></div></div>
-<div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy" style="max-width:52ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">08:40 · The shelf</div>
+<div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy" style="max-width:52ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">The shelf</div>
 <h2>Forty minutes out, a thousand feet down.</h2>
 <p>About forty minutes at cruise and the bottom falls away to a thousand feet. That edge is where the sailfish, marlin, tuna and mahi live, and it is why this stretch of the North Pacific holds so many IGFA records. Half days stay inshore; 3/4 and full days make the run.</p>
 <p><a class="link" href="{r}discover/guanacaste-fishing.html">Why Tamarindo fishes differently</a></p></div></div></section>
 
-<!-- 10:15 -->
-<section class="chapter two flip" id="bite"><div class="stamp" aria-hidden="true">10:15</div>
+<!-- chapter -->
+<section class="chapter two flip" id="bite"><div class="stamp" aria-hidden="true">Hookup</div>
 <div class="wrap"><div class="trio"><a href="{r}img/{img('sailfish-jump.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish-jump.jpg')}" alt="Sailfish leaping behind the transom" loading="lazy"></a><a href="{r}img/{img('sailfish.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish.jpg')}" alt="Sailfish boatside, about to be released" loading="lazy"></a><a href="{r}img/{img('roosterfish.jpg')}" data-lb="bite"><img src="{r}img/{img('roosterfish.jpg')}" alt="Roosterfish" loading="lazy"></a></div>
-<div class="ch-copy"><div class="t">10:15 · Sailfish up</div>
+<div class="ch-copy"><div class="t">Sailfish up</div>
 <h2>Roosters inshore. Sails and marlin off the edge.</h2>
 <p>Half days stay along the rocks for roosterfish, snapper and jacks. Go 3/4 or full and you're offshore for sailfish, marlin, tuna and mahi. Sailfish peak May to August, blue marlin November to April, and there is no month here with nothing biting.</p>
 <p><a class="link" href="{r}discover/fish-seasons.html">The month by month calendar</a></p></div></div></section>
 
-<!-- 13:00 -->
-<section class="chapter two" id="lunch"><div class="stamp" aria-hidden="true">13:00</div>
+<!-- chapter -->
+<section class="chapter two" id="lunch"><div class="stamp" aria-hidden="true">Lunch</div>
 <div class="wrap"><div class="ph rv"><img src="{r}img/{img('lunch-cooler.jpg')}" alt="Cooler open on deck: cold beer, fruit and a sandwich" loading="lazy"><div class="cap">Every charter: fruit, soda, water, beer. Light lunch on 3/4 and full days.</div></div>
-<div class="ch-copy"><div class="t">13:00 · Lunch on the bridge</div>
+<div class="ch-copy"><div class="t">Lunch on the bridge</div>
 <h2>Cold beer, a sandwich, and the story you'll tell for years.</h2>
 <p>Table fish come home with you; half the restaurants in town will cook your catch that night. Billfish go back in the water, every one. Tips aren't expected, but a crew that worked hard for you will remember 15 to 20 percent.</p>
 <p><a class="link" href="{r}dining/">Where we eat in Tamarindo</a></p></div></div></section>
 
-<!-- 16:00 -->
-<section class="chapter photo on-photo" id="beach"><div class="stamp" aria-hidden="true">16:00</div>
+<!-- chapter -->
+<section class="chapter photo on-photo" id="beach"><div class="stamp" aria-hidden="true">Beach</div>
 <div class="media"><canvas id="scrub" data-frames="{r}video/day/pg_" data-count="120" width="1440" height="810"></canvas><img class="poster" src="{r}video/playa-grande-poster.jpg" alt="Tamarindo bay from the air at golden hour"><div class="scrim b"></div></div>
-<div class="wrap" style="display:flex;align-items:flex-end;min-height:100svh;padding-bottom:clamp(48px,8vh,88px)"><div class="ch-copy" style="max-width:54ch"><div class="t">16:00 · Back on the sand</div>
+<div class="wrap" style="display:flex;align-items:flex-end;min-height:100svh;padding-bottom:clamp(48px,8vh,88px)"><div class="ch-copy" style="max-width:54ch"><div class="t">Back on the sand</div>
 <h2>Golden hour over Tamarindo bay, and dinner already booked.</h2>
 <p>The boat drops you where it picked you up. Shower, sunset, a table Liisa reserved at Pangas or El Chiringuito. Tomorrow could be the zipline, the estuary with the kids, or the boat again.</p></div></div></section>
 
-<!-- 17:45 -->
-<section class="chapter two flip" id="sunset"><div class="stamp" aria-hidden="true">17:45</div>
+<!-- chapter -->
+<section class="chapter two flip" id="sunset"><div class="stamp" aria-hidden="true">Sunset</div>
 <div class="wrap"><div class="ph land rv"><img src="{r}img/{img('_42-sunset.jpg')}" alt="Sunset from the 42-foot catamaran off Tamarindo" loading="lazy"><div class="cap">Sunset catamaran: sail, snorkel, paddleboard, open bar. $108 per adult, kids $74.</div></div>
-<div class="ch-copy"><div class="t">17:45 · Sunset sail</div>
+<div class="ch-copy"><div class="t">Sunset sail</div>
 <h2>The half of the family that didn't fish gets their day too.</h2>
 <p>Sixteen adventures we've done ourselves: the sunset catamaran, ATVs through the back roads, the estuary crocodiles, Rio Celeste, a spa afternoon. Most pick up from your hotel in Tamarindo or Flamingo. We book them all in one email.</p>
 <p><a class="link" href="{r}adventures/">All sixteen adventures</a></p></div></div></section>
