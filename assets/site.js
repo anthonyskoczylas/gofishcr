@@ -7,7 +7,8 @@
   var CONFIG = {
     email: 'gofishcr@gmail.com',
     phone: '1-888-434-7491',
-    whatsapp: ''
+    whatsapp: '',
+    behold: ''   // Behold.so feed ID for @gofishcostarica; leave empty until Steve creates one at behold.so
   };
   window.GF_CONFIG = CONFIG;
 
@@ -157,6 +158,7 @@
         'Name: ' + f.name.value,
         'Email: ' + f.email.value,
         f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
+        'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
       ]);
       showSent(bp, req, 'Your request for the ' + B.name + ' is ready to send.');
@@ -174,6 +176,7 @@
       f.base ? 'Pickup area: ' + f.base.value : '',
       'Name: ' + f.name.value, 'Email: ' + f.email.value,
       f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
+      'Transportation: ' + (f.transport.value || 'not needed'),
       f.notes.value ? 'Notes: ' + f.notes.value : ''
     ]);
     showSent(ap, req, 'Your request is ready to send.');
@@ -292,6 +295,7 @@
         'Guests: ' + state.pax,
         'Name: ' + f.name.value, 'Email: ' + f.email.value,
         f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
+        'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
       ]);
       showSent(e.target, req, 'Your trip request is ready.');
@@ -303,6 +307,14 @@
   // ---- MOBILE BOOK BAR -----------------------------------------------------
   var bar = $('.bookbar');
   if (bar) { document.body.classList.add('has-bookbar'); var t = $('#boat-book') || $('#adv-book'); if (t) { var io2 = new IntersectionObserver(function (es) { bar.classList.toggle('show', !es[0].isIntersecting); }); io2.observe(t); } else bar.classList.add('show'); }
+
+  // ---- INSTAGRAM (Behold.so) -----------------------------------------------
+  var ig = $('#ig-feed');
+  if (ig && CONFIG.behold) {
+    var sc = document.createElement('script'); sc.type = 'module'; sc.src = 'https://w.behold.so/widget.js'; document.head.appendChild(sc);
+    ig.innerHTML = '<behold-widget feed-id="' + CONFIG.behold + '"></behold-widget>';
+    var fb = $('#ig-fallback'); if (fb) fb.style.display = 'none';
+  }
 
   // ---- HIDE WHATSAPP LINKS IF NOT CONFIGURED -------------------------------
   if (!CONFIG.whatsapp) $$('[data-wa]').forEach(function (a) { a.style.display = 'none'; });

@@ -259,6 +259,7 @@ def boat_page(b):
 <div class="fld"><label for="bk-name">Your name</label><input id="bk-name" name="name" required autocomplete="name"></div>
 <div class="row2"><div class="fld"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="bk-phone">Phone / WhatsApp</label><input id="bk-phone" name="phone" autocomplete="tel"></div></div>
 <div class="fld"><label for="bk-notes">What do you want to catch? Where are you staying?</label><textarea id="bk-notes" name="notes"></textarea></div>
+<div class="fld"><label for="bk-tr">Need transportation?</label><select id="bk-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 {'<div class="est" id="est"><span><small>Estimated total</small></span><span style="text-align:right"><b></b><small></small></span></div>' if not b['quote'] else ''}
 <button class="btn btn-primary btn-block" type="submit">Request this boat</button>
 <div class="note">You pay the boat directly on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing license and crew tips extra.</div>
@@ -326,6 +327,7 @@ def adv_page(a):
 <div class="fld"><label for="ab-name">Your name</label><input id="ab-name" name="name" required autocomplete="name"></div>
 <div class="row2"><div class="fld"><label for="ab-email">Email</label><input id="ab-email" type="email" name="email" required></div><div class="fld"><label for="ab-phone">Phone / WhatsApp</label><input id="ab-phone" name="phone"></div></div>
 <div class="fld"><label for="ab-notes">Hotel, ages of kids, anything else</label><textarea id="ab-notes" name="notes"></textarea></div>
+<div class="fld"><label for="ab-tr">Need transportation?</label><select id="ab-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <button class="btn btn-primary btn-block" type="submit">Request this tour</button>
 <div class="note">No payment online. We hold the spot and you pay the operator on the day unless told otherwise.</div></form></aside></div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More adventures</div><h2 style="font-size:30px">You might also like</h2></div><a class="btn btn-ghost btn-sm" href="{r}adventures/">All adventures</a></div><div class="grid g3">{''.join(adv_card(x, r) for x in others)}</div></div></section>'''
@@ -518,6 +520,7 @@ def planner():
 <form id="wiz-form"><div class="fld"><label for="w-name">Your name</label><input id="w-name" name="name" required autocomplete="name"></div>
 <div class="row2"><div class="fld"><label for="w-email">Email</label><input id="w-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="w-phone">Phone / WhatsApp</label><input id="w-phone" name="phone" autocomplete="tel"></div></div>
 <div class="fld"><label for="w-notes">Where are you staying? What do you want to catch? Kids' ages?</label><textarea id="w-notes" name="notes"></textarea></div>
+<div class="fld"><label for="w-tr">Need transportation?</label><select id="w-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button class="btn btn-primary" type="submit">Send my request</button></div></form></div>
 </div>
 <p class="small muted" style="text-align:center;margin-top:24px">Prefer to talk? Call toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a> or email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div></section>'''

@@ -30,10 +30,10 @@ def home(ctx):
 <nav class="rail" aria-label="Hours of the day">{rail}</nav>
 
 <!-- chapter -->
-<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-rooster.jpg" alt="Roosterfish held up on deck off Tamarindo, moments before release" fetchpriority="high" style="object-position:38% 30%"><div class="scrim hero-scrim"></div></div>
-<div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
-<h1>One day on the water. <em>Let's plan yours.</em></h1>
-<p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, start to finish. Scroll through it, then tell us your dates.</p>
+<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-marlin.jpg" alt="Blue marlin airborne behind the transom off Tamarindo" fetchpriority="high" style="object-position:62% 40%"><div class="scrim hero-scrim-l"></div></div>
+<div class="wrap"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
+<h1>Costa Rica's number one <em>sportfishing operation.</em></h1>
+<p class="lead">Seventeen boats out of Tamarindo and Flamingo, captains we know by name, and fifteen straight years of TripAdvisor Travelers' Choice. Scroll through a day with us, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
 <div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor, every year since 2018</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Costa Rica</div></div>
 </div></div></section>
@@ -125,6 +125,10 @@ def home(ctx):
 </div>
 <div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award</div></div>
 </div></section>
+
+<section class="tight"><div class="wrap"><div class="ig"><div><div class="t">Follow the action</div><h2 style="font-size:clamp(28px,3vw,40px)">@gofishcostarica</h2></div><a class="btn btn-ghost" href="{SOCIAL['ig']}" target="_blank" rel="noopener">Follow on Instagram</a></div>
+<div id="ig-feed" style="margin-top:26px"></div>
+<div id="ig-fallback" class="strip" style="margin-top:26px">{''.join(f'<a href="{r}img/{img(g)}" data-lb="ig"><img src="{r}img/{img(g)}" alt="" loading="lazy"></a>' for g in ['9a000add-c9c3-4b54-8f98-1a677dcc7a50.jpg','img_0928.jpg','24fc1498-da0a-47ce-8efb-bf1912a823da.jpg','c3ab02f9-e7ba-41a2-9329-e6dad4d32470.jpg','liisa_crew.jpg'])}</div></div></section>
 
 <section class="reviews-wall"><div class="wrap">
 <div class="rw-head"><div><div class="t">What people say</div><h2>590 reviews. <em>581 of them say Excellent.</em></h2></div>
