@@ -123,7 +123,14 @@ def home(ctx):
 <div class="aw"><b>5.0</b><span>on TripAdvisor from 590 reviews, and 5.0 on Google</span></div>
 <div class="aw"><b>1,000+</b><span>anglers a year, most of them referred or returning</span></div>
 </div>
-<div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award</div></div>
+<div class="aw-row"><div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award, 2025</div></div>
+<div class="aw-list">
+<div class="aw-item"><span class="aw-y">2012 to 2026</span><div><b>TripAdvisor Travelers' Choice</b><span>Fifteen consecutive years. Known as the Certificate of Excellence before 2020. Awarded to the top 10% of attractions worldwide.</span><div class="aw-years">{''.join(f'<i>{y}</i>' for y in range(2012, 2027))}</div></div></div>
+<div class="aw-item"><span class="aw-y">2015 to 2025</span><div><b>Ducks Unlimited Approved Outfitter</b><span>Ten-year partnership award. Go Fish trips donated to DU events have raised $1.7 million for wetland conservation.</span></div></div>
+<div class="aw-item"><span class="aw-y">2026</span><div><b>5.0 on TripAdvisor, 590 reviews</b><span>581 rated Excellent. Ranked #21 of 255 boat tours and water sports in Tamarindo.</span></div></div>
+<div class="aw-item"><span class="aw-y">Google</span><div><b>5.0 rating</b><span>Five stars on every Google review to date.</span></div></div>
+<div class="aw-item"><span class="aw-y">Since 2010</span><div><b>1,000+ anglers a year</b><span>Fished out of Tamarindo and Flamingo, most referred by past guests or coming back.</span></div></div>
+</div></div>
 </div></section>
 
 <section class="tight"><div class="wrap"><div class="ig"><div><div class="t">Follow the action</div><h2 style="font-size:clamp(28px,3vw,40px)">@gofishcostarica</h2></div><a class="btn btn-ghost" href="{SOCIAL['ig']}" target="_blank" rel="noopener">Follow on Instagram</a></div>

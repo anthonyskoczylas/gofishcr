@@ -508,3 +508,16 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 
 /* square-source hero: keep subject right, copy left */
 @media(max-width:900px){.chapter.hero .media img{object-position:58% 50%!important}}
+
+/* awards ledger beside the plaque photo */
+.aw-row{display:grid;grid-template-columns:minmax(280px,440px) 1fr;gap:clamp(24px,4vw,56px);align-items:start;margin-top:clamp(28px,4vw,48px)}
+.aw-row .aw-photo{margin-top:0}
+.aw-list{display:flex;flex-direction:column}
+.aw-item{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:18px 0;border-top:1px solid rgba(255,255,255,.16)}
+.aw-item:last-child{border-bottom:1px solid rgba(255,255,255,.16)}
+.aw-y{font-family:var(--display);font-weight:700;font-variation-settings:'wdth' 125;font-size:14px;letter-spacing:.04em;color:var(--foam);padding-top:3px}
+.aw-item b{display:block;font-family:var(--display);font-weight:600;font-size:18px;color:#fff;margin-bottom:4px}
+.aw-item span{font-size:14.5px;color:rgba(243,247,249,.75);display:block;max-width:52ch}
+.aw-years{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.aw-years i{font-style:normal;font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.04em;padding:4px 8px;border:1px solid rgba(255,255,255,.22);border-radius:3px;color:#fff}
+@media(max-width:900px){.aw-row{grid-template-columns:1fr}.aw-item{grid-template-columns:1fr;gap:6px}}
