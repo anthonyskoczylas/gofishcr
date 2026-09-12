@@ -166,7 +166,7 @@ def home():
 <section class="dark"><div class="wrap"><div class="sec-head rv"><div class="kicker">How it works</div><h2>Booking a charter should feel like <em>calling a friend who lives here.</em></h2></div>
 <div class="steps">
 <div class="s rv"><h3>Tell us your dates and your crew</h3><p>Use the planner or send an email. Where you are staying, how many are fishing, what you want to catch, how hard you want to fish.</p></div>
-<div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within 24 hours.</p></div>
+<div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours.</p></div>
 <div class="s rv"><h3>Show up at the beach at 7am</h3><p>Gear, bait, drinks and lunch are on board. You pay the boat directly on the day. We stay on call the whole trip.</p></div>
 </div></div></section>
 
@@ -253,7 +253,7 @@ def boat_page(b):
 </div>
 <aside><form class="book" id="boat-book">
 <div class="from"><b>{('$%s' % f"{b['half']:,}") if b['half'] else 'Quote'}</b><span>{'half day · per boat' if b['half'] else 'private sail'}</span></div>
-<div class="sub">Request this boat. Steve &amp; Liisa confirm availability within 24 hours. No payment online.</div>
+<div class="sub">Request this boat. Steve &amp; Liisa confirm availability within hours. No payment online.</div>
 {seg}
 <div class="row2"><div class="fld"><label for="bk-date">Date</label><input id="bk-date" type="date" name="date" required></div><div class="fld"><label for="bk-pax">Guests</label><select id="bk-pax" name="pax">{pax_opts}</select></div></div>
 <div class="fld"><label for="bk-name">Your name</label><input id="bk-name" name="name" required autocomplete="name"></div>
@@ -320,7 +320,7 @@ def adv_page(a):
 <div class="prose"><p class="small muted">Pickup from Tamarindo or Flamingo on most tours. Hotels in Pinilla, JW Marriott or Westin may carry a small transport supplement, noted above where it applies.</p></div></div>
 <aside><form class="book" id="adv-book" data-name="{E(a['name'])}">
 <div class="from"><b>{fr or 'Ask'}</b><span>{'per person' if fr else 'for rates'}</span></div>
-<div class="sub">Request this tour. We confirm the date, pickup time and final price within 24 hours.</div>
+<div class="sub">Request this tour. We confirm the date, pickup time and final price within hours.</div>
 <div class="row2"><div class="fld"><label for="ab-date">Date</label><input id="ab-date" type="date" name="date" required></div><div class="fld"><label for="ab-pax">Guests</label><select id="ab-pax" name="pax">{''.join(f'<option value="{i}"{" selected" if i==2 else ""}>{i}</option>' for i in range(1,21))}</select></div></div>
 <div class="fld"><label for="ab-base">Pickup area</label><select id="ab-base" name="base"><option>Tamarindo</option><option>Flamingo</option><option>Other (tell us below)</option></select></div>
 <div class="fld"><label for="ab-name">Your name</label><input id="ab-name" name="name" required autocomplete="name"></div>
@@ -488,7 +488,7 @@ def blog():
 # ---------------------------------------------------------------- TRIP PLANNER
 def planner():
     r = ''
-    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No payment online, no obligation. Steve &amp; Liisa reply within 24 hours.</p></div></header>
+    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No payment online, no obligation. Steve &amp; Liisa reply within hours.</p></div></header>
 <section style="margin-top:-100px;padding-top:0"><div class="wrap"><div class="wiz" id="wizard">
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
@@ -513,7 +513,7 @@ def planner():
 <div class="picks" id="picks"></div>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: your details</button></div></div>
 
-<div class="pane"><h2>Almost there.</h2><p class="lead">Check the summary, add your details, and send. We confirm availability within 24 hours.</p>
+<div class="pane"><h2>Almost there.</h2><p class="lead">Check the summary, add your details, and send. We confirm availability within hours.</p>
 <div class="summary" id="summary"></div>
 <form id="wiz-form"><div class="fld"><label for="w-name">Your name</label><input id="w-name" name="name" required autocomplete="name"></div>
 <div class="row2"><div class="fld"><label for="w-email">Email</label><input id="w-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="w-phone">Phone / WhatsApp</label><input id="w-phone" name="phone" autocomplete="tel"></div></div>

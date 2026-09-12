@@ -103,7 +103,7 @@
     var cards = $$('[data-boat]');
     var qs = new URLSearchParams(location.search);
     ['base', 'pax', 'budget', 'wash', 'sort'].forEach(function (k) { if (qs.get(k) && fl.elements[k]) fl.elements[k].value = qs.get(k); });
-    if (qs.get('date')) { var d = $('#fleet-date'); if (d) d.textContent = 'Availability for ' + fmtDate(qs.get('date')) + ' is confirmed by email within 24h.'; }
+    if (qs.get('date')) { var d = $('#fleet-date'); if (d) d.textContent = 'Availability for ' + fmtDate(qs.get('date')) + ' is confirmed by email within hours.'; }
     function apply() {
       var base = fl.elements.base.value, pax = +fl.elements.pax.value || 0, budget = +fl.elements.budget.value || 0, wash = fl.elements.wash.value, sort = fl.elements.sort.value;
       var shown = 0, list = [];
@@ -190,7 +190,7 @@
   function showSent(form, req, title) {
     var wrap = form.parentNode;
     var div = document.createElement('div'); div.className = 'sent';
-    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">Send it by email and Steve &amp; Liisa reply within 24 hours, usually much faster.</p>'
+    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">Send it by email and Steve &amp; Liisa reply within hours.</p>'
       + '<a class="btn btn-primary btn-block" href="' + req.mailto + '">Send by email</a>'
       + (req.wa ? '<a class="btn btn-ghost btn-block" style="margin-top:8px" target="_blank" rel="noopener" href="' + req.wa + '">Send on WhatsApp</a>' : '')
       + '<div class="alt"><button type="button" class="btn btn-ghost btn-sm" data-copy>Copy details</button><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a></div>'
@@ -244,7 +244,7 @@
         return;
       }
       var cat = state.type === 'catamaran';
-      h.innerHTML = cat ? '<h2>Private catamarans</h2><p class="lead">Morning or sunset sails, priced by request. Pick one and we quote within 24 hours.</p>'
+      h.innerHTML = cat ? '<h2>Private catamarans</h2><p class="lead">Morning or sunset sails, priced by request. Pick one and we quote within hours.</p>'
         : '<h2>Boats that fit your group</h2><p class="lead">Showing ' + (state.base || 'Tamarindo &amp; Flamingo') + ' boats that take ' + state.pax + (state.pax > 1 ? ' guests' : ' guest') + '. Every boat is one we know personally.</p>';
       var list = Object.keys(window.FLEET).map(function (k) { return window.FLEET[k]; }).filter(function (b) {
         if (cat !== !!b.quote) return false;

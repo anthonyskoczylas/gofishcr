@@ -31,7 +31,7 @@ def home(ctx):
 
 <!-- chapter -->
 <section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-rooster.jpg" alt="Roosterfish held up on deck off Tamarindo, moments before release" fetchpriority="high" style="object-position:38% 30%"><div class="scrim hero-scrim"></div></div>
-<div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy hero-copy"><img class="hero-logo" src="{r}img/logo.svg" alt="Go Fish Costa Rica"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
+<div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
 <h1>One day on the water. <em>Let's plan yours.</em></h1>
 <p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, start to finish. Scroll through it, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
@@ -96,7 +96,7 @@ def home(ctx):
 
 <!-- your day -->
 <section class="chapter" id="plan" style="min-height:auto;padding:clamp(80px,12vh,140px) 0"><div class="wrap plan">
-<div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve and Liisa answer within 24 hours.</h2>
+<div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve and Liisa answer within hours.</h2>
 <p>No payment online and no obligation. You get a straight recommendation, one boat or a whole week, and you pay the boat on the day.</p>
 <p class="small muted">Prefer to talk? Toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a>, or <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div>
 <form id="qb"><div class="fld"><label for="qb-base">Where are you staying?</label><select id="qb-base" name="base"><option value="">Tamarindo or Flamingo, not sure yet</option><option>Tamarindo</option><option>Flamingo</option></select></div>
