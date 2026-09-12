@@ -88,7 +88,7 @@ def home(ctx):
 
 <!-- chapter -->
 <section class="chapter two flip" id="sunset"><div class="stamp" aria-hidden="true">Sunset</div>
-<div class="wrap"><div class="ph land rv"><img src="{r}img/{img('_42-sunset.jpg')}" alt="Sunset from the 42-foot catamaran off Tamarindo" loading="lazy"><div class="cap">Sunset catamaran: sail, snorkel, paddleboard, open bar. $108 per adult, kids $74.</div></div>
+<div class="wrap"><div class="ph land rv"><img src="{r}img/{img('42-sunset.jpg')}" alt="Sunset from the 42-foot catamaran off Tamarindo" loading="lazy"><div class="cap">Sunset catamaran: sail, snorkel, paddleboard, open bar. $108 per adult, kids $74.</div></div>
 <div class="ch-copy"><div class="t">Sunset sail</div>
 <h2>The half of the family that didn't fish gets their day too.</h2>
 <p>Sixteen adventures we've done ourselves: the sunset catamaran, ATVs through the back roads, the estuary crocodiles, Rio Celeste, a spa afternoon. Most pick up from your hotel in Tamarindo or Flamingo. We book them all in one email.</p>
