@@ -197,7 +197,7 @@ def home():
 def charters():
     r = '../'
     cards = ''.join(boat_card(b, r) for b in sorted(FLEET, key=lambda b: (b['quote'], b['half'] or 0)))
-    body = page_hero(r, 'Fishing charters in Tamarindo &amp; Flamingo', 'From 21-foot center consoles to 43-foot sport fishers and private catamarans. Rates are per boat, all gear and drinks included. Pick a base, tell us your group, and we will tell you which boat is right.', '43_-riviera-pics3-side-view.jpg', [('Home', r+'index.html'), ('Charters', None)]) + f'''
+    body = page_hero(r, 'Fishing charters in Tamarindo &amp; Flamingo', 'From 21-foot center consoles to 43-foot sport fishers and private catamarans. Rates are per boat, all gear and drinks included. Pick a base, tell us your group, and we will tell you which boat is right.', 'offshore-aerial.jpg', [('Home', r+'index.html'), ('Charters', None)]) + f'''
 <section style="padding-top:0"><div class="wrap">
 <form id="fleet-filters" class="filters">
 <div class="f"><label>Base</label><select name="base"><option value="">Both</option><option>Tamarindo</option><option>Flamingo</option></select></div>
@@ -284,7 +284,7 @@ def parse_adv(a):
 
 def adventures():
     r = '../'
-    body = page_hero(r, 'Adventures in Guanacaste', 'Fishing holds a special place in our hearts, but the Gold Coast has more to give. Sixteen tours we have personally done, with guides and operators we trust. Pickup in Tamarindo or Flamingo on most.', 'zipline-tour.jpg', [('Home', r+'index.html'), ('Adventures', None)]) + f'''
+    body = page_hero(r, 'Adventures in Guanacaste', 'Fishing holds a special place in our hearts, but the Gold Coast has more to give. Sixteen tours we have personally done, with guides and operators we trust. Pickup in Tamarindo or Flamingo on most.', 'atv-ridge.jpg', [('Home', r+'index.html'), ('Adventures', None)]) + f'''
 <section><div class="wrap"><div class="grid g3">{''.join(adv_card(a, r) for a in ADV)}</div>
 <div class="cta" style="margin-top:60px;border-radius:var(--radius);padding:64px 28px"><img class="bg" src="{r}img/{img('sunset-catamarn.jpg')}" alt=""><div class="kicker">Mix and match</div><h2>Fish one day, fly through the canopy the next.</h2><p>Tell us how many days you have and we build the whole week: charters, tours, dinner reservations, the lot.</p><div class="row"><a class="btn btn-sand" href="{r}book.html?type=adventure">Plan my trip</a></div></div></div></section>'''
     write('adventures/index.html', page(r, 'Adventures — Zipline, ATV, Catamaran, Volcano & more | Go Fish Costa Rica', 'Sixteen adventures around Tamarindo and Flamingo: sunset catamaran, ATV, zipline, Rio Celeste, Monteverde, rafting, surf lessons, turtle tours and spa days. Real prices, trusted operators.', body))
@@ -489,7 +489,7 @@ def blog():
 # ---------------------------------------------------------------- TRIP PLANNER
 def planner():
     r = ''
-    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('43_-riviera-pics3-side-view.jpg')}" alt=""><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No payment online, no obligation. Steve &amp; Liisa reply within 24 hours.</p></div></header>
+    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No payment online, no obligation. Steve &amp; Liisa reply within 24 hours.</p></div></header>
 <section style="margin-top:-100px;padding-top:0"><div class="wrap"><div class="wiz" id="wizard">
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
