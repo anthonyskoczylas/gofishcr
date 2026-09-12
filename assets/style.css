@@ -473,8 +473,8 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .aw{padding:26px 24px 28px;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16)}
 .aw b{display:block;font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 135;font-size:clamp(30px,3.4vw,46px);line-height:1;color:#fff;letter-spacing:-.01em}
 .aw span{display:block;margin-top:10px;font-size:15px;color:rgba(243,247,249,.75);max-width:26ch}
-.aw-photo{margin-top:clamp(28px,4vw,48px);position:relative;border-radius:var(--r);overflow:hidden;max-width:560px}
-.aw-photo img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.aw-photo{margin-top:clamp(28px,4vw,48px);position:relative;border-radius:var(--r);overflow:hidden;max-width:440px}
+.aw-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 0}
 .aw-photo .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(180deg,transparent,rgba(6,12,32,.8));color:#fff;font-size:13.5px}
 @media(max-width:900px){.aw-head{grid-template-columns:1fr}.aw-logo{height:72px}.aw-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.aw-grid{grid-template-columns:1fr}}

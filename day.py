@@ -123,7 +123,7 @@ def home(ctx):
 <div class="aw"><b>5.0</b><span>on TripAdvisor from 590 reviews, and 5.0 on Google</span></div>
 <div class="aw"><b>1,000+</b><span>anglers a year, most of them referred or returning</span></div>
 </div>
-<div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy" style="object-position:50% 20%"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award</div></div>
+<div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award</div></div>
 </div></section>
 
 <section class="reviews-wall"><div class="wrap">
