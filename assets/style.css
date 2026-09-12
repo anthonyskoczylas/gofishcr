@@ -143,7 +143,7 @@ nav.top.over-photo .nav-cta{background:#fff;color:var(--ink)}
 .chapter.hero .ch-copy h1 em{color:var(--foam)}
 .chapter.hero .lead{color:rgba(255,255,255,.88);margin-top:22px}
 .hero-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
-.hero-foot{margin-top:clamp(32px,6vh,64px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.22);padding-top:20px;font-size:14px;color:rgba(255,255,255,.72)}
+.hero-foot{margin-top:clamp(32px,6vh,64px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-top:8px;font-size:14px;color:rgba(255,255,255,.72)}
 .hero-foot b{display:block;font-family:var(--display);font-weight:700;font-variation-settings:'wdth' 130;font-size:22px;color:#fff;letter-spacing:.02em}
 .hero-foot .cols{display:flex;gap:40px;flex-wrap:wrap}
 @media(max-width:760px){.chapter.hero h1{font-size:clamp(38px,11vw,60px)}.chapter.hero .lead{font-size:17px}.hero-foot{margin-top:28px}.hero-foot .cols{gap:12px 22px}.hero-foot b{font-size:17px}.hero-foot>div:last-child{display:none}}
