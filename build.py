@@ -47,7 +47,7 @@ def fleet_js():
 
 # ---------------------------------------------------------------- layout
 def nav(root, light=False):
-    dd = ''.join('<li><a href="%sdiscover/%s.html">%s</a></li>' % (root, s, t) for s, t in [('about-us','About Steve & Liisa'),('our-pledge-to-you','Our Pledge'),('crews-equipment','Crews & Equipment'),('fish-seasons','Fish & Seasons'),('guanacaste-fishing','Guanacaste Fishing'),('weather','Weather'),('contact-us','Contact')])
+    dd = ''.join('<li><a href="%sdiscover/%s.html">%s</a></li>' % (root, s, t) for s, t in [('about-us','About Steve & Liisa'),('our-pledge-to-you','Our Pledge'),('crews-equipment','Crews & Equipment'),('fish-seasons','Fish & Seasons'),('guanacaste-fishing','Why Fish Tamarindo'),('weather','Weather'),('contact-us','Contact')])
     return f'''<nav class="top over-photo{' light' if light else ''}"><div class="wrap">
 <a class="logo" href="{root}index.html" aria-label="Go Fish Costa Rica home"><img class="lm" src="{root}img/logo.svg" alt="Go Fish Costa Rica"></a>
 <ul class="nav-links">
@@ -63,11 +63,11 @@ def nav(root, light=False):
 def footer(root):
     return f'''<footer><div class="wrap"><div class="cols">
 <div><a class="logo" href="{root}index.html"><img src="{root}img/logo.svg" alt="Go Fish Costa Rica"></a>
-<p class="brandline">Guanacaste's trusted fishing charter and adventure booking agency since 2010. Steve &amp; Liisa Quinn, Tamarindo &amp; Flamingo.</p>
+<p class="brandline">Tamarindo's trusted fishing charter and adventure booking agency since 2010. Steve &amp; Liisa Quinn, Tamarindo &amp; Flamingo.</p>
 <div class="socials"><a href="{SOCIAL['ig']}" target="_blank" rel="noopener" aria-label="Instagram">IG</a><a href="{SOCIAL['fb']}" target="_blank" rel="noopener" aria-label="Facebook">FB</a><a href="{SOCIAL['yt']}" target="_blank" rel="noopener" aria-label="YouTube">YT</a><a href="{SOCIAL['ta']}" target="_blank" rel="noopener" aria-label="TripAdvisor">TA</a></div></div>
 <div><h4>Book</h4><ul><li><a href="{root}charters/">Fishing charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}charters/?base=Tamarindo">Tamarindo boats</a></li><li><a href="{root}charters/?base=Flamingo">Flamingo boats</a></li><li><a href="{root}book.html">Trip planner</a></li></ul></div>
-<div><h4>Discover</h4><ul><li><a href="{root}discover/about-us.html">About us</a></li><li><a href="{root}discover/fish-seasons.html">Fish &amp; seasons</a></li><li><a href="{root}discover/crews-equipment.html">Crews &amp; equipment</a></li><li><a href="{root}discover/guanacaste-fishing.html">Guanacaste fishing</a></li><li><a href="{root}dining/">Where to eat</a></li><li><a href="{root}discover/weather.html">Weather</a></li><li><a href="{root}blog/">Blog</a></li></ul></div>
-<div><h4>Contact</h4><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{PHONE_TEL}">{PHONE} (toll-free)</a></li><li>Mon–Sat 8:00am–6:00pm</li><li>Playa Tamarindo &amp; Playa Flamingo<br>Guanacaste, Costa Rica 50309</li></ul></div>
+<div><h4>Discover</h4><ul><li><a href="{root}discover/about-us.html">About us</a></li><li><a href="{root}discover/fish-seasons.html">Fish &amp; seasons</a></li><li><a href="{root}discover/crews-equipment.html">Crews &amp; equipment</a></li><li><a href="{root}discover/guanacaste-fishing.html">Why fish Tamarindo</a></li><li><a href="{root}dining/">Where to eat</a></li><li><a href="{root}discover/weather.html">Weather</a></li><li><a href="{root}blog/">Blog</a></li></ul></div>
+<div><h4>Contact</h4><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{PHONE_TEL}">{PHONE} (toll-free)</a></li><li>Mon–Sat 8:00am–6:00pm</li><li>Playa Tamarindo &amp; Playa Flamingo<br>Costa Rica 50309</li></ul></div>
 </div><div class="bottom"><span>&copy; {datetime.date.today().year} Go Fish Costa Rica. All billfish released. Prices in USD, subject to change.</span><span>Site by <a href="https://coastalcr.com" target="_blank" rel="noopener">Coastal CR</a></span></div></div></footer>'''
 
 def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
