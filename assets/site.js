@@ -135,7 +135,7 @@
   var bp = $('#boat-book');
   if (bp && window.BOAT) {
     var B = window.BOAT;
-    var durLabel = { half: '1/2 day · 5 hrs · 7am–12pm', tq: '3/4 day · 6+ hrs · 7am–2pm', full: 'Full day · 8+ hrs · 7am–4pm' };
+    var durLabel = { half: '1/2 day · about 5 hrs · inshore', tq: '3/4 day · 6+ hrs · offshore', full: 'Full day · 8+ hrs · offshore' };
     var price = { half: B.half, tq: B.three_quarter, full: B.full };
     function refresh() {
       $$('.seg label', bp).forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });

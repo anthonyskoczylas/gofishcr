@@ -521,3 +521,8 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .aw-years{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .aw-years i{font-style:normal;font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.04em;padding:4px 8px;border:1px solid rgba(255,255,255,.22);border-radius:3px;color:#fff}
 @media(max-width:900px){.aw-row{grid-template-columns:1fr}.aw-item{grid-template-columns:1fr;gap:6px}}
+
+/* mobile audit 2026-09-12: watermark words fit the screen, hookup photos uncropped, planner options stack */
+@media(max-width:900px){.stamp{font-size:clamp(34px,12.5vw,64px);left:20px;max-width:calc(100vw - 40px);overflow:hidden;white-space:nowrap}}
+@media(max-width:700px){.trio a{aspect-ratio:auto}.trio img{height:auto;display:block}}
+@media(max-width:600px){.opts{grid-template-columns:1fr!important}}

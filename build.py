@@ -115,10 +115,11 @@ def write(path, content):
         content = content.replace('</head>', f'<link rel="canonical" href="{c}"><meta property="og:url" content="{c}">\n<script type="application/ld+json">{ORG_LD}</script>\n</head>', 1)
     open(p, 'w').write(content)
 
-def page_hero(root, title, lead, bg, crumbs=None):
+def page_hero(root, title, lead, bg, crumbs=None, pos=None):
     c = ''
     if crumbs: c = '<div class="crumbs">' + ' <span>/</span> '.join('<a href="%s">%s</a>' % (h, t) if h else '<span>%s</span>' % t for t, h in crumbs) + '</div>'
-    return f'<header class="page-hero"><img class="bg" src="{root}img/{img(bg)}" alt=""><div class="wrap">{c}<h1>{title}</h1>{"<p>"+lead+"</p>" if lead else ""}</div></header>'
+    st = f' style="object-position:{pos}"' if pos else ''
+    return f'<header class="page-hero"><img class="bg" src="{root}img/{img(bg)}" alt=""{st}><div class="wrap">{c}<h1>{title}</h1>{"<p>"+lead+"</p>" if lead else ""}</div></header>'
 
 def boat_card(b, root):
     base = ' · '.join(b['locations'])
@@ -392,8 +393,8 @@ def discover():
     body = page_hero(r, 'Discover Go Fish', 'The people, the pledge, the fish and the water. Everything you would want to know before you book with the only trusted fishing charter and adventure agency on the Guanacaste coast.', 'guanacaste-papagayo-gulf.jpg', [('Home', r+'index.html'), ('Discover', None)]) + f'<section><div class="wrap"><div class="grid g3">{cards}</div></div></section>'
     write('discover/index.html', page(r, 'Discover Go Fish Costa Rica', 'About Steve & Liisa Quinn, our pledge, crews and equipment standards, fish seasons, Guanacaste fishing guide, weather and contact.', body))
 
-    def simple(slug, title, lead, bg, content, extra=''):
-        body = page_hero(r, title, lead, bg, [('Home', r+'index.html'), ('Discover', r+'discover/'), (title, None)]) + f'<section><div class="wrap-n prose">{content}</div>{extra}</section>'
+    def simple(slug, title, lead, bg, content, extra='', pos=None):
+        body = page_hero(r, title, lead, bg, [('Home', r+'index.html'), ('Discover', r+'discover/'), (title, None)], pos=pos) + f'<section><div class="wrap-n prose">{content}</div>{extra}</section>'
         write(f'discover/{slug}.html', page(r, f'{re.sub("<[^>]+>","",title)} | Go Fish Costa Rica', re.sub('<[^>]+>','',lead)[:155], body))
 
     simple('about-us', 'About Steve &amp; Liisa', 'Your travel gurus in Tamarindo since 2010.', 'steveandliisa.jpg', f'''
@@ -405,7 +406,7 @@ def discover():
 <p>Every client we have served has become a friend, and we intend to keep it that way. Whether you are after adrenaline or a hammock, our job is to make sure your trip is nothing short of extraordinary.</p>
 <h2>Community</h2>
 <p>Ten years as a Ducks Unlimited partner and counting. We live here, our kids grew up here, and we put money and time back into the town that made this possible.</p>
-<p><a class="btn btn-primary" href="{r}book.html">Plan a trip with us</a></p>''')
+<p><a class="btn btn-primary" href="{r}book.html">Plan a trip with us</a></p>''', pos='50% 18%')
 
     simple('our-pledge-to-you', 'Our pledge to you', 'To elevate your angling experience, by any means necessary.', 'sloth.jpg', f'''
 <p class="lede">We pledge to not just meet but exceed your expectations. As anglers ourselves, we know what matters: top-notch service, a safe boat, a crew that knows the water, and gear that matches what you came to catch.</p>
@@ -566,6 +567,10 @@ def extras():
     urls = ['', 'charters/', 'adventures/', 'dining/', 'discover/', 'gallery.html', 'blog/', 'book.html'] + [f'charters/{b["slug"]}.html' for b in FLEET] + [f'adventures/{a["slug"]}.html' for a in ADV] + [f'dining/{d["slug"]}.html' for d in DINING] + [f'discover/{s}.html' for s in ['about-us','our-pledge-to-you','crews-equipment','fish-seasons','guanacaste-fishing','weather','contact-us']] + [f'blog/{p["slug"]}.html' for p in BLOG]
     write('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join(f'<url><loc>https://gofishcr.com/{u}</loc></url>' for u in urls) + '\n</urlset>\n')
     write('robots.txt', 'User-agent: *\nAllow: /\nSitemap: https://gofishcr.com/sitemap.xml\n')
+    # Old-site addresses that have no matching page in the new build -> instant redirect
+    for src, dst in [('reservation.html', 'book.html'), ('discover/blog.html', 'blog/'), ('locations/tamarindo.html', 'discover/guanacaste-fishing.html'),
+                     ('locations/flamingo.html', 'discover/guanacaste-fishing.html'), ('locations/index.html', 'discover/guanacaste-fishing.html'), ('sitemap.html', 'index.html')]:
+        write(src, f'<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/{dst}"><link rel="canonical" href="https://gofishcr.com/{dst}"><title>Redirecting</title></head><body><a href="/{dst}">Continue</a></body></html>')
 
 if __name__ == '__main__':
     import day

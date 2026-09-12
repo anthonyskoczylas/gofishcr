@@ -34,7 +34,7 @@ def home(ctx):
 <div class="wrap"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
 <h1>Costa Rica's #1 <em>sportfishing operation.</em></h1>
 <p class="lead">Seventeen boats out of Tamarindo and Flamingo, captains we know by name, and fifteen straight years of TripAdvisor Travelers' Choice. Scroll through a day with us, then tell us your dates.</p>
-<div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
+<div class="hero-row"><a class="btn btn-ghost" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
 <div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor, every year since 2018</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Costa Rica</div></div>
 </div></div></section>
 
