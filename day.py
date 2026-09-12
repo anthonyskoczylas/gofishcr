@@ -56,10 +56,10 @@ def home(ctx):
 
 <!-- 08:40 -->
 <section class="chapter photo on-photo" id="shelf"><div class="stamp" aria-hidden="true">08:40</div>
-<div class="media"><video autoplay muted loop playsinline poster="{r}video/offshore-poster.jpg" data-src="{r}video/offshore.mp4"></video><img class="poster" src="{r}video/offshore-poster.jpg" alt=""><div class="scrim r"></div></div>
+<div class="media"><video autoplay muted loop playsinline poster="{r}img/offshore-aerial.jpg" data-src="{r}video/offshore.mp4"></video><img class="poster" src="{r}img/offshore-aerial.jpg" alt=""><div class="scrim r"></div></div>
 <div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy" style="max-width:52ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">08:40 · The shelf</div>
-<h2>Twelve minutes out, a thousand feet down.</h2>
-<p>The continental shelf runs right along this coast, so the deep water starts almost at the beach. Less running, more lines in. It is why the North Pacific holds so many IGFA records, and why a 3/4 day here fishes like a full day anywhere else.</p>
+<h2>Forty minutes out, a thousand feet down.</h2>
+<p>About forty minutes at cruise and the bottom falls away to a thousand feet. That edge is where the sailfish, marlin, tuna and mahi live, and it is why this stretch of the North Pacific holds so many IGFA records. Half days stay inshore; 3/4 and full days make the run.</p>
 <p><a class="link" href="{r}discover/guanacaste-fishing.html">Why Tamarindo fishes differently</a></p></div></div></section>
 
 <!-- 10:15 -->
