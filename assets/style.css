@@ -505,3 +505,6 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 
 .ig .t{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.08em;color:var(--sea);display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .ig .t::before{content:"";width:28px;height:1.5px;background:currentColor}
+
+/* square-source hero: keep subject right, copy left */
+@media(max-width:900px){.chapter.hero .media img{object-position:62% 55%!important}}
