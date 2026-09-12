@@ -30,7 +30,7 @@ def home(ctx):
 <nav class="rail" aria-label="Hours of the day">{rail}</nav>
 
 <!-- chapter -->
-<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-marlin.jpg" alt="Marlin jumping far back in the wake, seen from the bridge off Tamarindo" fetchpriority="high" style="object-position:55% 45%"><div class="scrim hero-scrim-l"></div></div>
+<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-wake.jpg" alt="Marlin jumping far back in the wake, seen from the bridge off Tamarindo" fetchpriority="high" style="object-position:55% 45%"><div class="scrim hero-scrim-l"></div></div>
 <div class="wrap"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
 <h1>Costa Rica's #1 <em>sportfishing operation.</em></h1>
 <p class="lead">Seventeen boats out of Tamarindo and Flamingo, captains we know by name, and fifteen straight years of TripAdvisor Travelers' Choice. Scroll through a day with us, then tell us your dates.</p>
