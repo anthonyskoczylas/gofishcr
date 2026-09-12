@@ -30,9 +30,9 @@ def home(ctx):
 <nav class="rail" aria-label="Hours of the day">{rail}</nav>
 
 <!-- chapter -->
-<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-marlin.jpg" alt="Blue marlin airborne behind the transom off Tamarindo" fetchpriority="high" style="object-position:62% 40%"><div class="scrim hero-scrim-l"></div></div>
+<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-marlin.jpg" alt="Marlin jumping far back in the wake, seen from the bridge off Tamarindo" fetchpriority="high" style="object-position:55% 45%"><div class="scrim hero-scrim-l"></div></div>
 <div class="wrap"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
-<h1>Costa Rica's number one <em>sportfishing operation.</em></h1>
+<h1>Costa Rica's #1 <em>sportfishing operation.</em></h1>
 <p class="lead">Seventeen boats out of Tamarindo and Flamingo, captains we know by name, and fifteen straight years of TripAdvisor Travelers' Choice. Scroll through a day with us, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
 <div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor, every year since 2018</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Costa Rica</div></div>
@@ -65,7 +65,7 @@ def home(ctx):
 
 <!-- chapter -->
 <section class="chapter two flip" id="bite"><div class="stamp" aria-hidden="true">Hookup</div>
-<div class="wrap"><div class="trio"><a href="{r}img/{img('sailfish-jump.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish-jump.jpg')}" alt="Sailfish leaping behind the transom" loading="lazy"></a><a href="{r}img/{img('sailfish.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish.jpg')}" alt="Sailfish boatside, about to be released" loading="lazy"></a><a href="{r}img/{img('roosterfish.jpg')}" data-lb="bite"><img src="{r}img/{img('roosterfish.jpg')}" alt="Roosterfish" loading="lazy"></a></div>
+<div class="wrap"><div class="trio"><a href="{r}img/{img('sailfish.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish.jpg')}" alt="Sailfish boatside, about to be released" loading="lazy" style="object-position:70% 50%"></a><a href="{r}img/{img('marlin.jpg')}" data-lb="bite"><img src="{r}img/{img('marlin.jpg')}" alt="Marlin jumping" loading="lazy"></a><a href="{r}img/{img('roosterfish.jpg')}" data-lb="bite"><img src="{r}img/{img('roosterfish.jpg')}" alt="Roosterfish" loading="lazy"></a></div>
 <div class="ch-copy"><div class="t">Sailfish up</div>
 <h2>Roosters inshore. Sails and marlin off the edge.</h2>
 <p>Half days stay along the rocks for roosterfish, snapper and jacks. Go 3/4 or full and you're offshore for sailfish, marlin, tuna and mahi. Sailfish peak May to August, blue marlin November to April, and there is no month here with nothing biting.</p>
