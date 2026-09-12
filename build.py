@@ -456,10 +456,9 @@ def discover():
 # ---------------------------------------------------------------- GALLERY
 def gallery():
     r = ''
-    ims = [f for f in os.listdir(os.path.join(ROOT, 'img')) if re.match(r'^([0-9a-f]{8}-[0-9a-f]{4}-|img_\d+|\d\d\.jpg|liisa|aug_11)', f)]
-    ims = sorted(ims)
+    ims = D('gallery.json')
     tiles = ''.join(f'<a href="{r}img/{g}" data-lb="g"><img src="{r}img/{g}" alt="" loading="lazy"></a>' for g in ims)
-    body = page_hero(r, 'Photo gallery', 'Fishing adventures and memorable moments from unforgettable trips. Tag us @gofishcostarica and we will add yours.', 'img_1784.jpg', [('Home', r+'index.html'), ('Gallery', None)]) + f'<section><div class="wrap"><div class="masonry">{tiles}</div></div></section>'
+    body = page_hero(r, 'Photo gallery', 'Fishing adventures and memorable moments from unforgettable trips. Tag us @gofishcostarica and we will add yours.', 'img_0928.jpg', [('Home', r+'index.html'), ('Gallery', None)]) + f'<section><div class="wrap"><div class="masonry">{tiles}</div></div></section>'
     write('gallery.html', page(r, 'Photo Gallery | Go Fish Costa Rica', 'Marlin, sailfish, roosterfish, tuna and the crews and families who caught them. Photos from Go Fish Costa Rica charters in Tamarindo and Flamingo.', body))
     return len(ims)
 
