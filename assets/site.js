@@ -18,7 +18,8 @@
 
   // ---- NAV -----------------------------------------------------------------
   var nav = $('nav.top');
-  function onScroll() { if (nav) nav.classList.toggle('scrolled', window.scrollY > 40); }
+  var pageHero = document.querySelector('.page-hero');
+  function onScroll() { if (!nav) return; nav.classList.toggle('scrolled', window.scrollY > 40); if (pageHero && !document.getElementById('day')) nav.classList.toggle('over-photo', window.scrollY < pageHero.offsetHeight - 72); }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   var burger = $('.burger'), drawer = $('.drawer');
   if (burger && drawer) {

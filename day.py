@@ -2,7 +2,7 @@
 import json
 
 CHAPTERS = [  # (id, clock, sky color for the page background while this chapter is in view, over-photo)
-    ('dawn', 'Dawn', '#1b1f4e', True),
+    ('dawn', 'Dawn', '#0d2a3a', True),
     ('sand', 'Boats', '#e8eef2', False),
     ('launch', 'Launch', '#0c1334', True),
     ('shelf', 'Offshore', '#0c1334', True),
@@ -30,8 +30,8 @@ def home(ctx):
 <nav class="rail" aria-label="Hours of the day">{rail}</nav>
 
 <!-- chapter -->
-<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/dawn.jpg" alt="Playa Tamarindo before sunrise, sport fishing boats moored in the bay" fetchpriority="high"><div class="scrim b"></div></div>
-<div class="wrap"><div class="ch-copy"><img class="hero-logo" src="{r}img/logo.svg" alt="Go Fish Costa Rica"><div class="t">Go Fish Costa Rica · Playa Tamarindo</div>
+<section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-rooster.jpg" alt="Roosterfish held up on deck off Tamarindo, moments before release" fetchpriority="high" style="object-position:38% 30%"><div class="scrim hero-scrim"></div></div>
+<div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy hero-copy"><img class="hero-logo" src="{r}img/logo.svg" alt="Go Fish Costa Rica"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
 <h1>One day on the water. <em>Let's plan yours.</em></h1>
 <p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, start to finish. Scroll through it, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>

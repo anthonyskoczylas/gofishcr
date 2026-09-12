@@ -495,7 +495,7 @@ def planner():
 <div class="opts">
 <label class="opt"><input type="radio" name="type" value="fishing"><span class="ic">◐</span><b>Fishing charter</b><small>Half, 3/4 or full day on one of 14 sport fishing boats. Inshore roosters to offshore marlin.</small></label>
 <label class="opt"><input type="radio" name="type" value="catamaran"><span class="ic">◭</span><b>Private catamaran</b><small>Your own 40', 42' or 65' cat for a morning or sunset sail. Snorkel gear, bar, lunch.</small></label>
-<label class="opt"><input type="radio" name="type" value="adventure"><span class="ic">▲</span><b>Land &amp; sea adventure</b><small>ATV, zipline, volcano, Rio Celeste, estuary, surf lesson, spa and more.</small></label></div>
+<label class="opt"><input type="radio" name="type" value="adventure"><span class="ic">▲</span><b>Adventures</b><small>ATV, zipline, volcano, Rio Celeste, estuary, surf lesson, spa and more.</small></label></div>
 <h2 style="font-size:24px;margin-top:30px">Which base is closer to you?</h2><p class="lead">Boats launch from the beach at both. Tours pick up from either.</p>
 <div class="opts" style="grid-template-columns:1fr 1fr 1fr">
 <label class="opt"><input type="radio" name="base" value="Tamarindo"><b>Tamarindo</b><small>Also Langosta, Pinilla, JW Marriott, Avellanas.</small></label>
