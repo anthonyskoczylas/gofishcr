@@ -31,7 +31,7 @@ def adv_from(a):
     m = [x for x in re.findall(r'\$(\d[\d,]*)', txt) if int(x.replace(',', '')) >= 40]
     return ('$' + min(m, key=lambda x: int(x.replace(',', '')))) if m else ''
 ADV_TAG = {
- 'zipline-tour':'10 cables · 3.5 hrs · from Tamarindo or Flamingo','atv-tour':'Private · 2–4 hrs · beaches, mountains, back roads','sunset-catamaran':'Sail, snorkel, paddleboard · open bar · 1pm–5:45pm',
+ 'zipline-tour':'10 cables · 3.5 hrs · from Tamarindo or Flamingo','atv-tour':'Private · 2–4 hrs · beaches, mountains, back roads','sunset-catamaran':'Sail, snorkel, paddleboard · open bar · afternoon into sunset',
  'mega-combo-adventure-tour':'Zipline, tubing, horses, hot springs · all day','volcano-hike-mud-baths':'Rincón de la Vieja · hot springs · full day','white-water-rafting':'Class III–V · bilingual guides · full day',
  'waterfall-hike':'La Leona Waterfalls · swim · lunch','birdwatching-tour':'Toucans, hawks, wetlands · all levels','estuary-tour':'Mangroves · crocs, monkeys, birds · 2 hrs',
  'horseback-riding':'Beach, forest and mountain trails · all levels','monteverde-cloud-forest':'Hanging bridges or zipline · full day','rio-celeste-hike':'Turquoise river · Tenorio Volcano · full day',
@@ -78,7 +78,7 @@ def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
 <title>{E(html.unescape(title))}</title>
 <meta name="description" content="{E(html.unescape(desc))}">
 <link rel="icon" type="image/svg+xml" href="{root}img/logo.svg">
-<meta property="og:title" content="{E(html.unescape(title))}"><meta property="og:description" content="{E(html.unescape(desc))}"><meta property="og:image" content="{root}video/hero-poster.jpg">
+<meta property="og:title" content="{E(html.unescape(title))}"><meta property="og:description" content="{E(html.unescape(desc))}"><meta property="og:image" content="https://gofishcr.com/img/hero-split.jpg"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@100..150,400..900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css?v={BUILD}">{extra_head}
@@ -90,8 +90,29 @@ def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
 <script src="{root}assets/site.js?v={BUILD}"></script>
 </body></html>'''
 
+SITE_URL = 'https://gofishcr.com/'
+ORG_LD = json.dumps({
+  "@context": "https://schema.org", "@type": "TravelAgency", "@id": SITE_URL + "#org",
+  "name": SITE, "url": SITE_URL, "logo": SITE_URL + "img/logo.svg", "image": SITE_URL + "img/hero-split.jpg",
+  "description": "Sport fishing charters, private catamarans and adventure tours in Tamarindo and Flamingo, Costa Rica. Booked by Steve & Liisa Quinn since 2010.",
+  "email": EMAIL, "telephone": PHONE_TEL, "priceRange": "$700 - $2,100",
+  "address": {"@type": "PostalAddress", "addressLocality": "Tamarindo", "addressRegion": "Guanacaste", "postalCode": "50309", "addressCountry": "CR"},
+  "areaServed": ["Tamarindo", "Playa Flamingo", "Playa Grande", "Playa Conchal", "Guanacaste"],
+  "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "08:00", "closes": "18:00"},
+  "sameAs": list(SOCIAL.values()),
+  "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5.0", "reviewCount": "590", "bestRating": "5"},
+  "founder": [{"@type": "Person", "name": "Steve Quinn"}, {"@type": "Person", "name": "Liisa Quinn"}],
+}, ensure_ascii=False)
+
+def canonical_of(path):
+    u = path.replace('index.html', '')
+    return SITE_URL + u
+
 def write(path, content):
     p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)
+    if path.endswith('.html') and '</head>' in content:
+        c = canonical_of(path)
+        content = content.replace('</head>', f'<link rel="canonical" href="{c}"><meta property="og:url" content="{c}">\n<script type="application/ld+json">{ORG_LD}</script>\n</head>', 1)
     open(p, 'w').write(content)
 
 def page_hero(root, title, lead, bg, crumbs=None):
@@ -167,7 +188,7 @@ def home():
 <div class="steps">
 <div class="s rv"><h3>Tell us your dates and your crew</h3><p>Use the planner or send an email. Where you are staying, how many are fishing, what you want to catch, how hard you want to fish.</p></div>
 <div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours.</p></div>
-<div class="s rv"><h3>Show up at the beach at 7am</h3><p>Gear, bait, drinks and lunch are on board. You pay the boat directly on the day. We stay on call the whole trip.</p></div>
+<div class="s rv"><h3>Show up at the beach at first light</h3><p>Gear, bait, drinks and lunch are on board. You pay the boat directly on the day. We stay on call the whole trip.</p></div>
 </div></div></section>
 
 <section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">Beyond the boat</div><h2>Adventures for the <em>non-fishing days.</em></h2></div><a class="btn btn-ghost" href="{r}adventures/">All 16 adventures</a></div>
@@ -229,9 +250,9 @@ def boat_page(b):
     base = ' / '.join(b['locations'])
     rates = '' if b['quote'] else f'''<h2 style="font-size:26px;margin-top:34px">Rates for this boat</h2>
 <table class="rates-t"><tr><th>Charter</th><th>Hours</th><th>Rate per boat</th></tr>
-<tr><td>Half day</td><td>7am – 12pm · about 5 hrs · inshore only</td><td><b>${b['half']:,}</b></td></tr>
-<tr><td>3/4 day</td><td>7am – 2pm · 6+ hrs · offshore, light lunch</td><td><b>${b['three_quarter']:,}</b></td></tr>
-<tr><td>Full day</td><td>7am – 4pm · 8+ hrs · offshore, light lunch</td><td><b>${b['full']:,}</b></td></tr></table>
+<tr><td>Half day</td><td>About 5 hrs · inshore only</td><td><b>${b['half']:,}</b></td></tr>
+<tr><td>3/4 day</td><td>6+ hrs · offshore, light lunch</td><td><b>${b['three_quarter']:,}</b></td></tr>
+<tr><td>Full day</td><td>8+ hrs · offshore, light lunch</td><td><b>${b['full']:,}</b></td></tr></table>
 <p class="small muted">Rates are per boat, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Prices subject to change. To target billfish, book 3/4 or full day.</p>'''
     seg = '' if b['quote'] else f'''<div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>Half day<small>${b['half']:,}</small></label><label><input type="radio" name="dur" value="tq">3/4 day<small>${b['three_quarter']:,}</small></label><label><input type="radio" name="dur" value="full">Full day<small>${b['full']:,}</small></label></div>'''
     pax_opts = ''.join(f'<option value="{i}"{" selected" if i==min(4,b["max_pax"] or 4) else ""}>{i}</option>' for i in range(1, (b['max_pax'] or 20) + 1))
@@ -248,7 +269,7 @@ def boat_page(b):
 <h2 style="font-size:26px">What this boat offers</h2><div class="chips" style="margin:14px 0 8px">{''.join(f'<span class="chip">{E(f)}</span>' for f in b['features'])}<span class="chip">{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>
 {rates}
 <div class="incl"><div><h4>Included</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul></div></div>
-<div class="prose"><h3>Charter lengths</h3><ul><li><b>Half day</b> · about 5 hours, 7am to 12pm. Boats stay inshore: roosterfish, snapper, jacks.</li><li><b>3/4 day</b> · 6+ hours, 7am to 2pm. Enough time to run offshore for sailfish, marlin, tuna and mahi.</li><li><b>Full day</b> · 8+ hours, 7am to 4pm. The serious billfish day.</li></ul>
+<div class="prose"><h3>Charter lengths</h3><ul><li><b>Half day</b> · about 5 hours. Boats stay inshore: roosterfish, snapper, jacks.</li><li><b>3/4 day</b> · 6+ hours. Enough time to run offshore for sailfish, marlin, tuna and mahi.</li><li><b>Full day</b> · 8+ hours. The serious billfish day.</li></ul>
 <p>Tips are not expected but very much appreciated. If the crew works hard for you, 15 to 20% is customary.</p></div>
 </div>
 <aside><form class="book" id="boat-book">
@@ -269,6 +290,17 @@ def boat_page(b):
 <div class="grid g3">{''.join(boat_card(x, r) for x in sorted([x for x in FLEET if x['slug']!=b['slug'] and set(x['locations'])&set(b['locations']) and x['quote']==b['quote']], key=lambda x: abs((x['half'] or 0)-(b['half'] or 0)))[:3])}</div></div></section>'''
     boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], max_pax=b['max_pax'], quote=b['quote']))
     bar = f'<div class="bookbar"><div><b>{("$%s" % f"{b["half"]:,}") if b["half"] else "Quote"}</b><small>{"half day · per boat" if b["half"] else "private sail"}</small></div><a class="btn btn-primary btn-sm" href="#boat-book">Request this boat</a></div>'
+    ld = {"@context": "https://schema.org", "@graph": [
+      {"@type": "Product", "name": f"{b['name']} fishing charter", "image": [SITE_URL + 'img/' + i for i in b['images'][:3]],
+       "description": re.sub('<[^>]+>', '', intro), "brand": {"@id": SITE_URL + "#org"},
+       "offers": [] if b['quote'] else [
+         {"@type": "Offer", "name": n, "price": str(pr), "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": SITE_URL + f"charters/{b['slug']}.html", "seller": {"@id": SITE_URL + "#org"}}
+         for n, pr in (("Half day", b['half']), ("3/4 day", b['three_quarter']), ("Full day", b['full']))]},
+      {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL},
+        {"@type": "ListItem", "position": 2, "name": "Charters", "item": SITE_URL + "charters/"},
+        {"@type": "ListItem", "position": 3, "name": b['name'], "item": SITE_URL + f"charters/{b['slug']}.html"}]}]}
+    boatjs += '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>'
     write(f"charters/{b['slug']}.html", page(r, f"{b['name']} — {base} fishing charter | Go Fish Costa Rica", f"{b['name']} fishing charter in {base}, Guanacaste. {'Half day $%s, 3/4 day $%s, full day $%s per boat.' % (f'{b['half']:,}', f'{b['three_quarter']:,}', f'{b['full']:,}') if not b['quote'] else 'Private catamaran, morning or sunset, quote on request.'} Gear, bait and drinks included.", body, extra_head=boatjs, bookbar=bar))
 
 # ---------------------------------------------------------------- ADVENTURES
