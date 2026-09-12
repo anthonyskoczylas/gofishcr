@@ -15,6 +15,7 @@ CHAPTERS = [  # (id, clock, sky color for the page background while this chapter
 
 def home(ctx):
     E, img, FLEET, ADV, boat_len, SOCIAL, EMAIL, PHONE, PHONE_TEL, REVIEWS, page = (ctx[k] for k in ('E', 'img', 'FLEET', 'ADV', 'boat_len', 'SOCIAL', 'EMAIL', 'PHONE', 'PHONE_TEL', 'REVIEWS', 'page'))
+    REVIEWS_ALL = json.load(open(__import__('os').path.join(__import__('os').path.dirname(__file__), 'data', 'reviews.json')))
     r = ''
     rail_boats = [b for b in FLEET if b['slug'] in ('28-whitewater-center-console', '31-chris-craft', '35-cabo', '35-carolina-classic', '38-riviera', '43-riviera-team-edition')]
     rail_boats.sort(key=lambda b: b['half'])
@@ -112,22 +113,23 @@ def home(ctx):
 <p><a class="link" href="{r}discover/about-us.html">Our story</a> &nbsp;&nbsp; <a class="link" href="{r}discover/our-pledge-to-you.html">Our pledge</a></p></div></div></section>
 
 <section class="awards dark"><div class="wrap">
-<div class="aw-head"><img src="{r}img/logo.svg" alt="Go Fish Costa Rica" class="aw-logo"><div><div class="t">Reviews &amp; awards</div><h2>Fourteen years of Travelers' Choice. <em>That is not luck.</em></h2>
-<p>TripAdvisor gives its Travelers' Choice award to the top ten percent of attractions in the world, judged on what everyday travelers write afterwards. Go Fish Costa Rica has earned it every year since 2012.</p></div></div>
+<div class="aw-head"><img src="{r}img/logo.svg" alt="Go Fish Costa Rica" class="aw-logo"><div><div class="t">Reviews &amp; awards</div><h2>Fifteen years of Travelers' Choice. <em>That is not luck.</em></h2>
+<p>TripAdvisor gives its Travelers' Choice award to the top ten percent of attractions in the world, judged on what everyday travelers write afterwards. Go Fish Costa Rica has earned it every year since 2012, 2026 included.</p></div></div>
 <div class="aw-grid">
-<div class="aw"><b>2012 to 2025</b><span>TripAdvisor Travelers' Choice, fourteen years running</span></div>
+<div class="aw"><b>2012 to 2026</b><span>TripAdvisor Travelers' Choice, fifteen years running</span></div>
 <div class="aw"><b>Top 10%</b><span>of attractions worldwide, by traveler reviews</span></div>
 <div class="aw"><b>10 years</b><span>Ducks Unlimited Approved Outfitter, partnership award 2025</span></div>
 <div class="aw"><b>$1.7M</b><span>raised for conservation through Go Fish trips at DU events</span></div>
-<div class="aw"><b>5.0</b><span>Google rating, five stars on every review</span></div>
+<div class="aw"><b>5.0</b><span>on TripAdvisor from 590 reviews, and 5.0 on Google</span></div>
 <div class="aw"><b>1,000+</b><span>anglers a year, most of them referred or returning</span></div>
 </div>
 <div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy" style="object-position:50% 20%"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award</div></div>
 </div></section>
 
-<section><div class="wrap quotes">
-<blockquote>“Every last detail was executed to perfection. Two days on a 31 ft flybridge boat with three great captains was the icing on the cake.”<footer>Laura Mayer, Google review</footer></blockquote>
-<div class="list">{''.join(f'<div><p>{E(t)}</p><b>{n}, {s}</b></div>' for t, n, s in REVIEWS if not n.startswith('Laura'))}
-<div class="years">{''.join(f'<span>{y}</span>' for y in range(2018, 2026))}</div><p class="small muted">Five stars on TripAdvisor every year since 2018, Travelers' Choice since 2012. <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">Read the reviews on TripAdvisor</a> · <a href="{SOCIAL['ig']}" target="_blank" rel="noopener">@gofishcostarica</a></p></div>
+<section class="reviews-wall"><div class="wrap">
+<div class="rw-head"><div><div class="t">What people say</div><h2>590 reviews. <em>581 of them say Excellent.</em></h2></div>
+<div class="rw-stats"><div><b>5.0</b><span>TripAdvisor rating</span></div><div><b>#21</b><span>of 255 boat tours in Tamarindo</span></div><div><b>2026</b><span>Travelers' Choice</span></div></div></div>
+<div class="rw-grid">{''.join(f'<figure class="rw"><div class="stars">★★★★★</div><blockquote>{E(x["q"])}</blockquote><figcaption><b>{E(x["n"])}</b><span>{E(", ".join(v for v in (x["w"], x["s"] + (" · " + x["d"] if x["d"] else "")) if v))}</span></figcaption></figure>' for x in REVIEWS_ALL)}</div>
+<p class="small muted" style="margin-top:28px">Excerpts from public reviews. <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">Read all 590 on TripAdvisor</a> · <a href="{SOCIAL['ig']}" target="_blank" rel="noopener">@gofishcostarica</a></p>
 </div></section>'''
     return page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Tamarindo's number one sport fishing operation. Seventeen vetted boats in Tamarindo and Flamingo, sixteen adventures, booked by Steve and Liisa, who live here. See what a day on the water looks like, hour by hour.", body, extra_head=ctx['fleet_js']())
