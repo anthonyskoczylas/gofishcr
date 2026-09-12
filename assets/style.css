@@ -460,3 +460,22 @@ footer .bottom a{color:rgba(243,247,249,.75)}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.chapter .ph img,.chapter .ph video{transform:none;transition:none}body{transition:none}}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:4px;font-size:14px;opacity:0;transition:.3s;z-index:var(--z-toast);pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%)}
+
+/* hero logo + awards band */
+.hero-logo{height:clamp(56px,7vw,92px);width:auto;filter:brightness(0) invert(1);margin-bottom:22px;opacity:.96}
+.awards{padding:clamp(72px,9vw,120px) 0}
+.aw-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,72px);align-items:center;margin-bottom:clamp(32px,5vw,56px)}
+.aw-logo{height:clamp(90px,14vw,190px);width:auto;filter:brightness(0) invert(1)}
+.aw-head h2{max-width:18ch;color:#fff}
+.aw-head p{margin-top:16px;max-width:56ch;color:rgba(243,247,249,.78);font-size:17.5px}
+.aw-head .t{color:var(--foam);font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.08em;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.aw-head .t::before{content:"";width:28px;height:1.5px;background:currentColor}
+.aw-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.16);border-left:1px solid rgba(255,255,255,.16)}
+.aw{padding:26px 24px 28px;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16)}
+.aw b{display:block;font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 135;font-size:clamp(30px,3.4vw,46px);line-height:1;color:#fff;letter-spacing:-.01em}
+.aw span{display:block;margin-top:10px;font-size:15px;color:rgba(243,247,249,.75);max-width:26ch}
+.aw-photo{margin-top:clamp(28px,4vw,48px);position:relative;border-radius:var(--r);overflow:hidden;max-width:560px}
+.aw-photo img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.aw-photo .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(180deg,transparent,rgba(6,12,32,.8));color:#fff;font-size:13.5px}
+@media(max-width:900px){.aw-head{grid-template-columns:1fr}.aw-logo{height:72px}.aw-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.aw-grid{grid-template-columns:1fr}}

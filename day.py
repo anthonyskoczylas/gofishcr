@@ -30,7 +30,7 @@ def home(ctx):
 
 <!-- chapter -->
 <section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/dawn.jpg" alt="Playa Tamarindo before sunrise, sport fishing boats moored in the bay" fetchpriority="high"><div class="scrim b"></div></div>
-<div class="wrap"><div class="ch-copy"><div class="t">First light · Playa Tamarindo</div>
+<div class="wrap"><div class="ch-copy"><img class="hero-logo" src="{r}img/logo.svg" alt="Go Fish Costa Rica"><div class="t">Go Fish Costa Rica · Playa Tamarindo</div>
 <h1>One day on the water. <em>Let's plan yours.</em></h1>
 <p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, start to finish. Scroll through it, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
@@ -48,7 +48,7 @@ def home(ctx):
 
 <!-- chapter -->
 <section class="chapter photo on-photo" id="launch"><div class="stamp" aria-hidden="true">Launch</div>
-<div class="media"><video autoplay muted loop playsinline poster="{r}img/{img('35cabo2.jpg')}" data-src="{r}video/launch.mp4"></video><img class="poster" src="{r}img/{img('35cabo2.jpg')}" alt=""><div class="scrim"></div></div>
+<div class="media"><video autoplay muted loop playsinline poster="{r}img/launch-poster.jpg" data-src="{r}video/launch.mp4"></video><img class="poster" src="{r}img/launch-poster.jpg" alt=""><div class="scrim"></div></div>
 <div class="wrap"><div class="ch-copy" style="max-width:56ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">Lines off</div>
 <h2>Off the beach. No marina, no waiting.</h2>
 <p>In Tamarindo the boats launch straight off the sand, a panga runs you out and you're fishing while the town is still waking up. In Flamingo you step off the dock at the marina. Either way the crew has already loaded ice, bait and the lunch.</p>
@@ -106,14 +106,28 @@ def home(ctx):
 </div>
 
 <section class="tight"><div class="wrap split">
-<div class="ph rv"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn" loading="lazy" style="object-position:50% 12%"><div class="cap">Steve &amp; Liisa Quinn. Tamarindo since 2010.</div></div>
+<div class="ph wide rv"><img src="{r}img/{img('04.jpg')}" alt="Steve and Liisa Quinn" loading="lazy" style="object-position:50% 30%"><div class="cap">Steve &amp; Liisa Quinn, Go Fish Costa Rica. Tamarindo since 2010.</div></div>
 <div class="ch-copy"><div class="t">Who answers the email</div><h2>We're not a call center. We're the two people you'll wave to on the beach.</h2>
 <p>We came down from Canada in 2004, stayed for good in 2010, and ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
 <p><a class="link" href="{r}discover/about-us.html">Our story</a> &nbsp;&nbsp; <a class="link" href="{r}discover/our-pledge-to-you.html">Our pledge</a></p></div></div></section>
 
+<section class="awards dark"><div class="wrap">
+<div class="aw-head"><img src="{r}img/logo.svg" alt="Go Fish Costa Rica" class="aw-logo"><div><div class="t">Reviews &amp; awards</div><h2>Fourteen years of Travelers' Choice. <em>That is not luck.</em></h2>
+<p>TripAdvisor gives its Travelers' Choice award to the top ten percent of attractions in the world, judged on what everyday travelers write afterwards. Go Fish Costa Rica has earned it every year since 2012.</p></div></div>
+<div class="aw-grid">
+<div class="aw"><b>2012 to 2025</b><span>TripAdvisor Travelers' Choice, fourteen years running</span></div>
+<div class="aw"><b>Top 10%</b><span>of attractions worldwide, by traveler reviews</span></div>
+<div class="aw"><b>10 years</b><span>Ducks Unlimited Approved Outfitter, partnership award 2025</span></div>
+<div class="aw"><b>$1.7M</b><span>raised for conservation through Go Fish trips at DU events</span></div>
+<div class="aw"><b>5.0</b><span>Google rating, five stars on every review</span></div>
+<div class="aw"><b>1,000+</b><span>anglers a year, most of them referred or returning</span></div>
+</div>
+<div class="aw-photo"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn receiving the Ducks Unlimited ten-year Approved Outfitter award" loading="lazy" style="object-position:50% 20%"><div class="cap">Ducks Unlimited Approved Outfitter, ten-year partnership award</div></div>
+</div></section>
+
 <section><div class="wrap quotes">
 <blockquote>“Every last detail was executed to perfection. Two days on a 31 ft flybridge boat with three great captains was the icing on the cake.”<footer>Laura Mayer, Google review</footer></blockquote>
 <div class="list">{''.join(f'<div><p>{E(t)}</p><b>{n}, {s}</b></div>' for t, n, s in REVIEWS if not n.startswith('Laura'))}
-<div class="years">{''.join(f'<span>{y}</span>' for y in range(2018, 2026))}</div><p class="small muted">Five stars on TripAdvisor every year since 2018. <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">Read the reviews</a> · <a href="{SOCIAL['ig']}" target="_blank" rel="noopener">@gofishcostarica</a></p></div>
+<div class="years">{''.join(f'<span>{y}</span>' for y in range(2018, 2026))}</div><p class="small muted">Five stars on TripAdvisor every year since 2018, Travelers' Choice since 2012. <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">Read the reviews on TripAdvisor</a> · <a href="{SOCIAL['ig']}" target="_blank" rel="noopener">@gofishcostarica</a></p></div>
 </div></section>'''
     return page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Tamarindo's number one sport fishing operation. Seventeen vetted boats in Tamarindo and Flamingo, sixteen adventures, booked by Steve and Liisa, who live here. See what a day on the water looks like, hour by hour.", body, extra_head=ctx['fleet_js']())
