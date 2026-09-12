@@ -507,7 +507,7 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .ig .t::before{content:"";width:28px;height:1.5px;background:currentColor}
 
 /* square-source hero: keep subject right, copy left */
-@media(max-width:900px){.chapter.hero .media img{object-position:58% 50%!important}}
+@media(max-width:900px){.chapter.hero .media img{object-position:48% 50%!important}}
 
 /* awards ledger beside the plaque photo */
 .aw-row{display:grid;grid-template-columns:minmax(280px,440px) 1fr;gap:clamp(24px,4vw,56px);align-items:start;margin-top:clamp(28px,4vw,48px)}
