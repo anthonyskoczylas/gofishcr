@@ -34,7 +34,7 @@ def home(ctx):
 <h1>One day on the water. <em>Let's plan yours.</em></h1>
 <p class="lead">Seventeen boats, two beaches, and two people who know every captain by name. This is what a Go Fish day looks like, hour by hour. Scroll through it, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-primary" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="#sand">Skip to the boats</a></div>
-<div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor, every year since 2018</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Guanacaste</div></div>
+<div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor, every year since 2018</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Costa Rica</div></div>
 </div></div></section>
 
 <!-- 06:45 -->
@@ -60,11 +60,11 @@ def home(ctx):
 <div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy" style="max-width:52ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">08:40 · The shelf</div>
 <h2>Twelve minutes out, a thousand feet down.</h2>
 <p>The continental shelf runs right along this coast, so the deep water starts almost at the beach. Less running, more lines in. It is why the North Pacific holds so many IGFA records, and why a 3/4 day here fishes like a full day anywhere else.</p>
-<p><a class="link" href="{r}discover/guanacaste-fishing.html">Why Guanacaste fishes differently</a></p></div></div></section>
+<p><a class="link" href="{r}discover/guanacaste-fishing.html">Why Tamarindo fishes differently</a></p></div></div></section>
 
 <!-- 10:15 -->
 <section class="chapter two flip" id="bite"><div class="stamp" aria-hidden="true">10:15</div>
-<div class="wrap"><div class="trio"><a href="{r}img/{img('sailfish.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish.jpg')}" alt="Sailfish boatside, about to be released" loading="lazy"></a><a href="{r}img/{img('marlin.jpg')}" data-lb="bite"><img src="{r}img/{img('marlin.jpg')}" alt="Marlin jumping" loading="lazy"></a><a href="{r}img/{img('roosterfish.jpg')}" data-lb="bite"><img src="{r}img/{img('roosterfish.jpg')}" alt="Roosterfish" loading="lazy"></a></div>
+<div class="wrap"><div class="trio"><a href="{r}img/{img('sailfish-jump.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish-jump.jpg')}" alt="Sailfish leaping behind the transom" loading="lazy"></a><a href="{r}img/{img('sailfish.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish.jpg')}" alt="Sailfish boatside, about to be released" loading="lazy"></a><a href="{r}img/{img('roosterfish.jpg')}" data-lb="bite"><img src="{r}img/{img('roosterfish.jpg')}" alt="Roosterfish" loading="lazy"></a></div>
 <div class="ch-copy"><div class="t">10:15 · Sailfish up</div>
 <h2>Roosters inshore. Sails and marlin off the edge.</h2>
 <p>Half days stay along the rocks for roosterfish, snapper and jacks. Go 3/4 or full and you're offshore for sailfish, marlin, tuna and mahi. Sailfish peak May to August, blue marlin November to April, and there is no month here with nothing biting.</p>
@@ -72,7 +72,7 @@ def home(ctx):
 
 <!-- 13:00 -->
 <section class="chapter two" id="lunch"><div class="stamp" aria-hidden="true">13:00</div>
-<div class="wrap"><div class="ph rv"><img src="{r}img/{img('img_1784.jpg')}" alt="Family on the bridge with the day's catch" loading="lazy"><div class="cap">Every charter: fruit, soda, water, beer. Light lunch on 3/4 and full days.</div></div>
+<div class="wrap"><div class="ph rv"><img src="{r}img/{img('lunch-cooler.jpg')}" alt="Cooler open on deck: cold beer, fruit and a sandwich" loading="lazy"><div class="cap">Every charter: fruit, soda, water, beer. Light lunch on 3/4 and full days.</div></div>
 <div class="ch-copy"><div class="t">13:00 · Lunch on the bridge</div>
 <h2>Cold beer, a sandwich, and the story you'll tell for years.</h2>
 <p>Table fish come home with you; half the restaurants in town will cook your catch that night. Billfish go back in the water, every one. Tips aren't expected, but a crew that worked hard for you will remember 15 to 20 percent.</p>
@@ -80,9 +80,9 @@ def home(ctx):
 
 <!-- 16:00 -->
 <section class="chapter photo on-photo" id="beach"><div class="stamp" aria-hidden="true">16:00</div>
-<div class="media"><canvas id="scrub" data-frames="{r}video/day/pg_" data-count="120" width="1440" height="810"></canvas><img class="poster" src="{r}video/playa-grande-poster.jpg" alt="Playa Grande from the air at golden hour"><div class="scrim b"></div></div>
+<div class="media"><canvas id="scrub" data-frames="{r}video/day/pg_" data-count="120" width="1440" height="810"></canvas><img class="poster" src="{r}video/playa-grande-poster.jpg" alt="Tamarindo bay from the air at golden hour"><div class="scrim b"></div></div>
 <div class="wrap" style="display:flex;align-items:flex-end;min-height:100svh;padding-bottom:clamp(48px,8vh,88px)"><div class="ch-copy" style="max-width:54ch"><div class="t">16:00 · Back on the sand</div>
-<h2>Golden hour on Playa Grande, and dinner already booked.</h2>
+<h2>Golden hour over Tamarindo bay, and dinner already booked.</h2>
 <p>The boat drops you where it picked you up. Shower, sunset, a table Liisa reserved at Pangas or El Chiringuito. Tomorrow could be the zipline, the estuary with the kids, or the boat again.</p></div></div></section>
 
 <!-- 17:45 -->
@@ -106,7 +106,7 @@ def home(ctx):
 </div>
 
 <section class="tight"><div class="wrap split">
-<div class="ph wide rv"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn" loading="lazy"><div class="cap">Steve &amp; Liisa Quinn. Tamarindo since 2010.</div></div>
+<div class="ph rv"><img src="{r}img/{img('steve-liisa-ducks-unlimited.jpg')}" alt="Steve and Liisa Quinn" loading="lazy" style="object-position:50% 12%"><div class="cap">Steve &amp; Liisa Quinn. Tamarindo since 2010.</div></div>
 <div class="ch-copy"><div class="t">Who answers the email</div><h2>We're not a call center. We're the two people you'll wave to on the beach.</h2>
 <p>We came down from Canada in 2004, stayed for good in 2010, and ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
 <p><a class="link" href="{r}discover/about-us.html">Our story</a> &nbsp;&nbsp; <a class="link" href="{r}discover/our-pledge-to-you.html">Our pledge</a></p></div></div></section>
@@ -116,4 +116,4 @@ def home(ctx):
 <div class="list">{''.join(f'<div><p>{E(t)}</p><b>{n}, {s}</b></div>' for t, n, s in REVIEWS if not n.startswith('Laura'))}
 <div class="years">{''.join(f'<span>{y}</span>' for y in range(2018, 2026))}</div><p class="small muted">Five stars on TripAdvisor every year since 2018. <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">Read the reviews</a> · <a href="{SOCIAL['ig']}" target="_blank" rel="noopener">@gofishcostarica</a></p></div>
 </div></section>'''
-    return page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Costa Rica's number one sport fishing operation. Seventeen vetted boats in Tamarindo and Flamingo, sixteen adventures, booked by Steve and Liisa, who live here. See what a day on the water looks like, hour by hour.", body, extra_head=ctx['fleet_js']())
+    return page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Tamarindo's number one sport fishing operation. Seventeen vetted boats in Tamarindo and Flamingo, sixteen adventures, booked by Steve and Liisa, who live here. See what a day on the water looks like, hour by hour.", body, extra_head=ctx['fleet_js']())
