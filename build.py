@@ -362,7 +362,7 @@ def adv_page(a):
 <div class="fld"><label for="ab-notes">Hotel, ages of kids, anything else</label><textarea id="ab-notes" name="notes"></textarea></div>
 <div class="fld"><label for="ab-tr">Need transportation?</label><select id="ab-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <button class="btn btn-primary btn-block" type="submit">Request this tour</button>
-<div class="note">No payment online. We hold the spot and you pay the operator on the day unless told otherwise.</div></form></aside></div></section>
+<div class="note">No payment online. A 50% deposit holds your spot and the balance is paid to the operator on the day.</div></form></aside></div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More adventures</div><h2 style="font-size:30px">You might also like</h2></div><a class="btn btn-ghost btn-sm" href="{r}adventures/">All adventures</a></div><div class="grid g3">{''.join(adv_card(x, r) for x in others)}</div></div></section>'''
     bar = f'<div class="bookbar"><div><b>{fr or "Ask"}</b><small>{"per person" if fr else "for rates"}</small></div><a class="btn btn-primary btn-sm" href="#adv-book">Request this tour</a></div>'
     write(f"adventures/{a['slug']}.html", page(r, f"{a['name']} | Go Fish Costa Rica", (prose[0] if prose else a['name'])[:155], body, bookbar=bar))
