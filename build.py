@@ -188,8 +188,8 @@ def home():
 <section class="dark"><div class="wrap"><div class="sec-head rv"><div class="kicker">How it works</div><h2>Booking a charter should feel like <em>calling a friend who lives here.</em></h2></div>
 <div class="steps">
 <div class="s rv"><h3>Tell us your dates and your crew</h3><p>Use the planner or send an email. Where you are staying, how many are fishing, what you want to catch, how hard you want to fish.</p></div>
-<div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours.</p></div>
-<div class="s rv"><h3>Show up at the beach at first light</h3><p>Gear, bait, drinks and lunch are on board. You pay the boat directly on the day. We stay on call the whole trip.</p></div>
+<div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours, and a 50% deposit holds the boat.</p></div>
+<div class="s rv"><h3>Show up at the beach at first light</h3><p>Gear, bait, drinks and lunch are on board. The other half of the rate is paid on the day. We stay on call the whole trip.</p></div>
 </div></div></section>
 
 <section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">Beyond the boat</div><h2>Adventures for the <em>non-fishing days.</em></h2></div><a class="btn btn-ghost" href="{r}adventures/">All 16 adventures</a></div>
@@ -275,7 +275,7 @@ def boat_page(b):
 </div>
 <aside><form class="book" id="boat-book">
 <div class="from"><b>{('$%s' % f"{b['half']:,}") if b['half'] else 'Quote'}</b><span>{'half day · per boat' if b['half'] else 'private sail'}</span></div>
-<div class="sub">Request this boat. Steve &amp; Liisa confirm availability within hours. No payment online.</div>
+<div class="sub">Request this boat. Steve &amp; Liisa confirm availability within hours, then a 50% deposit holds it.</div>
 {seg}
 <div class="row2"><div class="fld"><label for="bk-date">Date</label><input id="bk-date" type="date" name="date" required></div><div class="fld"><label for="bk-pax">Guests</label><select id="bk-pax" name="pax">{pax_opts}</select></div></div>
 <div class="fld"><label for="bk-name">Your name</label><input id="bk-name" name="name" required autocomplete="name"></div>
@@ -284,7 +284,7 @@ def boat_page(b):
 <div class="fld"><label for="bk-tr">Need transportation?</label><select id="bk-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 {'<div class="est" id="est"><span><small>Estimated total</small></span><span style="text-align:right"><b></b><small></small></span></div>' if not b['quote'] else ''}
 <button class="btn btn-primary btn-block" type="submit">Request this boat</button>
-<div class="note">You pay the boat directly on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing license and crew tips extra.</div>
+<div class="note">A 50% deposit reserves the boat and the balance is paid on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing license and crew tips extra.</div>
 </form></aside>
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>
@@ -523,7 +523,7 @@ def blog():
 # ---------------------------------------------------------------- TRIP PLANNER
 def planner():
     r = ''
-    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No payment online, no obligation. Steve &amp; Liisa reply within hours.</p></div></header>
+    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No obligation to ask. Steve &amp; Liisa reply within hours, and a 50% deposit holds your boat once you say yes.</p></div></header>
 <section style="margin-top:-100px;padding-top:0;position:relative;z-index:2"><div class="wrap"><div class="wiz" id="wizard">
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
