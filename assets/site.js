@@ -7,6 +7,7 @@
   var CONFIG = {
     email: document.documentElement.getAttribute('data-email') || 'gofishcr@gmail.com',   // set EMAIL in build.py, not here
     cc: document.documentElement.getAttribute('data-cc') || '',                             // set EMAIL_CC in build.py
+    endpoint: document.documentElement.getAttribute('data-endpoint') || '',                 // set MAIL_ENDPOINT in build.py
     phone: '1-888-434-7491',
     whatsapp: '',
     behold: ''   // Behold.so feed ID for @gofishcostarica; leave empty until Steve creates one at behold.so
@@ -78,10 +79,11 @@
   }
 
   // ---- REQUEST HELPERS (static site: email / WhatsApp / phone) ------------
-  function buildRequest(lines) {
+  function buildRequest(lines, data) {
     var body = lines.filter(Boolean).join('\n');
     return {
       text: body,
+      data: data || null,
       mailto: 'mailto:' + CONFIG.email + '?' + (CONFIG.cc ? 'cc=' + encodeURIComponent(CONFIG.cc) + '&' : '') + 'subject=' + encodeURIComponent(lines[0].replace(/^Request: /, '') + ' — booking request') + '&body=' + encodeURIComponent(body + '\n\nSent from gofishcr.com'),
       wa: CONFIG.whatsapp ? 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(body) : ''
     };
@@ -161,7 +163,7 @@
         f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ]);
+      ], { kind: 'boat', trip: B.name, base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d]) + ' per boat' : 'custom quote', dateText: fmtDate(f.date.value), pax: f.pax.value, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value });
       showSent(bp, req, 'Your request for the ' + B.name + ' is ready to send.');
     });
   }
@@ -179,7 +181,7 @@
       f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
       'Transportation: ' + (f.transport.value || 'not needed'),
       f.notes.value ? 'Notes: ' + f.notes.value : ''
-    ]);
+    ], { kind: 'tour', trip: ap.getAttribute('data-name'), base: f.base ? f.base.value : '', dateText: fmtDate(f.date.value), pax: f.pax.value, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value });
     showSent(ap, req, 'Your request is ready to send.');
   });
 
@@ -187,14 +189,37 @@
   var cf = $('#contact-form');
   if (cf) cf.addEventListener('submit', function (e) {
     e.preventDefault(); var f = cf.elements;
-    var req = buildRequest(['Request: Message from ' + f.name.value, 'Name: ' + f.name.value, 'Email: ' + f.email.value, f.phone.value ? 'Phone: ' + f.phone.value : '', '', f.message.value]);
+    var req = buildRequest(['Request: Message from ' + f.name.value, 'Name: ' + f.name.value, 'Email: ' + f.email.value, f.phone.value ? 'Phone: ' + f.phone.value : '', '', f.message.value],
+      { kind: 'message', name: f.name.value, email: f.email.value, phone: f.phone.value, message: f.message.value });
     showSent(cf, req, 'Your message is ready to send.');
   });
 
   function showSent(form, req, title) {
+    if (!CONFIG.endpoint || !req.data || !window.fetch) return showFallback(form, req, title);
+    var btn = form.querySelector('button[type=submit]'), label = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+    var payload = Object.assign({ page: location.href, website: (form.elements.website && form.elements.website.value) || '' }, req.data);
+    var ctrl = window.AbortController ? new AbortController() : null, timer = ctrl && setTimeout(function () { ctrl.abort(); }, 12000);
+    fetch(CONFIG.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function () { showConfirmed(form, req); })
+      .catch(function () { showFallback(form, req, title, true); })
+      .then(function () { if (timer) clearTimeout(timer); if (btn) { btn.disabled = false; btn.textContent = label; } });
+  }
+  function showConfirmed(form, req) {
+    var wrap = form.parentNode, isMsg = req.data.kind === 'message';
+    var div = document.createElement('div'); div.className = 'sent';
+    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + (isMsg ? 'Message sent.' : 'Request sent.') + '</h3>'
+      + '<p class="muted" style="margin:8px 0 18px">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve &amp; Liisa reply within hours' + (isMsg ? '.' : ', then send your payment options.') + '</p>'
+      + '<div class="copybox">' + req.text.replace(/</g, '&lt;') + '</div>'
+      + '<div class="alt" style="margin-top:14px"><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a></div>';
+    form.style.display = 'none'; wrap.appendChild(div);
+    div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function showFallback(form, req, title, failed) {
     var wrap = form.parentNode;
     var div = document.createElement('div'); div.className = 'sent';
-    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">Send it by email and Steve &amp; Liisa reply within hours.</p>'
+    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">' + (failed ? 'Our sender is busy, so send it from your email app instead. ' : 'Send it by email and ') + 'Steve &amp; Liisa reply within hours.</p>'
       + '<a class="btn btn-primary btn-block" href="' + req.mailto + '">Send by email</a>'
       + (req.wa ? '<a class="btn btn-ghost btn-block" style="margin-top:8px" target="_blank" rel="noopener" href="' + req.wa + '">Send on WhatsApp</a>' : '')
       + '<div class="alt"><button type="button" class="btn btn-ghost btn-sm" data-copy>Copy details</button><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a></div>'
@@ -298,7 +323,7 @@
         f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ]);
+      ], { kind: state.type === 'adventure' ? 'tour' : 'boat', trip: c.name, base: state.base, length: (state.type !== 'adventure' && c.boat && !c.boat.quote) ? durLabel2[state.dur] : '', rate: c.price, dateText: fmtDate(state.date), pax: state.pax, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value });
       showSent(e.target, req, 'Your trip request is ready.');
       try { localStorage.removeItem('gf_wizard'); } catch (x) { }
     });

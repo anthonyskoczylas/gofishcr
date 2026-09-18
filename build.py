@@ -18,6 +18,7 @@ E = html.escape
 SITE = 'Go Fish Costa Rica'
 EMAIL, PHONE, PHONE_TEL = 'gofishcr@gmail.com', '1-888-434-7491', '+18884347491'
 EMAIL_CC = ''  # optional second inbox copied on every booking request (blank = none)
+MAIL_ENDPOINT = ''  # gofish-mail service (Vercel) that emails the guest + Go Fish; blank = email-app fallback only
 SOCIAL = dict(fb='https://www.facebook.com/GoFishCr', ig='https://www.instagram.com/gofishcostarica', yt='https://www.youtube.com/@GoFishCostaRica',
               ta='https://www.tripadvisor.com/Attraction_Review-g309253-d1474067-Reviews-Go_Fish_Costa_Rica-Tamarindo_Province_of_Guanacaste.html')
 
@@ -73,7 +74,7 @@ def footer(root):
 
 def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
     return f'''<!DOCTYPE html>
-<html lang="en" data-root="{root}" data-email="{EMAIL}" data-cc="{EMAIL_CC}">
+<html lang="en" data-root="{root}" data-email="{EMAIL}" data-cc="{EMAIL_CC}" data-endpoint="{MAIL_ENDPOINT}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(html.unescape(title))}</title>
