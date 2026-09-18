@@ -17,6 +17,7 @@ E = html.escape
 
 SITE = 'Go Fish Costa Rica'
 EMAIL, PHONE, PHONE_TEL = 'gofishcr@gmail.com', '1-888-434-7491', '+18884347491'
+EMAIL_CC = ''  # optional second inbox copied on every booking request (blank = none)
 SOCIAL = dict(fb='https://www.facebook.com/GoFishCr', ig='https://www.instagram.com/gofishcostarica', yt='https://www.youtube.com/@GoFishCostaRica',
               ta='https://www.tripadvisor.com/Attraction_Review-g309253-d1474067-Reviews-Go_Fish_Costa_Rica-Tamarindo_Province_of_Guanacaste.html')
 
@@ -72,7 +73,7 @@ def footer(root):
 
 def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
     return f'''<!DOCTYPE html>
-<html lang="en" data-root="{root}">
+<html lang="en" data-root="{root}" data-email="{EMAIL}" data-cc="{EMAIL_CC}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(html.unescape(title))}</title>
@@ -486,7 +487,7 @@ def discover():
 <div class="fld"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required style="min-height:140px"></textarea></div>
 <button class="btn btn-primary btn-block" type="submit">Send message</button>
 <p class="small muted" style="margin-top:10px">Booking a boat? The <a href="{r}book.html">trip planner</a> is faster.</p></form></div></div></section>'''
-    write('discover/contact-us.html', page(r, 'Contact Go Fish Costa Rica', 'Email gofishcr@gmail.com or call toll-free 1-888-434-7491. Offices at Playa Tamarindo and Playa Flamingo, Guanacaste.', body))
+    write('discover/contact-us.html', page(r, 'Contact Go Fish Costa Rica', f'Email {EMAIL} or call toll-free {PHONE}. Offices at Playa Tamarindo and Playa Flamingo, Guanacaste.', body))
 
 # ---------------------------------------------------------------- GALLERY
 def gallery():

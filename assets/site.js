@@ -5,7 +5,8 @@
   // ---- CONFIG (edit here only) -------------------------------------------
   // WhatsApp: leave empty ('') to hide the WhatsApp buttons. Format: country code + number, digits only.
   var CONFIG = {
-    email: 'gofishcr@gmail.com',
+    email: document.documentElement.getAttribute('data-email') || 'gofishcr@gmail.com',   // set EMAIL in build.py, not here
+    cc: document.documentElement.getAttribute('data-cc') || '',                             // set EMAIL_CC in build.py
     phone: '1-888-434-7491',
     whatsapp: '',
     behold: ''   // Behold.so feed ID for @gofishcostarica; leave empty until Steve creates one at behold.so
@@ -81,7 +82,7 @@
     var body = lines.filter(Boolean).join('\n');
     return {
       text: body,
-      mailto: 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent(lines[0].replace(/^Request: /, '') + ' — booking request') + '&body=' + encodeURIComponent(body + '\n\nSent from gofishcr.com'),
+      mailto: 'mailto:' + CONFIG.email + '?' + (CONFIG.cc ? 'cc=' + encodeURIComponent(CONFIG.cc) + '&' : '') + 'subject=' + encodeURIComponent(lines[0].replace(/^Request: /, '') + ' — booking request') + '&body=' + encodeURIComponent(body + '\n\nSent from gofishcr.com'),
       wa: CONFIG.whatsapp ? 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(body) : ''
     };
   }
