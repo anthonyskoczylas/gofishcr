@@ -127,8 +127,8 @@ def nav(root, light=False):
 <a class="logo" href="{root}index.html" aria-label="Go Fish Costa Rica home"><img class="lm" src="{root}img/logo.svg" alt="Go Fish Costa Rica"></a>
 <ul class="nav-links">
 <li><a href="{root}charters/">Fishing Charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}dining/">Dining</a></li>
-<li><a href="{root}discover/">Discover</a><ul class="dd">{dd}</ul></li><li><a href="{root}gallery.html">Gallery</a></li><li><a href="{root}blog/">Blog</a></li></ul>
-{social_links('nav-social')}<a class="nav-trip" href="{root}trip.html" hidden>My trip<span>0</span></a><a class="nav-cta" href="{root}book.html">Plan my trip</a>
+<li><a href="{root}discover/">Discover</a><ul class="dd">{dd}<li><a href="{root}blog/">Blog</a></li></ul></li><li><a href="{root}gallery.html">Gallery</a></li></ul>
+<a class="nav-trip" href="{root}trip.html" hidden aria-label="My trip"><b>My trip</b><span>0</span></a><a class="nav-cta" href="{root}book.html">Plan my trip</a>
 <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
 <div class="drawer"><button class="close" aria-label="Close">&times;</button>
 <a href="{root}charters/">Fishing Charters</a><a href="{root}adventures/">Adventures</a><a href="{root}dining/">Dining</a><a href="{root}gallery.html">Gallery</a><a href="{root}blog/">Blog</a><a href="{root}discover/">Discover</a>

@@ -311,7 +311,7 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .gal.one{grid-template-columns:1fr;grid-template-rows:1fr}
 .gal.two{grid-template-columns:1fr 1fr;grid-template-rows:1fr}
 .gal.two a:first-child{grid-row:auto}
-@media(max-width:700px){.gal{height:380px;grid-template-columns:1fr;grid-template-rows:2fr 1fr 1fr}.gal a:first-child{grid-row:auto}}
+@media(max-width:700px){.gal{height:auto;grid-template-columns:1fr 1fr;grid-template-rows:210px 120px}.gal a:first-child{grid-row:auto;grid-column:1/-1}}
 .specs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0}
 .specs div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
 .specs span{display:block;font-family:var(--display);font-weight:600;font-size:11.5px;letter-spacing:.05em;color:var(--ink-2)}
@@ -570,12 +570,19 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .pin-ok svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--sea)}
 
 /* ---- trip builder (book.html) + add-to-trip (Tyler round two) ---- */
+.nav-trip[hidden],.drawer-trip[hidden]{display:none!important}
 .nav-trip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--display);font-weight:600;font-size:13.5px;
   padding:9px 14px;border-radius:var(--r);border:1.5px solid var(--line);color:var(--ink);margin-right:10px;transition:.2s}
 .nav-trip span{display:grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--sea);color:#fff;font-size:12px}
 .nav-trip:hover{border-color:var(--sea)}
 nav.top.over-photo .nav-trip{border-color:rgba(255,255,255,.4);color:#fff}
-@media(max-width:1000px){.nav-trip{display:none}}
+@media(max-width:1000px){
+  .nav-trip{margin-right:8px;padding:8px 11px;gap:6px}
+  .nav-trip b{display:none}
+  .nav-trip::before{content:"";width:17px;height:17px;background:currentColor;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18l-1.5 11.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5z'/%3E%3Cpath d='M8 6V4.5a4 4 0 0 1 8 0V6'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18l-1.5 11.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5z'/%3E%3Cpath d='M8 6V4.5a4 4 0 0 1 8 0V6'/%3E%3C/svg%3E") center/contain no-repeat}
+}
 .drawer .drawer-trip{display:flex;align-items:center;justify-content:space-between}
 .drawer .drawer-trip span{background:var(--sea);color:#fff;border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:13px;padding:0 6px}
 
@@ -608,3 +615,6 @@ nav.top.over-photo .nav-trip{border-color:rgba(255,255,255,.4);color:#fff}
 /* nav breathing room once the socials and the trip chip are in */
 @media(max-width:1150px){.nav-social{display:none}}
 @media(max-width:1150px){.nav-links{gap:17px}.nav-trip{margin-right:6px;padding:8px 11px}}
+
+/* scraped copy sometimes carries a bare URL; never let it push the page wide */
+.prose p,.prose li,blockquote p{overflow-wrap:anywhere}
