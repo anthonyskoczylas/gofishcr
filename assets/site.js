@@ -546,7 +546,7 @@
       var c = chosen(), s = $('#summary');
       if (!c) { s.innerHTML = '<div class="empty">Go back and pick a boat or adventure first.</div>'; paintDayPicker(); paintWizTrip(); return; }
       paintDayPicker(); paintWizTrip();
-      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Base</dt><dd>' + (state.base || 'Either') + '</dd><dt>Your dates</dt><dd>' + ((state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + ((state.type !== 'adventure' && state.style) ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + ((state.type !== 'adventure' && state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
+      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Location</dt><dd>' + (state.base || 'Either') + '</dd><dt>Your dates</dt><dd>' + ((state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + ((state.type !== 'adventure' && state.style) ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + ((state.type !== 'adventure' && state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
         + '<div class="tot"><span class="muted small">' + (c.est ? (state.type === 'adventure' ? 'Estimated total' : 'Estimated total, excluding taxes') : '') + '</span><b>' + (c.est || c.price) + '</b></div>'
         + (c.est && c.est !== 'Quote' ? '<div class="muted small" style="margin-top:6px">Per boat, all gear, bait, drinks' + (state.dur !== 'half' ? ' and light lunch' : '') + ' included. Taxes, fishing licences and crew tips are not included.</div>' : '');
     }
@@ -635,7 +635,7 @@
 
     $$('[data-next]', wz).forEach(function (b) { b.addEventListener('click', function () {
       if (step === 0 && !state.type) return toast('Pick what kind of day you want');
-      if (step === 0 && !state.base && state.type !== 'adventure') return toast('Pick a base: Tamarindo or Flamingo');
+      if (step === 0 && !state.base && state.type !== 'adventure') return toast('Pick a location: Tamarindo or Flamingo');
       if (step === 2 && !state.boat && !state.adv) return toast('Pick one to continue');
       go(step + 1);
     }); });

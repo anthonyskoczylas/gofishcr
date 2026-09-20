@@ -300,10 +300,10 @@ def home():
 def charters():
     r = '../'
     cards = ''.join(boat_card(b, r) for b in sorted(FLEET, key=lambda b: (b['quote'], b['half'] or 0)))
-    body = page_hero(r, 'Fishing charters in Tamarindo &amp; Flamingo', 'From 21-foot center consoles to 43-foot sport fishers and private catamarans. Rates are per boat, all gear and drinks included. Pick a base, tell us your group, and we will tell you which boat is right.', 'offshore-aerial.jpg', [('Home', r+'index.html'), ('Charters', None)]) + f'''
+    body = page_hero(r, 'Fishing charters in Tamarindo &amp; Flamingo', 'From 21-foot center consoles to 43-foot sport fishers and private catamarans. Rates are per boat, all gear and drinks included. Pick a location, tell us your group, and we will tell you which boat is right.', 'offshore-aerial.jpg', [('Home', r+'index.html'), ('Charters', None)]) + f'''
 <section style="padding-top:0;position:relative;z-index:2"><div class="wrap">
 <form id="fleet-filters" class="filters">
-<div class="f"><label>Base</label><select name="base"><option value="">Both</option><option>Tamarindo</option><option>Flamingo</option></select></div>
+<div class="f"><label>Location</label><select name="base"><option value="">Both</option><option>Tamarindo</option><option>Flamingo</option></select></div>
 <div class="f"><label>Guests</label><select name="pax"><option value="">Any</option>{''.join(f'<option value="{i}">{i}</option>' for i in range(1,10))}</select></div>
 <div class="f"><label>Budget</label><select name="budget"><option value="">Any</option><option value="800">Under $800</option><option value="1100">Under $1,100</option><option value="1500">Under $1,500</option><option value="2200">Under $2,200</option></select></div>
 <div class="f"><label>Washroom</label><select name="wash"><option value="">Either</option><option value="yes">Yes please</option></select></div>
@@ -340,14 +340,14 @@ def boat_page(b):
     pax_opts = ''.join(f'<option value="{i}"{" selected" if i==min(4,b["max_pax"] or 4) else ""}>{i}</option>' for i in range(1, (b['max_pax'] or 20) + 1))
     intro = {
       True: f"Private sailing catamaran out of {base}. Morning or sunset departures, snorkeling and paddleboarding gear, open bar and lunch on the sunset sail. Priced by request depending on group size and season.",
-      False: f"{(b['top_label'] + '. ') if b['top'] else ''}Based in {base}, priced for {b['priced_for']} anglers with room for {b['max_pax']}. {'Washroom on board. ' if b['washroom'] else 'No washroom on board, so she is built for a fast inshore run rather than a long day offshore. '}Captain and crew speak English, and every trip runs with catch and release on billfish."
+      False: f"{(b['top_label'] + '. ') if b['top'] else ''}Out of {base}, priced for {b['priced_for']} anglers with room for {b['max_pax']}. {'Washroom on board. ' if b['washroom'] else 'No washroom on board, so she is built for a fast inshore run rather than a long day offshore. '}Captain and crew speak English, and every trip runs with catch and release on billfish."
     }[b['quote']]
     body = f'''<header class="page-hero" style="padding-bottom:40px"><img class="bg" src="{r}img/{img(b['images'][0])}" alt=""><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><a href="{r}charters/">Charters</a><span>/</span><span>{E(b['name'])}</span></div>
 <div class="chips" style="margin-bottom:16px">{''.join(f'<span class="chip" style="background:rgba(255,255,255,.14);color:#fff">{l}</span>' for l in b['locations'])}{f'<span class="chip" style="background:var(--sand);color:var(--navy)">{b["top_label"]}</span>' if b['top'] else ''}</div>
 <h1>{E(b['name'])}</h1><p>{intro}</p></div></header>
 <section><div class="wrap detail">
 <div class="main">{gallery_html(r, b['images'], 'boat', b['name'])}
-<div class="specs"><div><span>Length</span><b>{boat_len(b)} ft</b></div><div><span>Guests</span><b>{('up to %d' % b['max_pax']) if b['max_pax'] else 'Group'}</b></div><div><span>Base</span><b style="font-size:18px">{base}</b></div></div>
+<div class="specs"><div><span>Length</span><b>{boat_len(b)} ft</b></div><div><span>Guests</span><b>{('up to %d' % b['max_pax']) if b['max_pax'] else 'Group'}</b></div><div><span>Location</span><b style="font-size:18px">{base}</b></div></div>
 <h2 style="font-size:26px">What this boat offers</h2><div class="chips" style="margin:14px 0 8px">{''.join(f'<span class="chip">{E(f)}</span>' for f in b['features'])}<span class="chip">{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>
 {rates}
 <div class="incl"><div><h4>Included</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul></div></div>
@@ -481,7 +481,7 @@ def dining():
 # ---------------------------------------------------------------- DISCOVER
 def discover():
     r = '../'
-    items = [('about-us','About Steve & Liisa','Two Canadians who left in 2010 and never went back.','steveandliisa.jpg'),('our-pledge-to-you','Our pledge to you','Objective, personal, and on call from first email to last cast.','sloth.jpg'),('crews-equipment','Crews & equipment','What every boat we send you on has to have.','fb_img_1555113966938.jpg'),('fish-seasons','Fish & seasons','What bites when on the Gold Coast, month by month.','roosterfish.jpg'),('guanacaste-fishing','Guanacaste fishing','IGFA record waters and why the North Pacific is different.','guanacaste-papagayo-gulf.jpg'),('weather','Weather','Live forecast for Tamarindo and Flamingo.','tamarindo-beach.jpg'),('contact-us','Contact us','Hours, bases and the fastest way to reach us.','costaricajaco.jpg')]
+    items = [('about-us','About Steve & Liisa','Two Canadians who left in 2010 and never went back.','steveandliisa.jpg'),('our-pledge-to-you','Our pledge to you','Objective, personal, and on call from first email to last cast.','sloth.jpg'),('crews-equipment','Crews & equipment','What every boat we send you on has to have.','fb_img_1555113966938.jpg'),('fish-seasons','Fish & seasons','What bites when on the Gold Coast, month by month.','roosterfish.jpg'),('guanacaste-fishing','Guanacaste fishing','IGFA record waters and why the North Pacific is different.','guanacaste-papagayo-gulf.jpg'),('weather','Weather','Live forecast for Tamarindo and Flamingo.','tamarindo-beach.jpg'),('contact-us','Contact us','Hours, locations and the fastest way to reach us.','costaricajaco.jpg')]
     cards = ''.join(f'<a class="card" href="{r}discover/{s}.html"><div class="ph"><img src="{r}img/{img(im)}" alt="" loading="lazy"></div><div class="body"><h3>{t}</h3><p class="small muted">{d}</p></div></a>' for s, t, d, im in items)
     body = page_hero(r, 'Discover Go Fish', 'The people, the pledge, the fish and the water. Everything you would want to know before you book with the only trusted fishing charter and adventure agency on the Guanacaste coast.', 'guanacaste-papagayo-gulf.jpg', [('Home', r+'index.html'), ('Discover', None)]) + f'<section><div class="wrap"><div class="grid g3">{cards}</div></div></section>'
     write('discover/index.html', page(r, 'Discover Go Fish Costa Rica', 'About Steve & Liisa Quinn, our pledge, crews and equipment standards, fish seasons, Guanacaste fishing guide, weather and contact.', body))
@@ -611,7 +611,7 @@ def blog():
 <section><div class="wrap-n prose">{content}
 <hr style="border:0;border-top:1px solid var(--line);margin:40px 0">
 <p class="small muted">Next up: <a href="{r}blog/{nxt['slug']}.html">{E(nxt['title'])}</a> · <a href="{r}blog/">All posts</a></p></div></section>
-<section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><h2>Ready to fish Guanacaste?</h2><p>Seventeen boats, two bases, one honest recommendation.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></section>'''
+<section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><h2>Ready to fish Guanacaste?</h2><p>Seventeen boats, two locations, one honest recommendation.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></section>'''
         write(f"blog/{p['slug']}.html", page(r, f"{p['title']} | Go Fish Costa Rica", (p['desc'] or (p['paras'][0] if p['paras'] else p['title']))[:155], body))
 
 # ---------------------------------------------------------------- TRIP PLANNER
@@ -625,7 +625,7 @@ def planner():
 <label class="opt"><input type="radio" name="type" value="fishing"><span class="ic">◐</span><b>Fishing charter</b><small>Half, 3/4 or full day on one of 14 sport fishing boats. Inshore roosters to offshore marlin.</small></label>
 <label class="opt"><input type="radio" name="type" value="catamaran"><span class="ic">◭</span><b>Private catamaran</b><small>Your own 40', 42' or 65' cat for a morning or sunset sail. Snorkel gear, bar, lunch.</small></label>
 <label class="opt"><input type="radio" name="type" value="adventure"><span class="ic">▲</span><b>Adventures</b><small>ATV, zipline, volcano, Rio Celeste, estuary, surf lesson, spa and more.</small></label></div>
-<h2 style="font-size:24px;margin-top:30px">Which base is closer to you?</h2><p class="lead">Boats launch from the beach at both. Tours pick up from either.</p>
+<h2 style="font-size:24px;margin-top:30px">Which location is closer to you?</h2><p class="lead">Boats launch from the beach at both. Tours pick up from either.</p>
 <div class="opts" style="grid-template-columns:1fr 1fr 1fr">
 <label class="opt"><input type="radio" name="base" value="Tamarindo"><b>Tamarindo</b><small>Also Langosta, Pinilla, JW Marriott, Avellanas.</small></label>
 <label class="opt"><input type="radio" name="base" value="Flamingo"><b>Flamingo</b><small>Also Potrero, Conchal, Brasilito, Westin, Las Catalinas.</small></label>
@@ -657,7 +657,7 @@ def planner():
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button class="btn btn-primary" type="submit" id="wiz-send">Send my request</button></div></form></div>
 </div>
 <p class="small muted" style="text-align:center;margin-top:24px">Prefer to talk? Call toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a> or email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div></section>'''
-    write('book.html', page(r, 'Plan Your Trip | Go Fish Costa Rica', 'Four-step trip planner: pick fishing charter, private catamaran or adventure, choose your base and dates, see the boats that fit your group, send a request.', body, extra_head=fleet_js()))
+    write('book.html', page(r, 'Plan Your Trip | Go Fish Costa Rica', 'Four-step trip planner: pick fishing charter, private catamaran or adventure, choose your location and dates, see the boats that fit your group, send a request.', body, extra_head=fleet_js()))
 
 def trip_page():
     """trip.html — the running list. The planner still books one thing; this stacks a whole week."""
