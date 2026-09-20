@@ -94,8 +94,8 @@
    "Sunset Catamaran Cruise – Tamarindo & Flamingo, Costa Rica",
    "Sail the Pacific on a luxury catamaran while enjoying snorkeling, stand-up paddleboarding, swimming, and a late lunch (served around 3pm). Unlimited drinks—both alcoholic and non-alcoholic—are included. Relax as you watch the stunning Costa Rica sunset over the ocean.",
    "Rates (tax included):",
-   "Tamarindo: Adults $108 | Kids 5–11 $74 | Under 5 free (no transportation)",
-   "Flamingo: Adults $108 | Kids 5–12 $74 | Under 5 free (transportation included)",
+   "Tamarindo: Adults $125 | Kids 5–11 $74 | Under 5 free (no transportation)",
+   "Flamingo: Adults $125 | Kids 5–12 $74 | Under 5 free (transportation included)",
    "Add $10 pp for JW Marriott or Pinilla pickups.",
    "Duration: Meet at 1pm | Return around 5:45pm",
    "Private charters available upon request."
@@ -115,7 +115,7 @@
   "paras": [
    "All-Day Mega Combo Tour – Guanacaste",
    "For thrill-seekers, this all-day tour includes ziplining, river tubing, horseback riding, rock climbing, hot springs, and volcanic mud baths—plus a traditional Costa Rican lunch.",
-   "Cost: $195 per person (minimum 4 people) | Private $225 pp",
+   "Cost: $195 per person (minimum 4 people) | Private $225 per person (minimum 2 people)",
    "Duration: Pickup at 7:30am | Return 6:30–7pm (2 hrs from Tamarindo)",
    "Included: Transportation, guide, lunch, all activities",
    "What to Bring: Shoes/clothes that can get wet, bathing suit, towel, sunscreen, bug repellent, camera, change of clothes"
@@ -225,7 +225,7 @@
   "paras": [
    "Tamarindo Estuary Boat Tour",
    "Conveniently located in Tamarindo, this 2-hour estuary boat ride explores the mangroves where you’ll see iguanas, crocodiles, caimans, exotic birds, and howler monkeys. Includes a short jungle walk for wildlife spotting.",
-   "Cost: $50 per person (tax included)",
+   "Cost: $60 per person (tax included)",
    "Duration: 2 hours (pickup times vary with the tides)",
    "Included: Transportation in Tamarindo, guide, boat ride",
    "What to Bring: Comfortable shoes and clothes, bug repellent, sunscreen, camera, binoculars"
@@ -247,7 +247,8 @@
   "paras": [
    "At GoFish Costa Rica, we invite you to experience the thrill and beauty of horseback riding in Guanacaste. Picture yourself riding a majestic horse through lush rainforests, along pristine beaches, and up rugged mountain trails, with the natural splendor of Costa Rica all around you. Guanacaste is renowned for its diverse landscapes and rich biodiversity, making it the perfect destination for an unforgettable horseback riding adventure.",
    "Our tours cater to all skill levels, from beginners to experienced riders, ensuring that everyone can enjoy the journey. Friendly and knowledgeable guides will accompany you, sharing fascinating insights into the local culture, history, and ecology, enriching your experience. Whether you prefer a leisurely ride through the forest, an exhilarating gallop along the coast, or a challenging mountain trail, we have the perfect adventure for you.",
-   "At GoFish Costa Rica, your safety and satisfaction are our top priorities. Our well-trained horses and comprehensive briefings ensure a comfortable and enjoyable ride. We are also committed to sustainable tourism practices, aiming to minimize environmental impact and support local communities. Join us for a horseback riding experience in Guanacaste that promises not just stunning views and encounters with wildlife, but also memories that will last a lifetime. Contact us today to book your adventure and explore the breathtaking landscapes of Costa Rica."
+   "At GoFish Costa Rica, your safety and satisfaction are our top priorities. Our well-trained horses and comprehensive briefings ensure a comfortable and enjoyable ride. We are also committed to sustainable tourism practices, aiming to minimize environmental impact and support local communities. Join us for a horseback riding experience in Guanacaste that promises not just stunning views and encounters with wildlife, but also memories that will last a lifetime. Contact us today to book your adventure and explore the breathtaking landscapes of Costa Rica.",
+   "Rates start at $75 per person."
   ],
   "images": [
    "horseback-riding.jpg",
@@ -264,7 +265,7 @@
   "paras": [
    "Monteverde Cloud Forest Tour",
    "Travel to the Monteverde Cloud Forest, one of Costa Rica’s most famous destinations. Choose 2 activities: Butterfly Gardens, Insect Museum, Reptile Exhibit, Ziplining (13 cables & Tarzan swing), or Hanging Bridges (8 bridges up to 560 ft long).",
-   "Cost: $220 per person (based on 4 people – private tours available)",
+   "Cost: $225 per person (based on 4 people – private tours available)",
    "Duration: Pickup at 6:30am | Return 7pm (3 hrs each way from Tamarindo)",
    "Included: Transportation, guide, entrance fees, lunch",
    "What to Bring: Clothes for varying weather, rain gear, closed shoes, sunscreen, bug repellent, camera"
@@ -350,7 +351,8 @@
    "Join our knowledgeable guides as they lead you on a journey to secluded beaches where these magnificent creatures return year after year to lay their eggs. As the sun sets and the moon rises, you'll witness the ancient ritual of mother turtles making their way ashore to dig nests and deposit their precious eggs.",
    "Under the cover of darkness, you'll have the privilege of observing these gentle giants in their natural habitat, illuminated only by the soft glow of the moon and stars. Our experienced guides will share fascinating insights into the life cycle and behavior of sea turtles, enriching your experience with their expert knowledge.",
    "As you marvel at the sight of mother turtles carefully burying their eggs in the sand, you'll gain a newfound appreciation for the importance of conservation efforts to protect these endangered species. Learn about the conservation initiatives in place to safeguard sea turtle populations and how you can contribute to their preservation.",
-   "At GoFish Costa Rica, we are committed to responsible tourism practices, ensuring that our Turtle Tours have minimal impact on nesting turtles and their habitats. Join us for a Turtle Tour and witness the wonder of nature as you become part of a timeless tradition that spans generations. Contact us today to book your unforgettable turtle nesting experience in Costa Rica."
+   "At GoFish Costa Rica, we are committed to responsible tourism practices, ensuring that our Turtle Tours have minimal impact on nesting turtles and their habitats. Join us for a Turtle Tour and witness the wonder of nature as you become part of a timeless tradition that spans generations. Contact us today to book your unforgettable turtle nesting experience in Costa Rica.",
+   "Rates: $65 per person."
   ],
   "images": [
    "turtle-tour.jpg",
@@ -366,7 +368,7 @@
   "paras": [
    "Spa Package – Tamarindo, Costa Rica",
    "Relax with a half-day spa experience near Tamarindo. Choose any 3 treatments (massage, facial, wrap, scrub, manicure, pedicure, soaking tub). Enjoy a saltwater pool, gourmet lunch with wine, and full transportation.",
-   "Cost: $276 per person + tax",
+   "Cost: $315 per person (three treatments, lunch with wine and transportation included)",
    "Duration: Morning 9am–2pm | Afternoon 12:30pm–5pm (15 min drive from Tamarindo)",
    "Included: Three spa treatments, saltwater pool, lunch with 2 glasses of wine, transportation",
    "What to Bring: Swimsuit (for pool), clean skin, camera, cash for tips"
