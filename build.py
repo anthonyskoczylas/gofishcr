@@ -351,8 +351,8 @@ def boat_page(b):
 <p>Tips are not expected but very much appreciated. If the crew works hard for you, 15 to 20% is customary.</p></div>
 </div>
 <aside><form class="book" id="boat-book">
-<div class="from"><b>{('$%s' % f"{b['half']:,}") if b['half'] else 'Quote'}</b><span>{'half day · per boat' if b['half'] else 'private sail'}</span></div>
-<div class="sub">Request this boat. Steve &amp; Liisa confirm availability within hours, then a 50% deposit holds it.</div>
+<div class="from" id="boat-from"><b>{('$%s' % f"{b['half']:,}") if b['half'] else 'Quote'}</b><span>{'5 hours · per boat' if b['half'] else 'private sail'}</span></div>
+<div class="sub">Tell us your dates and we will come straight back with availability and a quote.</div>
 {seg}
 <div class="row3"><div class="fld"><label for="bk-date">Date</label><input id="bk-date" type="date" name="date" required></div>{pax_fields('bk', b['max_pax'])}</div>
 {style_field('bk') if not b['quote'] else ''}
@@ -365,7 +365,7 @@ def boat_page(b):
 {'<div class="est" id="est"><span><small>Estimated total</small></span><span style="text-align:right"><b></b><small></small></span></div>' if not b['quote'] else ''}
 <button class="btn btn-primary btn-block" type="submit">Request this boat</button>
 <button class="btn btn-ghost btn-block" type="button" data-add-trip style="margin-top:8px">Add to my trip</button>
-<div class="note">Rates exclude taxes. A 50% deposit reserves the boat and the balance is paid on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing licence and crew tips extra.</div>
+<div class="note">Rates are per boat and exclude taxes. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing licence and crew tips extra.</div>
 </form></aside>
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>

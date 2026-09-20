@@ -261,6 +261,13 @@
       var d = (bp.elements.dur && bp.elements.dur.value) || 'half';
       var est = $('#est'); if (est) { est.querySelector('b').textContent = price[d] ? money(price[d]) : 'Quote'; est.querySelector('small').textContent = price[d] ? 'per boat, excluding taxes · ' + durLabel[d] : 'custom quote for private catamarans'; }
       var bb = $('.bookbar b'); if (bb) bb.textContent = price[d] ? money(price[d]) : 'Quote';
+      var bs = $('.bookbar small'); if (bs) bs.textContent = price[d] ? durLabel[d].split(' \u00b7 ')[0] + ' \u00b7 per boat' : 'private sail';
+      // the headline price follows the charter length too
+      var from = $('#boat-from');
+      if (from) {
+        from.querySelector('b').textContent = price[d] ? money(price[d]) : 'Quote';
+        from.querySelector('span').textContent = price[d] ? durLabel[d].split(' \u00b7 ')[0] + ' \u00b7 per boat' : 'private sail';
+      }
       autoStyle(bp, d);
     }
     bp.addEventListener('change', refresh); refresh();
