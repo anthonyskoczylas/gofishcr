@@ -78,6 +78,102 @@
     else toast('Select and copy the text below');
   }
 
+  // ---- CHOICE CHIPS (inshore/offshore, target fish) ------------------------
+  function syncChips(group) { $$('label', group).forEach(function (l) { var i = l.querySelector('input'); if (i) l.classList.toggle('on', i.checked); }); }
+  $$('.chip-group').forEach(function (g) {
+    syncChips(g);
+    g.addEventListener('change', function () { syncChips(g); if (g.hasAttribute('data-style')) g.setAttribute('data-touched', '1'); });
+  });
+  function checkedValues(scope, name) {
+    return $$('[name="' + name + '"]', scope).filter(function (i) { return i.checked && i.value; }).map(function (i) { return i.value; });
+  }
+  // Charter length implies where the boat fishes, until the guest says otherwise.
+  function autoStyle(scope, dur) {
+    var g = $('[data-style]', scope); if (!g || g.getAttribute('data-touched')) return;
+    var want = dur === 'half' ? 'Inshore' : 'Offshore';
+    var el = g.querySelector('input[value="' + want + '"]'); if (el) { el.checked = true; syncChips(g); }
+  }
+
+  // ---- GUESTS (adults + kids) ----------------------------------------------
+  function guests(f) { var a = +((f.adults || {}).value || 0), k = +((f.kids || {}).value || 0); return { adults: a, kids: k, total: a + k }; }
+  function guestText(g) {
+    var out = g.adults + ' adult' + (g.adults === 1 ? '' : 's');
+    if (g.kids) out += ', ' + g.kids + ' kid' + (g.kids === 1 ? '' : 's');
+    return out;
+  }
+
+  // ---- ACCOMMODATION MAP PICKER (Leaflet + OpenStreetMap, no API key) -------
+  var TAMARINDO = [10.2993, -85.8371], leafletP;
+  function loadLeaflet() {
+    if (leafletP) return leafletP;
+    leafletP = new Promise(function (res, rej) {
+      var l = document.createElement('link'); l.rel = 'stylesheet';
+      l.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(l);
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+      sc.onload = res; sc.onerror = rej; document.head.appendChild(sc);
+    });
+    return leafletP;
+  }
+  function osmSearch(q) {
+    return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=cr&q=' + encodeURIComponent(q))
+      .then(function (r) { return r.json(); }).catch(function () { return []; });
+  }
+  function osmReverse(lat, lng) {
+    return fetch('https://nominatim.openstreetmap.org/reverse?format=json&zoom=17&lat=' + lat + '&lon=' + lng)
+      .then(function (r) { return r.json(); }).catch(function () { return null; });
+  }
+  var TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  $$('[data-stay]').forEach(function (box) {
+    var btn = $('[data-pin]', box), wrap = $('.pin-wrap', box), input = $('input[name="stay"]', box),
+        geo = $('input[name="stay_geo"]', box), link = $('input[name="stay_map"]', box),
+        map = null, marker = null, built = false;
+
+    function setPin(lat, lng) {
+      geo.value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+      link.value = 'https://www.google.com/maps?q=' + lat.toFixed(6) + ',' + lng.toFixed(6);
+      var ok = $('.pin-ok', box) || (function () { var d = document.createElement('div'); d.className = 'pin-ok'; box.appendChild(d); return d; })();
+      ok.innerHTML = TICK + '<span>Pinned. The crew gets a map link straight to the door.</span>';
+      osmReverse(lat, lng).then(function (r) {
+        if (r && r.display_name) ok.innerHTML = TICK + '<span>Pinned near <b>' + r.display_name.split(',').slice(0, 3).join(',').replace(/</g, '&lt;') + '</b></span>';
+      });
+    }
+    function place(lat, lng, zoom) {
+      if (!marker) { marker = window.L.marker([lat, lng], { draggable: true }).addTo(map); marker.on('dragend', function () { var q = marker.getLatLng(); setPin(q.lat, q.lng); }); }
+      else marker.setLatLng([lat, lng]);
+      map.setView([lat, lng], zoom || Math.max(map.getZoom(), 16));
+      setPin(lat, lng);
+    }
+    function build() {
+      wrap.innerHTML = '<div class="pin-map"></div><div class="pin-bar"><span>Tap the map to drop a pin, then drag it to fine-tune.</span><button type="button" data-clear>Clear</button></div>';
+      map = window.L.map($('.pin-map', wrap), { scrollWheelZoom: false }).setView(TAMARINDO, 12);
+      window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+      map.on('click', function (e) { place(e.latlng.lat, e.latlng.lng); });
+      $('[data-clear]', wrap).addEventListener('click', function () {
+        if (marker) { map.removeLayer(marker); marker = null; }
+        geo.value = ''; link.value = '';
+        var ok = $('.pin-ok', box); if (ok) ok.remove();
+      });
+      built = true;
+      if (input.value.trim()) osmSearch(input.value.trim() + ', Guanacaste, Costa Rica').then(function (hits) { if (hits && hits[0]) place(+hits[0].lat, +hits[0].lon, 16); });
+      setTimeout(function () { map.invalidateSize(); }, 60);
+    }
+    btn.addEventListener('click', function () {
+      if (built) { wrap.hidden = !wrap.hidden; if (!wrap.hidden) setTimeout(function () { map.invalidateSize(); }, 60); return; }
+      wrap.hidden = false; btn.disabled = true;
+      loadLeaflet().then(function () { btn.disabled = false; build(); })
+        .catch(function () { btn.disabled = false; wrap.hidden = true; toast('Map could not load. Type the name instead.'); });
+    });
+  });
+  function stayPayload(f) {
+    return { stay: (f.stay && f.stay.value) || '', stayGeo: (f.stay_geo && f.stay_geo.value) || '', stayMap: (f.stay_map && f.stay_map.value) || '' };
+  }
+  function stayLines(f) {
+    var out = [];
+    if (f.stay && f.stay.value) out.push('Staying at: ' + f.stay.value);
+    if (f.stay_map && f.stay_map.value) out.push('Map pin: ' + f.stay_map.value);
+    return out;
+  }
+
   // ---- REQUEST HELPERS (static site: email / WhatsApp / phone) ------------
   function buildRequest(lines, data) {
     var body = lines.filter(Boolean).join('\n');
@@ -138,50 +234,82 @@
   var bp = $('#boat-book');
   if (bp && window.BOAT) {
     var B = window.BOAT;
-    var durLabel = { half: '1/2 day · about 5 hrs · inshore', tq: '3/4 day · 6+ hrs · offshore', full: 'Full day · 8+ hrs · offshore' };
+    var durLabel = { half: '5 hours · inshore', tq: '7 hours · offshore', full: '9 hours · offshore' };
     var price = { half: B.half, tq: B.three_quarter, full: B.full };
     function refresh() {
       $$('.seg label', bp).forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });
       var d = (bp.elements.dur && bp.elements.dur.value) || 'half';
-      var est = $('#est'); if (est) { est.querySelector('b').textContent = price[d] ? money(price[d]) : 'Quote'; est.querySelector('small').textContent = price[d] ? 'per boat · ' + durLabel[d] : 'custom quote for private catamarans'; }
+      var est = $('#est'); if (est) { est.querySelector('b').textContent = price[d] ? money(price[d]) : 'Quote'; est.querySelector('small').textContent = price[d] ? 'per boat, excluding taxes · ' + durLabel[d] : 'custom quote for private catamarans'; }
       var bb = $('.bookbar b'); if (bb) bb.textContent = price[d] ? money(price[d]) : 'Quote';
+      autoStyle(bp, d);
     }
     bp.addEventListener('change', refresh); refresh();
     var qs2 = new URLSearchParams(location.search);
     if (qs2.get('date') && bp.elements.date) bp.elements.date.value = qs2.get('date');
-    if (qs2.get('pax') && bp.elements.pax) bp.elements.pax.value = Math.min(+qs2.get('pax'), B.max_pax || 20);
+    if (qs2.get('pax') && bp.elements.adults) bp.elements.adults.value = Math.min(+qs2.get('pax'), B.max_pax || 20);
     bp.addEventListener('submit', function (e) {
       e.preventDefault();
       var f = bp.elements, d = f.dur ? f.dur.value : 'half';
+      var g = guests(f);
+      if (B.max_pax && g.total > B.max_pax) return toast('This boat takes up to ' + B.max_pax + ' guests. Tell us in the notes and we will pair two boats.');
+      if (!g.total) return toast('Add at least one guest');
+      var style = (f.style && f.style.value) || '', fish = checkedValues(bp, 'fish');
       var req = buildRequest([
         'Request: ' + B.name + ' (' + B.locations.join(' / ') + ')',
         'Charter length: ' + durLabel[d] + (price[d] ? ' — ' + money(price[d]) + ' per boat' : ' — custom quote'),
+        style ? 'Fishing style: ' + style : '',
+        fish.length ? 'Target fish: ' + fish.join(', ') : '',
         'Date: ' + (fmtDate(f.date.value) || 'flexible'),
-        'Guests: ' + f.pax.value,
+        'Guests: ' + guestText(g),
         'Name: ' + f.name.value,
         'Email: ' + f.email.value,
-        f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
+        f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : ''
+      ].concat(stayLines(f), [
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ], { kind: 'boat', trip: B.name, base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d]) + ' per boat' : 'custom quote', dateText: fmtDate(f.date.value), pax: f.pax.value, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value });
+      ]), Object.assign({ kind: 'boat', trip: B.name, base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d]) + ' per boat' : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
       showSent(bp, req, 'Your request for the ' + B.name + ' is ready to send.');
     });
   }
 
   // ---- ADVENTURE / GENERIC REQUEST PANEL ----------------------------------
-  var ap = $('#adv-book');
+  var ap = $('#adv-book'), advRate = null;
+  // Tours with a rate matrix (ATV): duration + machine drive a live price.
+  if (ap && window.ADV_RATES) {
+    var R = window.ADV_RATES;
+    advRate = function () {
+      var dk = (ap.elements.dur && ap.elements.dur.value) || R.durations[0].key;
+      var vk = (ap.elements.vehicle && ap.elements.vehicle.value) || R.vehicles[0].key;
+      var d = R.durations.filter(function (x) { return x.key === dk; })[0] || R.durations[0];
+      var v = R.vehicles.filter(function (x) { return x.key === vk; })[0] || R.vehicles[0];
+      return { price: v.prices[dk], duration: d.label, vehicle: v.label, unit: v.unit };
+    };
+    var refreshRate = function () {
+      var r = advRate(), box = $('#adv-from');
+      if (box) { box.querySelector('b').textContent = money(r.price); box.querySelector('span').textContent = r.unit + ', excluding taxes'; }
+      var bb = $('.bookbar b'); if (bb) bb.textContent = money(r.price);
+      var bs = $('.bookbar small'); if (bs) bs.textContent = r.unit;
+    };
+    ap.addEventListener('change', refreshRate); refreshRate();
+  }
   if (ap) ap.addEventListener('submit', function (e) {
     e.preventDefault(); var f = ap.elements;
+    var g = guests(f);
+    if (!g.total) return toast('Add at least one guest');
+    var rate = advRate ? advRate() : null;
     var req = buildRequest([
       'Request: ' + ap.getAttribute('data-name'),
+      rate ? 'Option: ' + rate.duration + ' \u00b7 ' + rate.vehicle : '',
+      rate ? 'Rate: ' + money(rate.price) + ' ' + rate.unit + ', excluding taxes' : '',
       'Date: ' + (fmtDate(f.date.value) || 'flexible'),
-      'Guests: ' + f.pax.value,
+      'Guests: ' + guestText(g),
       f.base ? 'Pickup area: ' + f.base.value : '',
       'Name: ' + f.name.value, 'Email: ' + f.email.value,
-      f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
+      f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : ''
+    ].concat(stayLines(f), [
       'Transportation: ' + (f.transport.value || 'not needed'),
       f.notes.value ? 'Notes: ' + f.notes.value : ''
-    ], { kind: 'tour', trip: ap.getAttribute('data-name'), base: f.base ? f.base.value : '', dateText: fmtDate(f.date.value), pax: f.pax.value, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value });
+    ]), Object.assign({ kind: 'tour', trip: ap.getAttribute('data-name'), length: rate ? rate.duration + ' \u00b7 ' + rate.vehicle : '', rate: rate ? money(rate.price) + ' ' + rate.unit + ', excluding taxes' : '', base: f.base ? f.base.value : '', dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
     showSent(ap, req, 'Your request is ready to send.');
   });
 
@@ -232,14 +360,16 @@
   // ---- TRIP PLANNER WIZARD -------------------------------------------------
   var wz = $('#wizard');
   if (wz && window.FLEET) {
-    var state = { type: '', base: '', date: '', pax: 4, boat: '', dur: 'half', adv: '' };
+    var state = { type: '', base: '', date: '', pax: 4, adults: 2, kids: 0, style: '', fish: [], boat: '', dur: 'half', adv: '' };
+    function totalPax() { return (+state.adults || 0) + (+state.kids || 0); }
+    function wizGuestText() { return guestText({ adults: +state.adults || 0, kids: +state.kids || 0 }); }
     try { var saved = JSON.parse(localStorage.getItem('gf_wizard') || 'null'); if (saved) state = Object.assign(state, saved); } catch (e) { }
     var qsw = new URLSearchParams(location.search);
     if (qsw.get('boat')) { state.type = 'fishing'; state.boat = qsw.get('boat'); var bb0 = window.FLEET[state.boat]; if (bb0) state.base = bb0.locations[0]; }
     if (qsw.get('adv')) { state.type = 'adventure'; state.adv = qsw.get('adv'); }
     if (qsw.get('type')) state.type = qsw.get('type');
     var step = 0, panes = $$('.pane', wz), prog = $$('.prog span', wz);
-    var durLabel2 = { half: '1/2 day (5 hrs)', tq: '3/4 day (6+ hrs)', full: 'Full day (8+ hrs)' };
+    var durLabel2 = { half: 'Half day (5 hrs)', tq: '3/4 day (7 hrs)', full: 'Full day (9 hrs)' };
     function save() { try { localStorage.setItem('gf_wizard', JSON.stringify(state)); } catch (e) { } }
     function go(n, noScroll) {
       step = Math.max(0, Math.min(panes.length - 1, n));
@@ -254,10 +384,24 @@
     function syncOpts() { $$('.opt', wz).forEach(function (o) { o.classList.toggle('on', $('input', o).checked); }); }
     syncOpts();
     // step 2: date + pax
-    var dateI = $('input[name=date]', wz), paxI = $('select[name=pax]', wz);
-    if (state.date) dateI.value = state.date; paxI.value = state.pax;
+    var dateI = $('input[name=date]', wz), adultsI = $('select[name=adults]', wz), kidsI = $('select[name=kids]', wz);
+    if (state.date) dateI.value = state.date;
+    if (adultsI) adultsI.value = state.adults; if (kidsI) kidsI.value = state.kids;
     dateI.addEventListener('change', function () { state.date = dateI.value; });
-    paxI.addEventListener('change', function () { state.pax = +paxI.value; });
+    if (adultsI) adultsI.addEventListener('change', function () { state.adults = +adultsI.value; save(); });
+    if (kidsI) kidsI.addEventListener('change', function () { state.kids = +kidsI.value; save(); });
+    // fishing style + target fish live in step 3, outside the step-4 form
+    var styleG = $('[data-style]', wz), fishG = $('[data-fish]', wz);
+    if (styleG) {
+      var pre = styleG.querySelector('input[value="' + state.style + '"]'); if (pre) { pre.checked = true; syncChips(styleG); }
+      styleG.addEventListener('change', function () { state.style = (styleG.querySelector('input:checked') || {}).value || ''; save(); });
+    }
+    if (fishG) {
+      (state.fish || []).forEach(function (v) { var el = fishG.querySelector('input[value="' + v.replace(/"/g, '') + '"]'); if (el) el.checked = true; });
+      syncChips(fishG);
+      fishG.addEventListener('change', function () { state.fish = checkedValues(fishG, 'fish'); save(); });
+    }
+    function setFishRow(show) { var r = $('#fish-row'); if (r) r.style.display = show ? '' : 'none'; }
     // step 3: picks
     function renderPicks() {
       var box = $('#picks'), h = $('#picks-head');
@@ -269,25 +413,25 @@
           box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.adv === k ? ' on' : '') + '"><input type="radio" name="adv" value="' + k + '"><img src="' + ROOT + 'img/' + a.image + '" alt=""><div class="b"><b>' + a.name + '</b><span class="muted small">' + a.tag + '</span>' + (a.from ? '<div class="p">' + a.from + ' <small>per person</small></div>' : '<div class="p">Ask <small>for rates</small></div>') + '</div></label>');
         });
         $$('input[name=adv]', box).forEach(function (i) { i.addEventListener('change', function () { state.adv = i.value; state.boat = ''; $$('.pick', box).forEach(function (p) { p.classList.toggle('on', $('input', p).checked); }); }); });
-        $('#dur-row').style.display = 'none';
+        $('#dur-row').style.display = 'none'; setFishRow(false);
         return;
       }
       var cat = state.type === 'catamaran';
       h.innerHTML = cat ? '<h2>Private catamarans</h2><p class="lead">Morning or sunset sails, priced by request. Pick one and we quote within hours.</p>'
-        : '<h2>Boats that fit your group</h2><p class="lead">Showing ' + (state.base || 'Tamarindo &amp; Flamingo') + ' boats that take ' + state.pax + (state.pax > 1 ? ' guests' : ' guest') + '. Every boat is one we know personally.</p>';
+        : '<h2>Boats that fit your group</h2><p class="lead">Showing ' + (state.base || 'Tamarindo &amp; Flamingo') + ' boats that take ' + totalPax() + (totalPax() > 1 ? ' guests' : ' guest') + '. Every boat is one we know personally.</p>';
       var list = Object.keys(window.FLEET).map(function (k) { return window.FLEET[k]; }).filter(function (b) {
         if (cat !== !!b.quote) return false;
         if (state.base && b.locations.indexOf(state.base) < 0) return false;
-        if (!cat && b.max_pax < state.pax) return false;
+        if (!cat && b.max_pax < totalPax()) return false;
         return true;
       }).sort(function (a, b) { return (a.half || 0) - (b.half || 0); });
-      if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + state.pax + ' guests in ' + state.base + '. Go back and try the other base, or split the group over two boats: email us and we will pair them up.</div>'; }
+      if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + totalPax() + ' guests in ' + state.base + '. Go back and try the other base, or split the group over two boats: email us and we will pair them up.</div>'; }
       list.forEach(function (b) {
-        box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">Top boat</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · up to ' + (b.max_pax || 'group') + (b.max_pax ? ' guests' : '') + (b.washroom ? ' · washroom' : '') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
+        box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · up to ' + (b.max_pax || 'group') + (b.max_pax ? ' guests' : '') + (b.washroom ? ' · washroom' : '') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
       });
       $$('input[name=boat]', box).forEach(function (i) { i.addEventListener('change', function () { state.boat = i.value; state.adv = ''; $$('.pick', box).forEach(function (p) { p.classList.toggle('on', $('input', p).checked); }); }); });
-      $('#dur-row').style.display = cat ? 'none' : '';
-      $$('input[name=dur]', wz).forEach(function (i) { i.checked = i.value === state.dur; i.addEventListener('change', function () { state.dur = i.value; $$('#dur-row .seg label').forEach(function (l) { l.classList.toggle('on', $('input', l).checked); }); }); });
+      $('#dur-row').style.display = cat ? 'none' : ''; setFishRow(!cat);
+      $$('input[name=dur]', wz).forEach(function (i) { i.checked = i.value === state.dur; i.addEventListener('change', function () { state.dur = i.value; $$('#dur-row .seg label').forEach(function (l) { l.classList.toggle('on', $('input', l).checked); }); autoStyle(wz, state.dur); state.style = (($('[data-style] input:checked', wz)) || {}).value || ''; save(); }); });
       $$('#dur-row .seg label').forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });
     }
     function chosen() {
@@ -299,9 +443,9 @@
     function renderSummary() {
       var c = chosen(), s = $('#summary');
       if (!c) { s.innerHTML = '<div class="empty">Go back and pick a boat or adventure first.</div>'; return; }
-      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Base</dt><dd>' + (state.base || 'Either') + '</dd><dt>Date</dt><dd>' + (fmtDate(state.date) || 'Flexible') + '</dd><dt>Guests</dt><dd>' + state.pax + '</dd>' + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
-        + '<div class="tot"><span class="muted small">' + (c.est ? 'Estimated total' : '') + '</span><b>' + (c.est || c.price) + '</b></div>'
-        + (c.est && c.est !== 'Quote' ? '<div class="muted small" style="margin-top:6px">Per boat, all gear, bait, drinks' + (state.dur !== 'half' ? ' and light lunch' : '') + ' included. Licenses and crew tips not included.</div>' : '');
+      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Base</dt><dd>' + (state.base || 'Either') + '</dd><dt>Date</dt><dd>' + (fmtDate(state.date) || 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + (state.style ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + ((state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
+        + '<div class="tot"><span class="muted small">' + (c.est ? (state.type === 'adventure' ? 'Estimated total' : 'Estimated total, excluding taxes') : '') + '</span><b>' + (c.est || c.price) + '</b></div>'
+        + (c.est && c.est !== 'Quote' ? '<div class="muted small" style="margin-top:6px">Per boat, all gear, bait, drinks' + (state.dur !== 'half' ? ' and light lunch' : '') + ' included. Taxes, fishing licences and crew tips are not included.</div>' : '');
     }
     $$('[data-next]', wz).forEach(function (b) { b.addEventListener('click', function () {
       if (step === 0 && !state.type) return toast('Pick what kind of day you want');
@@ -317,13 +461,16 @@
         'Request: ' + c.name + (state.base ? ' (' + state.base + ')' : ''),
         (state.type !== 'adventure' && c.boat && !c.boat.quote) ? 'Charter length: ' + durLabel2[state.dur] : '',
         'Rate: ' + c.price,
+        state.style ? 'Fishing style: ' + state.style : '',
+        (state.fish && state.fish.length) ? 'Target fish: ' + state.fish.join(', ') : '',
         'Date: ' + (fmtDate(state.date) || 'flexible'),
-        'Guests: ' + state.pax,
+        'Guests: ' + wizGuestText(),
         'Name: ' + f.name.value, 'Email: ' + f.email.value,
-        f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : '',
+        f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : ''
+      ].concat(stayLines(f), [
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ], { kind: state.type === 'adventure' ? 'tour' : 'boat', trip: c.name, base: state.base, length: (state.type !== 'adventure' && c.boat && !c.boat.quote) ? durLabel2[state.dur] : '', rate: c.price, dateText: fmtDate(state.date), pax: state.pax, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value });
+      ]), Object.assign({ kind: state.type === 'adventure' ? 'tour' : 'boat', trip: c.name, base: state.base, length: (state.type !== 'adventure' && c.boat && !c.boat.quote) ? durLabel2[state.dur] : '', rate: c.price, style: state.style, fish: (state.fish || []).join(', '), dateText: fmtDate(state.date), pax: totalPax(), adults: state.adults, kids: state.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
       showSent(e.target, req, 'Your trip request is ready.');
       try { localStorage.removeItem('gf_wizard'); } catch (x) { }
     });

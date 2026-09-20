@@ -20,14 +20,14 @@ def home(ctx):
     rail_boats = [b for b in FLEET if b['slug'] in ('28-whitewater-center-console', '31-chris-craft', '35-cabo', '35-carolina-classic', '38-riviera', '43-riviera-team-edition')]
     rail_boats.sort(key=lambda b: b['half'])
     def boat(b):
-        return f'''<a class="boat" href="{r}charters/{b['slug']}.html"><div class="ph">{'<span class="tb">Top boat</span>' if b['top'] else ''}<span class="base">{' · '.join(b['locations'])}</span><img src="{r}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
+        return f'''<a class="boat" href="{r}charters/{b['slug']}.html"><div class="ph">{f'<span class="tb">{b["top_label"]}</span>' if b['top'] else ''}<span class="base">{' · '.join(b['locations'])}</span><img src="{r}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
 <div class="b"><h3>{E(b['name'])}</h3><div class="m">Up to {b['max_pax']} guests · {'washroom on board' if b['washroom'] else 'no washroom'}</div>
 <div class="p"><div><b>${b['half']:,}</b><small>half day, per boat</small></div><span>Details</span></div></div></a>'''
     chapters_js = json.dumps([dict(id=i, clock=c, sky=s, photo=p) for i, c, s, p in CHAPTERS])
     rail = ''.join(f'<a href="#{i}" data-ch="{i}">{c}<span></span></a>' for i, c, s, p in CHAPTERS[:-1])
 
     body = f'''<div class="day" id="day" data-chapters='{chapters_js}'>
-<nav class="rail" aria-label="Hours of the day">{rail}</nav>
+
 
 <!-- chapter -->
 <section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-split.jpg" alt="Sailfish on a baitball beneath a Go Fish boat off Tamarindo" fetchpriority="high" style="object-position:50% 50%"><div class="scrim hero-scrim-l"></div></div>

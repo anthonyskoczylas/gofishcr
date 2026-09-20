@@ -25,7 +25,10 @@ SOCIAL = dict(fb='https://www.facebook.com/GoFishCr', ig='https://www.instagram.
 # ---------------------------------------------------------------- helpers
 def boat_len(b): return int(re.match(r"(\d+)", b['name']).group(1))
 def adv_from(a):
-    """lowest headline per-person price in the adventure copy, ignoring add-ons and supplements"""
+    """lowest headline price: the rate matrix when there is one, otherwise the copy"""
+    if a.get('rates'):
+        lo = min(p for v in a['rates']['vehicles'] for p in v['prices'].values())
+        return '$%s' % f'{lo:,}'
     txt = ' '.join(a['paras'])
     m = re.search(r'Adults\s*\$(\d[\d,]*)', txt)
     if m: return '$' + m.group(1)
@@ -42,12 +45,79 @@ ADV_SHORT = {'mega-combo-adventure-tour':'Mega Combo Tour','volcano-hike-mud-bat
 def adv_short(a): return ADV_SHORT.get(a['slug'], a['name'])
 
 def fleet_js():
-    d = {b['slug']: dict(slug=b['slug'], name=b['name'], locations=b['locations'], top=b['top'], washroom=b['washroom'], max_pax=b['max_pax'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], quote=b['quote'], length=boat_len(b), images=b['images'][:1]) for b in FLEET}
+    d = {b['slug']: dict(slug=b['slug'], name=b['name'], locations=b['locations'], top=b['top'], top_label=b.get('top_label',''), washroom=b['washroom'], max_pax=b['max_pax'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], quote=b['quote'], length=boat_len(b), images=b['images'][:1]) for b in FLEET}
     a = {x['slug']: dict(name=adv_short(x), image=x['images'][0], tag=ADV_TAG[x['slug']], from_=adv_from(x)) for x in ADV}
     for v in a.values(): v['from'] = v.pop('from_')
     return '<script>window.FLEET=%s;window.ADV=%s;</script>' % (json.dumps(d), json.dumps(a))
 
+
+# ---------------------------------------------------------------- booking form fields (Tyler 09-20)
+FISH_TARGETS = ['Sailfish', 'Marlin', 'Tuna', 'Mahi mahi', 'Roosterfish', 'Snapper', 'Wahoo', "Whatever's biting"]
+PIN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+
+def pax_fields(pre, max_pax=None, adults=2):
+    cap = max_pax or 20
+    a = ''.join(f'<option value="{i}"{" selected" if i == min(adults, cap) else ""}>{i}</option>' for i in range(1, cap + 1))
+    k = ''.join(f'<option value="{i}"{" selected" if i == 0 else ""}>{i}</option>' for i in range(0, cap + 1))
+    return (f'<div class="fld"><label for="{pre}-adults">Adults</label><select id="{pre}-adults" name="adults">{a}</select></div>'
+            f'<div class="fld"><label for="{pre}-kids">Kids</label><select id="{pre}-kids" name="kids">{k}</select></div>')
+
+def style_field(pre):
+    rows = []
+    for v, t in [('', 'Not sure yet'), ('Inshore', 'Inshore'), ('Offshore', 'Offshore')]:
+        on = ' class="on"' if v == '' else ''
+        ck = ' checked' if v == '' else ''
+        rows.append(f'<label{on}><input type="radio" name="style" value="{v}"{ck}>{t}</label>')
+    return (f'<div class="fld"><label for="{pre}-style-g">Inshore or offshore?</label>'
+            f'<div class="chip-group" id="{pre}-style-g" data-style>{"".join(rows)}</div>'
+            f'<span class="hint">Inshore is roosterfish, snapper and jacks close to the beach. Offshore runs out to the shelf for billfish, tuna and mahi.</span></div>')
+
+def fish_field(pre):
+    opts = ''.join(f'<label><input type="checkbox" name="fish" value="{E(f)}">{E(f)}</label>' for f in FISH_TARGETS)
+    return (f'<div class="fld"><label for="{pre}-fish-g">What do you want to catch?</label>'
+            f'<div class="chip-group" id="{pre}-fish-g" data-fish>{opts}</div></div>')
+
+def stay_field(pre):
+    return (f'<div class="fld" data-stay><label for="{pre}-stay">Where are you staying?</label>'
+            f'<div class="stay-row"><input id="{pre}-stay" name="stay" autocomplete="off" placeholder="Hotel, villa or Airbnb name">'
+            f'<button type="button" class="pin-btn" data-pin>{PIN_SVG}Pin it</button></div>'
+            f'<span class="hint">Lots of places share a name. Drop a pin so the crew finds you first time.</span>'
+            f'<div class="pin-wrap" hidden></div>'
+            f'<input type="hidden" name="stay_geo"><input type="hidden" name="stay_map"></div>')
+
+
+def rates_picker(a):
+    """Duration + vehicle chooser for tours that have a rate matrix (ATV)."""
+    R = a.get('rates')
+    if not R: return '', ''
+    durs = ''.join(f'<label{" class=\"on\"" if i == 0 else ""}><input type="radio" name="dur" value="{d["key"]}"{" checked" if i == 0 else ""}>{d["label"]}</label>'
+                   for i, d in enumerate(R['durations']))
+    vehs = ''.join(f'<option value="{v["key"]}">{E(v["label"])}</option>' for v in R['vehicles'])
+    picker = (f'<div class="fld"><label for="ab-dur">{E(R["label"])}</label>'
+              f'<div class="chip-group" id="ab-dur" data-dur>{durs}</div></div>'
+              f'<div class="fld"><label for="ab-veh">Which machine?</label><select id="ab-veh" name="vehicle">{vehs}</select></div>')
+    head = ''.join(f'<th>{E(d["label"])}</th>' for d in R['durations'])
+    rows = ''.join('<tr><td>%s <span class="small muted">%s</span></td>%s</tr>' % (
+        E(v['label']), E(v['unit']), ''.join(f'<td><b>${v["prices"][d["key"]]:,}</b></td>' for d in R['durations']))
+        for v in R['vehicles'])
+    table = (f'<h2 style="font-size:26px;margin-top:34px">Rates</h2>'
+             f'<table class="rates-t"><tr><th>Machine</th>{head}</tr>{rows}</table>'
+             f'<p class="small muted">{E(R["note"])}</p>')
+    return picker, table
+
 # ---------------------------------------------------------------- layout
+SOCIAL_ICONS = {
+  'ig': '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.25" fill="currentColor"/></svg>',
+  'fb': '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.2 18.6v-5.7h1.9l.35-2.3h-2.25V9.15c0-.66.22-1.1 1.16-1.1h1.2V6c-.2-.03-.9-.09-1.7-.09-1.72 0-2.9 1.03-2.9 2.94v1.75H9v2.3h2.05v5.7z" fill="currentColor"/></svg>',
+  'yt': '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.2" y="5.6" width="19.6" height="12.8" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10.3 9.5l5.1 2.5-5.1 2.5z" fill="currentColor"/></svg>',
+  'ta': '<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="10.1" ry="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="7.7" cy="12" r="2.85" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16.3" cy="12" r="2.85" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="7.7" cy="12" r="1.15" fill="currentColor"/><circle cx="16.3" cy="12" r="1.15" fill="currentColor"/></svg>',
+}
+SOCIAL_NAMES = {'ig': 'Instagram', 'fb': 'Facebook', 'yt': 'YouTube', 'ta': 'TripAdvisor'}
+def social_links(cls):
+    return f'<div class="{cls}">' + ''.join(
+        f'<a href="{SOCIAL[k]}" target="_blank" rel="noopener" aria-label="{SOCIAL_NAMES[k]}" title="{SOCIAL_NAMES[k]}">{SOCIAL_ICONS[k]}</a>'
+        for k in ('ig', 'fb', 'yt', 'ta')) + '</div>'
+
 def nav(root, light=False):
     dd = ''.join('<li><a href="%sdiscover/%s.html">%s</a></li>' % (root, s, t) for s, t in [('about-us','About Steve & Liisa'),('our-pledge-to-you','Our Pledge'),('crews-equipment','Crews & Equipment'),('fish-seasons','Fish & Seasons'),('guanacaste-fishing','Why Fish Tamarindo'),('weather','Weather'),('contact-us','Contact')])
     return f'''<nav class="top over-photo{' light' if light else ''}"><div class="wrap">
@@ -55,12 +125,13 @@ def nav(root, light=False):
 <ul class="nav-links">
 <li><a href="{root}charters/">Fishing Charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}dining/">Dining</a></li>
 <li><a href="{root}discover/">Discover</a><ul class="dd">{dd}</ul></li><li><a href="{root}gallery.html">Gallery</a></li><li><a href="{root}blog/">Blog</a></li></ul>
-<span class="nav-clock" aria-hidden="true"></span><a class="nav-cta" href="{root}book.html">Plan my trip</a>
+{social_links('nav-social')}<a class="nav-cta" href="{root}book.html">Plan my trip</a>
 <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
 <div class="drawer"><button class="close" aria-label="Close">&times;</button>
 <a href="{root}charters/">Fishing Charters</a><a href="{root}adventures/">Adventures</a><a href="{root}dining/">Dining</a><a href="{root}gallery.html">Gallery</a><a href="{root}blog/">Blog</a><a href="{root}discover/">Discover</a>
 <a class="sub" href="{root}discover/about-us.html">About Steve &amp; Liisa</a><a class="sub" href="{root}discover/fish-seasons.html">Fish &amp; Seasons</a><a class="sub" href="{root}discover/crews-equipment.html">Crews &amp; Equipment</a><a class="sub" href="{root}discover/weather.html">Weather</a><a class="sub" href="{root}discover/contact-us.html">Contact</a>
-<a class="btn btn-sand" style="margin-top:22px;font-family:Inter;font-size:16px" href="{root}book.html">Plan my trip</a></div>'''
+<a class="btn btn-sand" style="margin-top:22px;font-family:Inter;font-size:16px" href="{root}book.html">Plan my trip</a>
+{social_links('drawer-social')}</div>'''
 
 def footer(root):
     return f'''<footer><div class="wrap"><div class="cols">
@@ -127,7 +198,7 @@ def boat_card(b, root):
     base = ' · '.join(b['locations'])
     rates = f'<div class="rates"><span>½ day<b>{"$%s" % f"{b["half"]:,}" if b["half"] else "Quote"}</b></span><span>¾ day<b>{"$%s" % f"{b["three_quarter"]:,}" if b["three_quarter"] else "Quote"}</b></span><span>Full<b>{"$%s" % f"{b["full"]:,}" if b["full"] else "Quote"}</b></span></div>'
     pax = f'up to {b["max_pax"]} guests' if b['max_pax'] else 'group sails'
-    return f'''<a class="card fleet-card" data-boat="{b['slug']}" href="{root}charters/{b['slug']}.html">{'<span class="tag">Top boat</span>' if b['top'] else ''}<span class="tag base">{base}</span>
+    return f'''<a class="card fleet-card" data-boat="{b['slug']}" href="{root}charters/{b['slug']}.html">{f'<span class="tag">{b["top_label"]}</span>' if b['top'] else ''}<span class="tag base">{base}</span>
 <div class="ph"><img src="{root}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
 <div class="body"><h3>{E(b['name'])}</h3><div class="meta"><span>{pax}</span><span>{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>{rates}
 <div class="price">{'<b>$%s</b><small> half day · per boat</small>' % f"{b['half']:,}" if b['half'] else '<b>Quote</b><small> private sail</small>'}<span class="go">View boat →</span></div></div></a>'''
@@ -253,18 +324,18 @@ def boat_page(b):
     base = ' / '.join(b['locations'])
     rates = '' if b['quote'] else f'''<h2 style="font-size:26px;margin-top:34px">Rates for this boat</h2>
 <table class="rates-t"><tr><th>Charter</th><th>Hours</th><th>Rate per boat</th></tr>
-<tr><td>Half day</td><td>About 5 hrs · inshore only</td><td><b>${b['half']:,}</b></td></tr>
-<tr><td>3/4 day</td><td>6+ hrs · offshore, light lunch</td><td><b>${b['three_quarter']:,}</b></td></tr>
-<tr><td>Full day</td><td>8+ hrs · offshore, light lunch</td><td><b>${b['full']:,}</b></td></tr></table>
-<p class="small muted">Rates are per boat, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Prices subject to change. To target billfish, book 3/4 or full day.</p>'''
-    seg = '' if b['quote'] else f'''<div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>Half day<small>${b['half']:,}</small></label><label><input type="radio" name="dur" value="tq">3/4 day<small>${b['three_quarter']:,}</small></label><label><input type="radio" name="dur" value="full">Full day<small>${b['full']:,}</small></label></div>'''
+<tr><td>Half day</td><td>5 hours · inshore</td><td><b>${b['half']:,}</b></td></tr>
+<tr><td>3/4 day</td><td>7 hours · offshore, light lunch</td><td><b>${b['three_quarter']:,}</b></td></tr>
+<tr><td>Full day</td><td>9 hours · offshore, light lunch</td><td><b>${b['full']:,}</b></td></tr></table>
+<p class="small muted">Rates are per boat, excluding taxes, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Prices subject to change. To target billfish, book the 7 or 9 hour trip.</p>'''
+    seg = '' if b['quote'] else f'''<div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>5 hrs<small>${b['half']:,}</small></label><label><input type="radio" name="dur" value="tq">7 hrs<small>${b['three_quarter']:,}</small></label><label><input type="radio" name="dur" value="full">9 hrs<small>${b['full']:,}</small></label></div>'''
     pax_opts = ''.join(f'<option value="{i}"{" selected" if i==min(4,b["max_pax"] or 4) else ""}>{i}</option>' for i in range(1, (b['max_pax'] or 20) + 1))
     intro = {
       True: f"Private sailing catamaran out of {base}. Morning or sunset departures, snorkeling and paddleboarding gear, open bar and lunch on the sunset sail. Priced by request depending on group size and season.",
-      False: f"{'One of our top boats. ' if b['top'] else ''}Based in {base}, priced for {b['priced_for']} anglers with room for {b['max_pax']}. {'Washroom on board. ' if b['washroom'] else 'No washroom on board, which keeps this the best-value option for a short inshore run. '}Captain and crew speak English, and every trip runs with catch and release on billfish."
+      False: f"{(b['top_label'] + '. ') if b['top'] else ''}Based in {base}, priced for {b['priced_for']} anglers with room for {b['max_pax']}. {'Washroom on board. ' if b['washroom'] else 'No washroom on board, which keeps this the best-value option for a short inshore run. '}Captain and crew speak English, and every trip runs with catch and release on billfish."
     }[b['quote']]
     body = f'''<header class="page-hero" style="padding-bottom:40px"><img class="bg" src="{r}img/{img(b['images'][0])}" alt=""><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><a href="{r}charters/">Charters</a><span>/</span><span>{E(b['name'])}</span></div>
-<div class="chips" style="margin-bottom:16px">{''.join(f'<span class="chip" style="background:rgba(255,255,255,.14);color:#fff">{l}</span>' for l in b['locations'])}{'<span class="chip" style="background:var(--sand);color:var(--navy)">Top boat</span>' if b['top'] else ''}</div>
+<div class="chips" style="margin-bottom:16px">{''.join(f'<span class="chip" style="background:rgba(255,255,255,.14);color:#fff">{l}</span>' for l in b['locations'])}{f'<span class="chip" style="background:var(--sand);color:var(--navy)">{b["top_label"]}</span>' if b['top'] else ''}</div>
 <h1>{E(b['name'])}</h1><p>{intro}</p></div></header>
 <section><div class="wrap detail">
 <div class="main">{gallery_html(r, b['images'], 'boat', b['name'])}
@@ -272,21 +343,24 @@ def boat_page(b):
 <h2 style="font-size:26px">What this boat offers</h2><div class="chips" style="margin:14px 0 8px">{''.join(f'<span class="chip">{E(f)}</span>' for f in b['features'])}<span class="chip">{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>
 {rates}
 <div class="incl"><div><h4>Included</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul></div></div>
-<div class="prose"><h3>Charter lengths</h3><ul><li><b>Half day</b> · about 5 hours. Boats stay inshore: roosterfish, snapper, jacks.</li><li><b>3/4 day</b> · 6+ hours. Enough time to run offshore for sailfish, marlin, tuna and mahi.</li><li><b>Full day</b> · 8+ hours. The serious billfish day.</li></ul>
+<div class="prose"><h3>Charter lengths</h3><ul><li><b>Half day</b> · 5 hours. Boats stay inshore: roosterfish, snapper, jacks.</li><li><b>3/4 day</b> · 7 hours. Enough time to run offshore for sailfish, marlin, tuna and mahi.</li><li><b>Full day</b> · 9 hours. The serious billfish day.</li></ul>
 <p>Tips are not expected but very much appreciated. If the crew works hard for you, 15 to 20% is customary.</p></div>
 </div>
 <aside><form class="book" id="boat-book">
 <div class="from"><b>{('$%s' % f"{b['half']:,}") if b['half'] else 'Quote'}</b><span>{'half day · per boat' if b['half'] else 'private sail'}</span></div>
 <div class="sub">Request this boat. Steve &amp; Liisa confirm availability within hours, then a 50% deposit holds it.</div>
 {seg}
-<div class="row2"><div class="fld"><label for="bk-date">Date</label><input id="bk-date" type="date" name="date" required></div><div class="fld"><label for="bk-pax">Guests</label><select id="bk-pax" name="pax">{pax_opts}</select></div></div>
-<div class="fld"><label for="bk-name">Your name</label><input id="bk-name" name="name" required autocomplete="name"></div>
+<div class="row3"><div class="fld"><label for="bk-date">Date</label><input id="bk-date" type="date" name="date" required></div>{pax_fields('bk', b['max_pax'])}</div>
+{style_field('bk') if not b['quote'] else ''}
+{fish_field('bk') if not b['quote'] else ''}
+<div class="fld"><label for="bk-name">Full name</label><input id="bk-name" name="name" required autocomplete="name" placeholder="First and last name"></div>
 <div class="row2"><div class="fld"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="bk-phone">Phone / WhatsApp</label><input id="bk-phone" name="phone" autocomplete="tel"></div></div>
-<div class="fld"><label for="bk-notes">What do you want to catch? Where are you staying?</label><textarea id="bk-notes" name="notes"></textarea></div>
+{stay_field('bk')}
+<div class="fld"><label for="bk-notes">Anything else we should know?</label><textarea id="bk-notes" name="notes"></textarea></div>
 <div class="fld"><label for="bk-tr">Need transportation?</label><select id="bk-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 {'<div class="est" id="est"><span><small>Estimated total</small></span><span style="text-align:right"><b></b><small></small></span></div>' if not b['quote'] else ''}
 <button class="btn btn-primary btn-block" type="submit">Request this boat</button>
-<div class="note">A 50% deposit reserves the boat and the balance is paid on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing license and crew tips extra.</div>
+<div class="note">Rates exclude taxes. A 50% deposit reserves the boat and the balance is paid on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing licence and crew tips extra.</div>
 </form></aside>
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>
@@ -349,25 +423,30 @@ def adv_page(a):
     content = ''.join(render_chunk(c) for c in chunks)
     factbox = f'<div class="facts">{"".join(f"<div><span>{E(k)}</span>{E(v)}</div>" for k, v in facts)}</div>' if facts else ''
     fr = adv_from(a)
+    rate_picker, rate_table = rates_picker(a)
     others = [x for x in ADV if x['slug'] != a['slug']][:3]
     body = f'''{page_hero(r, E(a['name']), ADV_TAG[a['slug']], a['images'][0], [('Home', r+'index.html'), ('Adventures', r+'adventures/'), (adv_short(a), None)])}
 <section><div class="wrap detail"><div class="main">{gallery_html(r, a['images'], 'adv', a['name'])}
 <div class="prose" style="margin-top:28px">{content}</div>{factbox}
+<div class="prose">{rate_table}</div>
 <div class="prose"><p class="small muted">Pickup from Tamarindo or Flamingo on most tours. Hotels in Pinilla, JW Marriott or Westin may carry a small transport supplement, noted above where it applies.</p></div></div>
 <aside><form class="book" id="adv-book" data-name="{E(a['name'])}">
-<div class="from"><b>{fr or 'Ask'}</b><span>{'per person' if fr else 'for rates'}</span></div>
+<div class="from" id="adv-from"><b>{fr or 'Ask'}</b><span>{('from · per machine' if a.get('rates') else 'per person') if fr else 'for rates'}</span></div>
 <div class="sub">Request this tour. We confirm the date, pickup time and final price within hours.</div>
-<div class="row2"><div class="fld"><label for="ab-date">Date</label><input id="ab-date" type="date" name="date" required></div><div class="fld"><label for="ab-pax">Guests</label><select id="ab-pax" name="pax">{''.join(f'<option value="{i}"{" selected" if i==2 else ""}>{i}</option>' for i in range(1,21))}</select></div></div>
+{rate_picker}
+<div class="row3"><div class="fld"><label for="ab-date">Date</label><input id="ab-date" type="date" name="date" required></div>{pax_fields('ab')}</div>
 <div class="fld"><label for="ab-base">Pickup area</label><select id="ab-base" name="base"><option>Tamarindo</option><option>Flamingo</option><option>Other (tell us below)</option></select></div>
-<div class="fld"><label for="ab-name">Your name</label><input id="ab-name" name="name" required autocomplete="name"></div>
+<div class="fld"><label for="ab-name">Full name</label><input id="ab-name" name="name" required autocomplete="name" placeholder="First and last name"></div>
 <div class="row2"><div class="fld"><label for="ab-email">Email</label><input id="ab-email" type="email" name="email" required></div><div class="fld"><label for="ab-phone">Phone / WhatsApp</label><input id="ab-phone" name="phone"></div></div>
-<div class="fld"><label for="ab-notes">Hotel, ages of kids, anything else</label><textarea id="ab-notes" name="notes"></textarea></div>
+{stay_field('ab')}
+<div class="fld"><label for="ab-notes">Ages of the kids, anything else?</label><textarea id="ab-notes" name="notes"></textarea></div>
 <div class="fld"><label for="ab-tr">Need transportation?</label><select id="ab-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <button class="btn btn-primary btn-block" type="submit">Request this tour</button>
 <div class="note">No payment online. A 50% deposit holds your spot and the balance is paid to the operator on the day.</div></form></aside></div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More adventures</div><h2 style="font-size:30px">You might also like</h2></div><a class="btn btn-ghost btn-sm" href="{r}adventures/">All adventures</a></div><div class="grid g3">{''.join(adv_card(x, r) for x in others)}</div></div></section>'''
     bar = f'<div class="bookbar"><div><b>{fr or "Ask"}</b><small>{"per person" if fr else "for rates"}</small></div><a class="btn btn-primary btn-sm" href="#adv-book">Request this tour</a></div>'
-    write(f"adventures/{a['slug']}.html", page(r, f"{a['name']} | Go Fish Costa Rica", (prose[0] if prose else a['name'])[:155], body, bookbar=bar))
+    head = '<script>window.ADV_RATES=%s;</script>' % json.dumps(a.get('rates') or None)
+    write(f"adventures/{a['slug']}.html", page(r, f"{a['name']} | Go Fish Costa Rica", (prose[0] if prose else a['name'])[:155], body, extra_head=head, bookbar=bar))
 
 # ---------------------------------------------------------------- DINING
 def dining():
@@ -541,20 +620,22 @@ def planner():
 <div class="nav-row"><span></span><button type="button" class="btn btn-primary" data-next>Next: dates &amp; group</button></div></div>
 
 <div class="pane"><h2>When, and how many?</h2><p class="lead">Dates can be flexible. We will tell you if the boat you want is taken and offer the next best.</p>
-<div class="row2" style="max-width:520px"><div class="fld"><label for="w-date">Preferred date</label><input id="w-date" type="date" name="date"></div><div class="fld"><label for="w-pax">Guests</label><select id="w-pax" name="pax">{''.join(f'<option value="{i}">{i}</option>' for i in range(1,21))}</select></div></div>
+<div class="row3" style="max-width:560px"><div class="fld"><label for="w-date">Preferred date</label><input id="w-date" type="date" name="date"></div>{pax_fields('w')}</div>
 <p class="small muted">Charter rates are per boat, so a group of six on a 35-footer is often cheaper per head than two on a 21. Big group? We can run two boats side by side.</p>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: pick your boat</button></div></div>
 
 <div class="pane"><div id="picks-head"></div>
-<div id="dur-row" style="max-width:420px;margin-bottom:22px"><label class="small muted" style="display:block;margin-bottom:6px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px">Charter length</label><div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>Half day<small>inshore · 5 hrs</small></label><label><input type="radio" name="dur" value="tq">3/4 day<small>offshore · 6+ hrs</small></label><label><input type="radio" name="dur" value="full">Full day<small>offshore · 8+ hrs</small></label></div></div>
+<div id="dur-row" style="max-width:420px;margin-bottom:22px"><label class="small muted" style="display:block;margin-bottom:6px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px">Charter length</label><div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>Half day<small>inshore · 5 hrs</small></label><label><input type="radio" name="dur" value="tq">3/4 day<small>offshore · 7 hrs</small></label><label><input type="radio" name="dur" value="full">Full day<small>offshore · 9 hrs</small></label></div></div>
+<div id="fish-row" style="max-width:560px;margin-bottom:24px">{style_field('w')}{fish_field('w')}</div>
 <div class="picks" id="picks"></div>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: your details</button></div></div>
 
 <div class="pane"><h2>Almost there.</h2><p class="lead">Check the summary, add your details, and send. We confirm availability within hours.</p>
 <div class="summary" id="summary"></div>
-<form id="wiz-form"><div class="fld"><label for="w-name">Your name</label><input id="w-name" name="name" required autocomplete="name"></div>
+<form id="wiz-form"><div class="fld"><label for="w-name">Full name</label><input id="w-name" name="name" required autocomplete="name" placeholder="First and last name"></div>
 <div class="row2"><div class="fld"><label for="w-email">Email</label><input id="w-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="w-phone">Phone / WhatsApp</label><input id="w-phone" name="phone" autocomplete="tel"></div></div>
-<div class="fld"><label for="w-notes">Where are you staying? What do you want to catch? Kids' ages?</label><textarea id="w-notes" name="notes"></textarea></div>
+{stay_field('w')}
+<div class="fld"><label for="w-notes">Ages of the kids, anything else?</label><textarea id="w-notes" name="notes"></textarea></div>
 <div class="fld"><label for="w-tr">Need transportation?</label><select id="w-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button class="btn btn-primary" type="submit">Send my request</button></div></form></div>
 </div>

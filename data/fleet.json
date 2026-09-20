@@ -5,7 +5,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": false,
   "priced_for": 4,
   "max_pax": 4,
@@ -27,7 +28,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 4,
@@ -60,7 +62,8 @@
    "Tamarindo",
    "Flamingo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": false,
   "priced_for": 4,
   "max_pax": 6,
@@ -87,6 +90,7 @@
    "Flamingo"
   ],
   "top": true,
+  "top_label": "Top inshore boat",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 6,
@@ -116,7 +120,8 @@
   "locations": [
    "Flamingo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 5,
@@ -147,6 +152,7 @@
    "Tamarindo"
   ],
   "top": true,
+  "top_label": "Top offshore boat",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 6,
@@ -177,7 +183,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 5,
@@ -202,6 +209,7 @@
    "Tamarindo"
   ],
   "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 5,
@@ -228,7 +236,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 5,
@@ -254,6 +263,7 @@
    "Tamarindo"
   ],
   "top": true,
+  "top_label": "Top offshore boat",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 8,
@@ -283,7 +293,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 6,
   "max_pax": 6,
@@ -311,7 +322,8 @@
    "Flamingo",
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 8,
   "max_pax": 8,
@@ -341,6 +353,7 @@
    "Flamingo"
   ],
   "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": null,
   "max_pax": null,
@@ -365,6 +378,7 @@
    "Tamarindo"
   ],
   "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": null,
   "max_pax": null,
@@ -393,7 +407,8 @@
    "Flamingo",
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 8,
   "max_pax": 9,
@@ -425,7 +440,8 @@
    "Flamingo",
    "Tamarindo"
   ],
-  "top": true,
+  "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": 8,
   "max_pax": 9,
@@ -460,6 +476,7 @@
    "Tamarindo"
   ],
   "top": false,
+  "top_label": "",
   "washroom": true,
   "priced_for": null,
   "max_pax": null,

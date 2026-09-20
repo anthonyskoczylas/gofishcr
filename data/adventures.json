@@ -3,20 +3,13 @@
   "slug": "zipline-tour",
   "name": "Zipline Tour",
   "paras": [
-   "Zipline Canopy Tour \u2013 Guanacaste, Costa Rica",
-   "This thrilling canopy tour features 10 cables suspended up to 120 meters high and 580 meters long, with short hikes of 10\u201330 meters between platforms.",
-   "Cost: $65 per person (tax included)",
-   "Transportation included (add $10 per person from JW Marriott, Pinilla, or Westin \u2013 minimum 4 people).",
+   "Zipline Canopy Tour – Guanacaste, Costa Rica",
+   "This thrilling canopy tour features 10 cables suspended up to 120 meters high and 580 meters long, with short hikes of 10–30 meters between platforms.",
+   "Cost: $75 per person (tax included)",
+   "Transportation included (add $10 per person from JW Marriott, Pinilla, or Westin – minimum 4 people).",
    "Duration: Pickup at 8am | Approx. 3.5 hours including drive time (30 minutes from Tamarindo)",
-   "Weight Limit: 280\u2013300 lbs, waist size under 47.5 inches",
-   "What to Bring: Comfortable shoes and clothes, bug repellent, sunscreen",
-   "---",
-   "Zipline Option #2 \u2013 Tamarindo, Costa Rica",
-   "Soar across 10 lines and 11 platforms, including a 1,100 ft. cable stretching from one mountain top to another.",
-   "Rates: $75 per person (minimum 2 people, rates vary for solo travelers)",
-   "Transportation included for 4+ people. For 3 or fewer, add $25.",
-   "Duration: 2 hours (plus 15-minute drive from Tamarindo)",
-   "Pickup available at 9am, 11am, or 3pm."
+   "Weight Limit: 280–300 lbs, waist size under 47.5 inches",
+   "What to Bring: Comfortable shoes and clothes, bug repellent, sunscreen"
   ],
   "images": [
    "zipline-tour.jpg"
@@ -26,27 +19,10 @@
   "slug": "atv-tour",
   "name": "ATV Tour",
   "paras": [
-   "ATV Tours \u2013 Tamarindo & Flamingo, Costa Rica",
-   "Our ATV tours are one of the most popular adventures in Tamarindo and Flamingo. The 4-hour private ATV tour is a favorite at $170 per person, though we also offer 2\u20134 hour options. On the 4-hour tour, you\u2019ll ride through beaches, mountains, towns, and back roads\u2014all at your own pace. Stop anytime to swim, eat, take photos, or relax. Because the tours are private, you won\u2019t be stuck in a group going too slow or too fast\u2014you choose the pace.",
+   "ATV Tours – Tamarindo & Flamingo, Costa Rica",
+   "Our ATV tours are one of the most popular adventures in Tamarindo and Flamingo. The 4-hour private ATV tour is a favorite at $170 per person, though we also offer 2–4 hour options. On the 4-hour tour, you’ll ride through beaches, mountains, towns, and back roads—all at your own pace. Stop anytime to swim, eat, take photos, or relax. Because the tours are private, you won’t be stuck in a group going too slow or too fast—you choose the pace.",
    "Age Requirement: Must be at least 16 years old to drive.",
-   "What to Bring: Comfortable shoes and clothes that can get dirty, bathing suit, bug repellent, sunscreen, camera.",
-   "ATV Rates (minimum 2 machines \u2013 rates vary for solo travelers):",
-   "2 Hours \u2013 Single: $110 | Double: $130",
-   "3 Hours \u2013 Single: $140 | Double: $170",
-   "4 Hours \u2013 Single: $170 | Double: $210",
-   "Transportation included (add $10 pp from JW Marriott or Pinilla).",
-   "Side-by-Side Rates (for 1\u20132 people):",
-   "2 Hours \u2013 $280 (extra person $20)",
-   "3 Hours \u2013 $300 (extra person $30)",
-   "4 Hours \u2013 $340 (extra person $40)",
-   "Transportation included (add $20 per side by side from JW Marriott or Pinilla).",
-   "---",
-   "ATV Ranch Tour \u2013 Tamarindo, Costa Rica",
-   "This 1.5-hour ATV adventure takes you through a peaceful 1,200-acre ranch just outside Tamarindo. Ride up to mountain tops with amazing ocean and ranch views. After your ride, relax at the pool and enjoy fresh fruit and juice.",
-   "Duration: 1.5 hours (approx. 15 minutes from Tamarindo)",
-   "Rates: $75 per person (minimum 2 machines, rates vary for solo travelers)",
-   "Transportation included for groups of 4+. For 3 or fewer, add $25.",
-   "What to Bring: Closed shoes, comfortable clothes, bandana/mask, bug repellent, sunscreen, bathing suit."
+   "What to Bring: Comfortable shoes and clothes that can get dirty, bathing suit, bug repellent, sunscreen, camera."
   ],
   "images": [
    "atv-tour.jpg",
@@ -59,17 +35,67 @@
    "atv03.jpg",
    "atv02.jpg",
    "atv01.jpg"
-  ]
+  ],
+  "rates": {
+   "label": "Pick your ride",
+   "durations": [
+    {
+     "key": "2h",
+     "label": "2 hours"
+    },
+    {
+     "key": "3h",
+     "label": "3 hours"
+    },
+    {
+     "key": "4h",
+     "label": "4 hours"
+    }
+   ],
+   "vehicles": [
+    {
+     "key": "single",
+     "label": "ATV, single rider",
+     "unit": "per machine",
+     "prices": {
+      "2h": 110,
+      "3h": 140,
+      "4h": 170
+     }
+    },
+    {
+     "key": "double",
+     "label": "ATV, two riders",
+     "unit": "per machine",
+     "prices": {
+      "2h": 130,
+      "3h": 170,
+      "4h": 210
+     }
+    },
+    {
+     "key": "sxs",
+     "label": "Side-by-side buggy",
+     "unit": "for 1-2 people",
+     "prices": {
+      "2h": 280,
+      "3h": 300,
+      "4h": 340
+     }
+    }
+   ],
+   "note": "Minimum two machines; rates vary for solo travellers. Transportation included, add $10 per person from JW Marriott or Pinilla, or $20 per side-by-side. Extra person on a side-by-side: $20 on the 2 hour, $30 on the 3 hour, $40 on the 4 hour."
+  }
  },
  {
   "slug": "sunset-catamaran",
   "name": "Sunset Catamaran",
   "paras": [
-   "Sunset Catamaran Cruise \u2013 Tamarindo & Flamingo, Costa Rica",
-   "Sail the Pacific on a luxury catamaran while enjoying snorkeling, stand-up paddleboarding, swimming, and a late lunch (served around 3pm). Unlimited drinks\u2014both alcoholic and non-alcoholic\u2014are included. Relax as you watch the stunning Costa Rica sunset over the ocean.",
+   "Sunset Catamaran Cruise – Tamarindo & Flamingo, Costa Rica",
+   "Sail the Pacific on a luxury catamaran while enjoying snorkeling, stand-up paddleboarding, swimming, and a late lunch (served around 3pm). Unlimited drinks—both alcoholic and non-alcoholic—are included. Relax as you watch the stunning Costa Rica sunset over the ocean.",
    "Rates (tax included):",
-   "Tamarindo: Adults $108 | Kids 5\u201311 $74 | Under 5 free (no transportation)",
-   "Flamingo: Adults $108 | Kids 5\u201312 $74 | Under 5 free (transportation included)",
+   "Tamarindo: Adults $108 | Kids 5–11 $74 | Under 5 free (no transportation)",
+   "Flamingo: Adults $108 | Kids 5–12 $74 | Under 5 free (transportation included)",
    "Add $10 pp for JW Marriott or Pinilla pickups.",
    "Duration: Meet at 1pm | Return around 5:45pm",
    "Private charters available upon request."
@@ -85,12 +111,12 @@
  },
  {
   "slug": "mega-combo-adventure-tour",
-  "name": "All-Day Mega Combo Tour \u2013 Guanacaste",
+  "name": "All-Day Mega Combo Tour – Guanacaste",
   "paras": [
-   "All-Day Mega Combo Tour \u2013 Guanacaste",
-   "For thrill-seekers, this all-day tour includes ziplining, river tubing, horseback riding, rock climbing, hot springs, and volcanic mud baths\u2014plus a traditional Costa Rican lunch.",
+   "All-Day Mega Combo Tour – Guanacaste",
+   "For thrill-seekers, this all-day tour includes ziplining, river tubing, horseback riding, rock climbing, hot springs, and volcanic mud baths—plus a traditional Costa Rican lunch.",
    "Cost: $195 per person (minimum 4 people) | Private $225 pp",
-   "Duration: Pickup at 7:30am | Return 6:30\u20137pm (2 hrs from Tamarindo)",
+   "Duration: Pickup at 7:30am | Return 6:30–7pm (2 hrs from Tamarindo)",
    "Included: Transportation, guide, lunch, all activities",
    "What to Bring: Shoes/clothes that can get wet, bathing suit, towel, sunscreen, bug repellent, camera, change of clothes"
   ],
@@ -105,10 +131,10 @@
   "slug": "volcano-hike-mud-baths",
   "name": "Volcano Hike / Mud Baths",
   "paras": [
-   "Volcano Hike, Hot Springs & Mud Bath \u2013 Rincon de la Vieja",
-   "Begin with a 3-hour guided hike in the Pailas Sector of Rincon de la Vieja Volcano, where you\u2019ll see wildlife such as toucans, capuchin monkeys, howler monkeys, coatis, and more. Along the way, explore bubbling mud pots, fumaroles, and a mini crater. Cool off with a swim at Oropendola Waterfall, then enjoy a typical Costa Rican lunch. End the day soaking in the Rio Negro hot springs and rejuvenating volcanic mud baths.",
-   "Cost: $190 per person (tax included, based on 4 people \u2013 rates may vary for smaller groups or private tours)",
-   "Duration: Pickup at 6:30am | Return approx. 6\u20137pm (2 hours from Tamarindo)",
+   "Volcano Hike, Hot Springs & Mud Bath – Rincon de la Vieja",
+   "Begin with a 3-hour guided hike in the Pailas Sector of Rincon de la Vieja Volcano, where you’ll see wildlife such as toucans, capuchin monkeys, howler monkeys, coatis, and more. Along the way, explore bubbling mud pots, fumaroles, and a mini crater. Cool off with a swim at Oropendola Waterfall, then enjoy a typical Costa Rican lunch. End the day soaking in the Rio Negro hot springs and rejuvenating volcanic mud baths.",
+   "Cost: $190 per person (tax included, based on 4 people – rates may vary for smaller groups or private tours)",
+   "Duration: Pickup at 6:30am | Return approx. 6–7pm (2 hours from Tamarindo)",
    "Included: Transportation, guide, lunch, entrance fees",
    "What to Bring: Walking shoes, comfortable clothes, bathing suit, towel, sunscreen, bug repellent, camera, change of clothes"
   ],
@@ -125,13 +151,13 @@
   "slug": "white-water-rafting",
   "name": "White Water Rafting",
   "paras": [
-   "Ride the Rapids with GoFish Costa Rica\u2019s White Water Rafting Adventure",
-   "Get ready for a high-energy, unforgettable experience with our White Water Rafting tour in the heart of Guanacaste. Perfect for thrill-seekers and nature lovers alike, this tour takes you deep into Costa Rica\u2019s lush interior, where inland rivers challenge and excite with a mix of beginner to intermediate rapids ranging from Class III to Class V.",
-   "Led by professional bilingual guides, you\u2019ll navigate powerful currents, paddle through fast-moving channels, and conquer roaring rapids that keep your adrenaline pumping from start to finish. Along the way, your guide will point out the incredible wildlife that thrives in the surrounding rainforest\u2014keep an eye out for monkeys, tropical birds, and other hidden jungle residents.",
+   "Ride the Rapids with GoFish Costa Rica’s White Water Rafting Adventure",
+   "Get ready for a high-energy, unforgettable experience with our White Water Rafting tour in the heart of Guanacaste. Perfect for thrill-seekers and nature lovers alike, this tour takes you deep into Costa Rica’s lush interior, where inland rivers challenge and excite with a mix of beginner to intermediate rapids ranging from Class III to Class V.",
+   "Led by professional bilingual guides, you’ll navigate powerful currents, paddle through fast-moving channels, and conquer roaring rapids that keep your adrenaline pumping from start to finish. Along the way, your guide will point out the incredible wildlife that thrives in the surrounding rainforest—keep an eye out for monkeys, tropical birds, and other hidden jungle residents.",
    "Each rapid presents a new challenge, requiring teamwork, focus, and a sense of adventure. Whether you're a first-time rafter or a seasoned paddler, the experience is designed to be safe, exhilarating, and unforgettable.",
    "Between the rapids, enjoy the moments of calm as you float through serene sections of river, soaking in the beauty of the jungle around you. This mix of excitement and natural immersion makes white water rafting in Costa Rica one of the most rewarding outdoor adventures available.",
    "At GoFish Costa Rica, we take safety seriously and pride ourselves on offering top-notch gear, experienced guides, and a fun, supportive environment for all skill levels.",
-   "Book your White Water Rafting adventure today and experience the wild energy of Costa Rica\u2019s rivers firsthand!"
+   "Book your White Water Rafting adventure today and experience the wild energy of Costa Rica’s rivers firsthand!"
   ],
   "images": [
    "white-water-rafting.jpg",
@@ -145,9 +171,9 @@
   "slug": "waterfall-hike",
   "name": "Waterfall Hike",
   "paras": [
-   "Waterfall Hike \u2013 La Leona Waterfalls, Guanacaste",
-   "Take a moderate 1\u20132 hour hike (each way) through the jungle along the Rio Blanco River, crossing streams, caverns, and lush rainforest before arriving at the stunning La Leona Waterfalls. Swim, relax, and take in the scenery before hiking back. End your day with a traditional Costa Rican lunch at a local restaurant.",
-   "Cost: $170 per person (tax included, based on minimum 4 people \u2013 private tours available)",
+   "Waterfall Hike – La Leona Waterfalls, Guanacaste",
+   "Take a moderate 1–2 hour hike (each way) through the jungle along the Rio Blanco River, crossing streams, caverns, and lush rainforest before arriving at the stunning La Leona Waterfalls. Swim, relax, and take in the scenery before hiking back. End your day with a traditional Costa Rican lunch at a local restaurant.",
+   "Cost: $170 per person (tax included, based on minimum 4 people – private tours available)",
    "Duration: Pickup at 8am | Return approx. 3:30pm (1.5 hours from Tamarindo)",
    "Included: Transportation, guide, entrance fees, lunch",
    "What to Bring: Walking shoes that can get wet, bathing suit, towel, sunscreen, bug repellent, camera, change of clothes"
@@ -198,7 +224,7 @@
   "name": "Tamarindo Estuary Boat Tour",
   "paras": [
    "Tamarindo Estuary Boat Tour",
-   "Conveniently located in Tamarindo, this 2-hour estuary boat ride explores the mangroves where you\u2019ll see iguanas, crocodiles, caimans, exotic birds, and howler monkeys. Includes a short jungle walk for wildlife spotting.",
+   "Conveniently located in Tamarindo, this 2-hour estuary boat ride explores the mangroves where you’ll see iguanas, crocodiles, caimans, exotic birds, and howler monkeys. Includes a short jungle walk for wildlife spotting.",
    "Cost: $50 per person (tax included)",
    "Duration: 2 hours (pickup times vary with the tides)",
    "Included: Transportation in Tamarindo, guide, boat ride",
@@ -237,8 +263,8 @@
   "name": "Monteverde Cloud Forest Tour",
   "paras": [
    "Monteverde Cloud Forest Tour",
-   "Travel to the Monteverde Cloud Forest, one of Costa Rica\u2019s most famous destinations. Choose 2 activities: Butterfly Gardens, Insect Museum, Reptile Exhibit, Ziplining (13 cables & Tarzan swing), or Hanging Bridges (8 bridges up to 560 ft long).",
-   "Cost: $220 per person (based on 4 people \u2013 private tours available)",
+   "Travel to the Monteverde Cloud Forest, one of Costa Rica’s most famous destinations. Choose 2 activities: Butterfly Gardens, Insect Museum, Reptile Exhibit, Ziplining (13 cables & Tarzan swing), or Hanging Bridges (8 bridges up to 560 ft long).",
+   "Cost: $220 per person (based on 4 people – private tours available)",
    "Duration: Pickup at 6:30am | Return 7pm (3 hrs each way from Tamarindo)",
    "Included: Transportation, guide, entrance fees, lunch",
    "What to Bring: Clothes for varying weather, rain gear, closed shoes, sunscreen, bug repellent, camera"
@@ -255,12 +281,12 @@
  },
  {
   "slug": "rio-celeste-hike",
-  "name": "Rio Celeste Hike \u2013 Tenorio Volcano National Park",
+  "name": "Rio Celeste Hike – Tenorio Volcano National Park",
   "paras": [
-   "Rio Celeste Hike \u2013 Tenorio Volcano National Park",
+   "Rio Celeste Hike – Tenorio Volcano National Park",
    "Take a 2-hour hike along rainforest trails to the breathtaking Rio Celeste Waterfall, where volcanic minerals create a turquoise-blue river. Wildlife sightings may include sloths, toucans, and monkeys. Afterward, enjoy a traditional Costa Rican lunch.",
-   "Cost: $195 per person (based on 4 people \u2013 private tours available)",
-   "Duration: Pickup at 7am | Return 6\u20137pm (3 hrs from Tamarindo)",
+   "Cost: $195 per person (based on 4 people – private tours available)",
+   "Duration: Pickup at 7am | Return 6–7pm (3 hrs from Tamarindo)",
    "Included: Transportation, guide, lunch, entrance fees",
    "What to Bring: Walking shoes, comfortable clothes, bathing suit, towel, sunscreen, bug repellent, camera, change of clothes"
   ],
@@ -300,8 +326,8 @@
   "slug": "surf-lessons",
   "name": "Surf Lessons",
   "paras": [
-   "Surf Lessons \u2013 Tamarindo, Costa Rica",
-   "Learn to surf in Tamarindo, one of Costa Rica\u2019s best surf towns. 2-hour surf lessons are tailored to beginners, families, and kids. Extra instructors available for children. Lesson times depend on the tides.",
+   "Surf Lessons – Tamarindo, Costa Rica",
+   "Learn to surf in Tamarindo, one of Costa Rica’s best surf towns. 2-hour surf lessons are tailored to beginners, families, and kids. Extra instructors available for children. Lesson times depend on the tides.",
    "Rates:",
    "Private (1 person): $90 per person",
    "Semi-Private (2 people): $70 per person",
@@ -320,7 +346,7 @@
   "slug": "turtle-tour",
   "name": "Turtle Tour",
   "paras": [
-   "Embark on a once-in-a-lifetime adventure with our Turtle Tour at GoFish Costa Rica. Along the pristine shores of Guanacaste, you'll have the incredible opportunity to witness one of nature's most awe-inspiring events\u2014the nesting of majestic sea turtles.",
+   "Embark on a once-in-a-lifetime adventure with our Turtle Tour at GoFish Costa Rica. Along the pristine shores of Guanacaste, you'll have the incredible opportunity to witness one of nature's most awe-inspiring events—the nesting of majestic sea turtles.",
    "Join our knowledgeable guides as they lead you on a journey to secluded beaches where these magnificent creatures return year after year to lay their eggs. As the sun sets and the moon rises, you'll witness the ancient ritual of mother turtles making their way ashore to dig nests and deposit their precious eggs.",
    "Under the cover of darkness, you'll have the privilege of observing these gentle giants in their natural habitat, illuminated only by the soft glow of the moon and stars. Our experienced guides will share fascinating insights into the life cycle and behavior of sea turtles, enriching your experience with their expert knowledge.",
    "As you marvel at the sight of mother turtles carefully burying their eggs in the sand, you'll gain a newfound appreciation for the importance of conservation efforts to protect these endangered species. Learn about the conservation initiatives in place to safeguard sea turtle populations and how you can contribute to their preservation.",
@@ -336,12 +362,12 @@
  },
  {
   "slug": "ultimate-spa-day",
-  "name": "Spa Package \u2013 Tamarindo, Costa Rica",
+  "name": "Spa Package – Tamarindo, Costa Rica",
   "paras": [
-   "Spa Package \u2013 Tamarindo, Costa Rica",
+   "Spa Package – Tamarindo, Costa Rica",
    "Relax with a half-day spa experience near Tamarindo. Choose any 3 treatments (massage, facial, wrap, scrub, manicure, pedicure, soaking tub). Enjoy a saltwater pool, gourmet lunch with wine, and full transportation.",
    "Cost: $276 per person + tax",
-   "Duration: Morning 9am\u20132pm | Afternoon 12:30pm\u20135pm (15 min drive from Tamarindo)",
+   "Duration: Morning 9am–2pm | Afternoon 12:30pm–5pm (15 min drive from Tamarindo)",
    "Included: Three spa treatments, saltwater pool, lunch with 2 glasses of wine, transportation",
    "What to Bring: Swimsuit (for pool), clean skin, camera, cash for tips"
   ],
