@@ -265,7 +265,7 @@ def home():
 <section class="dark"><div class="wrap"><div class="sec-head rv"><div class="kicker">How it works</div><h2>Booking a charter should feel like <em>calling a friend who lives here.</em></h2></div>
 <div class="steps">
 <div class="s rv"><h3>Tell us your dates and your crew</h3><p>Use the planner or send an email. Where you are staying, how many are fishing, what you want to catch, how hard you want to fish.</p></div>
-<div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours, and a 50% deposit holds the boat.</p></div>
+<div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours.</p></div>
 <div class="s rv"><h3>Show up at the beach at first light</h3><p>Gear, bait, drinks and lunch are on board. The other half of the rate is paid on the day. We stay on call the whole trip.</p></div>
 </div></div></section>
 
@@ -448,7 +448,7 @@ def adv_page(a):
 <div class="fld"><label for="ab-tr">Need transportation?</label><select id="ab-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <button class="btn btn-primary btn-block" type="submit">Request this tour</button>
 <button class="btn btn-ghost btn-block" type="button" data-add-trip style="margin-top:8px">Add to my trip</button>
-<div class="note">No payment online. A 50% deposit holds your spot and the balance is paid to the operator on the day.</div></form></aside></div></section>
+<div class="note">No payment online. We hold your spot and sort the payment details with you directly.</div></form></aside></div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More adventures</div><h2 style="font-size:30px">You might also like</h2></div><a class="btn btn-ghost btn-sm" href="{r}adventures/">All adventures</a></div><div class="grid g3">{''.join(adv_card(x, r) for x in others)}</div></div></section>'''
     bar = f'<div class="bookbar"><div><b>{fr or "Ask"}</b><small>{"per person" if fr else "for rates"}</small></div><a class="btn btn-primary btn-sm" href="#adv-book">Request this tour</a></div>'
     head = '<script>window.ADV_RATES=%s;</script>' % json.dumps(a.get('rates') or None)
@@ -610,7 +610,7 @@ def blog():
 # ---------------------------------------------------------------- TRIP PLANNER
 def planner():
     r = ''
-    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No obligation to ask. Steve &amp; Liisa reply within hours, and a 50% deposit holds your boat once you say yes.</p></div></header>
+    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No obligation to ask. Steve &amp; Liisa reply within hours with availability and a quote.</p></div></header>
 <section style="margin-top:-100px;padding-top:0;position:relative;z-index:2"><div class="wrap"><div class="wiz" id="wizard">
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
@@ -686,7 +686,7 @@ def trip_page():
     <div class="fld"><label for="t-tr">Need transportation?</label><select id="t-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
     <div class="fld"><label for="t-notes">Anything else we should know?</label><textarea id="t-notes" name="notes" placeholder="Ages of the kids, what you want to catch, anything you are celebrating."></textarea></div>
     <button class="btn btn-primary btn-block" type="submit">Send my trip</button>
-    <div class="note">No payment online. Steve &amp; Liisa confirm availability within hours, then a 50% deposit holds everything.</div>
+    <div class="note">No payment online. Steve &amp; Liisa confirm availability within hours and send you one plan for the whole trip.</div>
   </form>
 </div>
 
