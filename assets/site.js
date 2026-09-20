@@ -79,6 +79,24 @@
     else toast('Select and copy the text below');
   }
 
+  // ---- STALE PAGE GUARD ----------------------------------------------------
+  // Browsers (Safari especially) hold onto the HTML, so a returning guest can see
+  // yesterday's prices. Compare the build stamped on this page against the live
+  // one and reload once if they differ.
+  (function () {
+    var mine = document.documentElement.getAttribute('data-build');
+    if (!mine || !window.fetch) return;
+    fetch(ROOT + 'version.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (v) {
+        if (!v || !v.build || v.build === mine) return;
+        var key = 'gf_reloaded_' + v.build;
+        try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (e) { return; }
+        location.reload();
+      })
+      .catch(function () { });
+  })();
+
   // ---- CHOICE CHIPS (inshore/offshore, target fish) ------------------------
   function syncChips(group) { $$('label', group).forEach(function (l) { var i = l.querySelector('input'); if (i) l.classList.toggle('on', i.checked); }); }
   $$('.chip-group').forEach(function (g) {

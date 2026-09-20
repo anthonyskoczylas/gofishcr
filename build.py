@@ -151,7 +151,7 @@ def footer(root):
 
 def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
     return f'''<!DOCTYPE html>
-<html lang="en" data-root="{root}" data-email="{EMAIL}" data-cc="{EMAIL_CC}" data-endpoint="{MAIL_ENDPOINT}" data-wa="{WHATSAPP}">
+<html lang="en" data-root="{root}" data-build="{BUILD}" data-email="{EMAIL}" data-cc="{EMAIL_CC}" data-endpoint="{MAIL_ENDPOINT}" data-wa="{WHATSAPP}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(html.unescape(title))}</title>
@@ -709,6 +709,7 @@ def extras():
     urls = ['', 'charters/', 'adventures/', 'dining/', 'discover/', 'gallery.html', 'blog/', 'book.html', 'trip.html'] + [f'charters/{b["slug"]}.html' for b in FLEET] + [f'adventures/{a["slug"]}.html' for a in ADV] + [f'dining/{d["slug"]}.html' for d in DINING] + [f'discover/{s}.html' for s in ['about-us','our-pledge-to-you','crews-equipment','fish-seasons','guanacaste-fishing','weather','contact-us']] + [f'blog/{p["slug"]}.html' for p in BLOG]
     write('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join(f'<url><loc>https://gofishcr.com/{u}</loc></url>' for u in urls) + '\n</urlset>\n')
     write('robots.txt', 'User-agent: *\nAllow: /\nSitemap: https://gofishcr.com/sitemap.xml\n')
+    write('version.json', json.dumps({'build': BUILD}) + '\n')
     # Old-site addresses that have no matching page in the new build -> instant redirect
     for src, dst in [('reservation.html', 'book.html'), ('discover/blog.html', 'blog/'), ('locations/tamarindo.html', 'discover/guanacaste-fishing.html'),
                      ('locations/flamingo.html', 'discover/guanacaste-fishing.html'), ('locations/index.html', 'discover/guanacaste-fishing.html'), ('sitemap.html', 'index.html')]:
