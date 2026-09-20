@@ -5,8 +5,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": false,
-  "top_label": "",
+  "top": true,
+  "top_label": "Top inshore boat",
   "washroom": false,
   "priced_for": 4,
   "max_pax": 4,
@@ -28,8 +28,8 @@
   "locations": [
    "Tamarindo"
   ],
-  "top": false,
-  "top_label": "",
+  "top": true,
+  "top_label": "Top offshore boat",
   "washroom": true,
   "priced_for": 4,
   "max_pax": 4,
@@ -407,8 +407,8 @@
    "Flamingo",
    "Tamarindo"
   ],
-  "top": false,
-  "top_label": "",
+  "top": true,
+  "top_label": "Top offshore boat",
   "washroom": true,
   "priced_for": 8,
   "max_pax": 9,
@@ -440,8 +440,8 @@
    "Flamingo",
    "Tamarindo"
   ],
-  "top": false,
-  "top_label": "",
+  "top": true,
+  "top_label": "Top offshore boat",
   "washroom": true,
   "priced_for": 8,
   "max_pax": 9,

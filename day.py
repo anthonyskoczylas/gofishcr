@@ -17,7 +17,7 @@ def home(ctx):
     E, img, FLEET, ADV, boat_len, SOCIAL, EMAIL, PHONE, PHONE_TEL, REVIEWS, page = (ctx[k] for k in ('E', 'img', 'FLEET', 'ADV', 'boat_len', 'SOCIAL', 'EMAIL', 'PHONE', 'PHONE_TEL', 'REVIEWS', 'page'))
     REVIEWS_ALL = json.load(open(__import__('os').path.join(__import__('os').path.dirname(__file__), 'data', 'reviews.json')))
     r = ''
-    rail_boats = [b for b in FLEET if b['slug'] in ('28-whitewater-center-console', '31-chris-craft', '35-cabo', '35-carolina-classic', '38-riviera', '43-riviera-team-edition')]
+    rail_boats = [b for b in FLEET if b['top'] and not b['quote']]   # top boats only
     rail_boats.sort(key=lambda b: b['half'])
     def boat(b):
         return f'''<a class="boat" href="{r}charters/{b['slug']}.html"><div class="ph">{f'<span class="tb">{b["top_label"]}</span>' if b['top'] else ''}<span class="base">{' · '.join(b['locations'])}</span><img src="{r}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
@@ -41,7 +41,7 @@ def home(ctx):
 <!-- chapter -->
 <section class="chapter" id="sand"><div class="stamp" aria-hidden="true">Boats</div>
 <div class="wrap" style="padding-top:clamp(110px,16vh,180px);padding-bottom:clamp(48px,7vh,80px)"><div class="ch-copy"><div class="t">On the sand</div>
-<h2>Pick your boat. We already picked the captain.</h2>
+<h2>Pick your boat. We already picked the top captains.</h2>
 <p>Every hull here is one Steve and Liisa have fished from, and every captain is one they'd put their own family with. Rates are per boat and include gear, bait, drinks and lunch on the longer days. Tell us your group and budget, and we'll tell you which one.</p></div>
 <div class="fleet-rail" id="fleet-rail">{''.join(boat(b) for b in rail_boats)}</div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><a class="link" href="{r}charters/">All seventeen boats and rates</a><div class="rail-nav"><button type="button" data-rail="-1" aria-label="Previous boats">&#8249;</button><button type="button" data-rail="1" aria-label="More boats">&#8250;</button></div></div>
