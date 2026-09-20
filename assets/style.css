@@ -204,9 +204,10 @@ body>footer a{text-decoration:none;color:inherit;transition:color .3s}
 body>footer a:hover{color:var(--foam)}
 body>footer .logo img{height:52px;filter:brightness(0) invert(1)}
 body>footer .brandline{margin-top:16px;max-width:38ch;color:rgba(243,247,249,.62)}
-body>footer .socials{display:flex;gap:8px;margin-top:20px}
-body>footer .socials a{height:38px;padding:0 12px;border-radius:4px;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.06em}
-body>footer .socials a:hover{border-color:var(--foam);color:var(--foam)}
+body>footer .socials{display:flex;gap:10px;margin-top:20px}
+body>footer .socials a{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;color:rgba(243,247,249,.8);transition:.2s}
+body>footer .socials a svg{width:20px;height:20px;display:block}
+body>footer .socials a:hover{border-color:var(--foam);color:var(--foam);background:rgba(180,215,213,.08);transform:translateY(-2px)}
 body>footer .bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13px;color:rgba(243,247,249,.5)}
 body>footer .bottom a{color:rgba(243,247,249,.75)}
 @media(max-width:900px){body>footer .cols{grid-template-columns:1fr 1fr}}
