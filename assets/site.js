@@ -10,7 +10,7 @@
     endpoint: document.documentElement.getAttribute('data-endpoint') || '',                 // set MAIL_ENDPOINT in build.py
     phone: '1-888-434-7491',
     phoneCR: '+506 8393 7555',
-    whatsapp: '',
+    whatsapp: document.documentElement.getAttribute('data-wa') || '',   // set WHATSAPP in build.py
     behold: ''   // Behold.so feed ID for @gofishcostarica; leave empty until Steve creates one at behold.so
   };
   window.GF_CONFIG = CONFIG;
