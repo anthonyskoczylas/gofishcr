@@ -487,7 +487,7 @@
         if (!cat && b.max_pax < totalPax()) return false;
         return true;
       }).sort(function (a, b) { return (a.half || 0) - (b.half || 0); });
-      if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + totalPax() + ' guests in ' + state.base + '. Go back and try the other base, or split the group over two boats: email us and we will pair them up.</div>'; }
+      if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + totalPax() + ' guests in ' + state.base + '. With a group this size two boats is usually the better day anyway: more room to work and more lines in the water. Email us and we will pair the right two.</div>'; }
       list.forEach(function (b) {
         box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · up to ' + (b.max_pax || 'group') + (b.max_pax ? ' guests' : '') + (b.washroom ? ' · washroom' : '') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
       });

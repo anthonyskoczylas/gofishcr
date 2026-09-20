@@ -310,7 +310,7 @@ def charters():
 <button type="button" class="reset">Reset</button></form>
 <div class="count"><span id="fleet-count"></span> <span id="fleet-date"></span></div>
 <div class="grid g3">{cards}</div>
-<div id="fleet-empty" class="empty" style="display:none;margin-top:20px">No single boat fits every filter. Loosen one, or <a href="mailto:{EMAIL}">email us</a> and we will split a bigger group across two boats that run together.</div>
+<div id="fleet-empty" class="empty" style="display:none;margin-top:20px">No single boat fits every filter. Loosen one, or <a href="mailto:{EMAIL}">email us</a>. With ten or more anglers two boats running together is usually the better day.</div>
 <div class="incl" style="margin-top:50px"><div><h4>Included on every charter</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul><p class="small muted" style="margin-top:12px">Boats stay inshore on half days. To target billfish, book a 3/4 or full day offshore.</p></div></div>
 </div></section>'''
     write('charters/index.html', page(r, 'Fishing Charters — Tamarindo & Flamingo | Go Fish Costa Rica', 'Compare 17 fishing boats in Tamarindo and Flamingo with real rates: half, 3/4 and full day. Center consoles, Bertrams, Rivieras, Cabos and private catamarans.', body, extra_head=fleet_js()))
@@ -632,7 +632,7 @@ def planner():
 <div class="pane"><h2>When are you here, and how many?</h2><p class="lead">Give us your arrival and departure. You can pin each activity to a day later, or leave that to us.</p>
 <div class="row3" style="max-width:620px"><div class="fld"><label for="w-arrive">Arrival</label><input id="w-arrive" type="date" name="arrive"></div><div class="fld"><label for="w-depart">Departure</label><input id="w-depart" type="date" name="depart"></div></div>
 <div class="row3" style="max-width:620px;margin-top:12px">{pax_fields('w')}</div>
-<p class="small muted">Charter rates are per boat, so a group of six on a 35-footer is often cheaper per head than two on a 21. Big group? We can run two boats side by side.</p>
+<p class="small muted">Charter rates are per boat, not per person. Fishing with ten or more? Two boats is usually the better call: more room to work, more lines in the water and more chances at a fish. Tell us the group and we will pair the right two.</p>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: pick your boat</button></div></div>
 
 <div class="pane"><div id="picks-head"></div>
