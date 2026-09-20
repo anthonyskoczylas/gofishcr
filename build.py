@@ -38,7 +38,7 @@ def adv_from(a):
 ADV_TAG = {
  'zipline-tour':'10 cables · 3.5 hrs · from Tamarindo or Flamingo','atv-tour':'Private · 2–4 hrs · beaches, mountains, back roads','sunset-catamaran':'Sail, snorkel, paddleboard · open bar · afternoon into sunset',
  'mega-combo-adventure-tour':'Zipline, tubing, horses, hot springs · all day','volcano-hike-mud-baths':'Rincón de la Vieja · hot springs · full day','white-water-rafting':'Class III–V · bilingual guides · full day',
- 'waterfall-hike':'La Leona Waterfalls · swim · lunch','birdwatching-tour':'Toucans, hawks, wetlands · all levels','estuary-tour':'Mangroves · crocs, monkeys, birds · 2 hrs','riverboat-pottery-farm':'Tempisque River · wildlife · pottery farm',
+ 'waterfall-hike':'La Leona Waterfalls · swim · lunch','birdwatching-tour':'Toucans, hawks, wetlands · all levels','estuary-tour':'Mangroves · crocs, monkeys, birds · 2 hrs','riverboat-pottery-farm':'Palo Verde boat ride · lunch · Guaitil pottery',
  'horseback-riding':'Beach, forest and mountain trails · all levels','monteverde-cloud-forest':'Hanging bridges or zipline · full day','rio-celeste-hike':'Turquoise river · Tenorio Volcano · full day',
  'snorkeling':'Reefs, turtles, tropical fish · guided','surf-lessons':'2 hrs · beginners, families, kids','turtle-tour':'Night nesting tour · seasonal','ultimate-spa-day':'3 treatments · saltwater pool · lunch with wine'}
 ADV_SHORT = {'mega-combo-adventure-tour':'Mega Combo Tour','volcano-hike-mud-baths':'Volcano Hike & Mud Baths','rio-celeste-hike':'Rio Celeste Hike','estuary-tour':'Estuary Boat Tour','ultimate-spa-day':'Spa Day','monteverde-cloud-forest':'Monteverde Cloud Forest','riverboat-pottery-farm':'Riverboat & Pottery Farm'}
