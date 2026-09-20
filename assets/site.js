@@ -479,7 +479,13 @@
       syncChips(fishG);
       fishG.addEventListener('change', function () { state.fish = checkedValues(fishG, 'fish'); save(); });
     }
-    function setFishRow(show) { var r = $('#fish-row'); if (r) r.style.display = show ? '' : 'none'; }
+    filterFish(wz);
+    function setFishRow(show) {
+      var r = $('#fish-row'); if (!r) return;
+      r.style.display = show ? '' : 'none';
+      // a 5 hour trip means inshore, so set that up front, then filter to match
+      if (show) { autoStyle(wz, state.dur); state.style = (($('[data-style] input:checked', wz)) || {}).value || ''; state.fish = checkedValues(fishG || wz, 'fish'); }
+    }
     // step 3: picks
     function renderPicks() {
       var box = $('#picks'), h = $('#picks-head');
