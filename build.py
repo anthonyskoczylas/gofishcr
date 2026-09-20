@@ -270,7 +270,7 @@ def home():
 <div class="steps">
 <div class="s rv"><h3>Tell us your dates and your crew</h3><p>Use the planner or send an email. Where you are staying, how many are fishing, what you want to catch, how hard you want to fish.</p></div>
 <div class="s rv"><h3>We match you to the boat</h3><p>Not the most expensive one. The right one for your group, your budget and the season. We confirm availability within hours.</p></div>
-<div class="s rv"><h3>Show up at the beach at first light</h3><p>Gear, bait, drinks and lunch are on board. The other half of the rate is paid on the day. We stay on call the whole trip.</p></div>
+<div class="s rv"><h3>Show up at the beach at first light</h3><p>Gear, bait, drinks and lunch are on board. We stay on call the whole trip.</p></div>
 </div></div></section>
 
 <section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">Beyond the boat</div><h2>Adventures for the <em>non-fishing days.</em></h2></div><a class="btn btn-ghost" href="{r}adventures/">All 16 adventures</a></div>
@@ -454,7 +454,7 @@ def adv_page(a):
 <button class="btn btn-primary btn-block" type="submit">Request this tour</button>
 <button class="btn btn-ghost btn-block" type="button" data-add-trip style="margin-top:8px">Add to my trip</button>
 <a class="btn btn-ghost btn-block" data-wa href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener" style="margin-top:8px"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:1em;height:1em;vertical-align:-.12em;margin-right:.45em"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.26-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.71 2.74 4.22 3.74 2.08.82 2.5.66 2.96.62.45-.04 1.47-.6 1.68-1.18.2-.58.2-1.07.15-1.18-.07-.1-.23-.16-.48-.28-.25-.13-1.47-.73-1.7-.81-.22-.08-.39-.13-.56.12-.16.25-.63.81-.78.97-.14.17-.29.19-.54.06-.24-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.71-.14-.24-.01-.38.11-.5.11-.12.25-.29.37-.44s.16-.25.24-.42c.08-.17.04-.31-.02-.44-.06-.12-.55-1.34-.76-1.83-.2-.48-.4-.42-.55-.42z"/></svg>Ask on WhatsApp</a>
-<div class="note">No payment online. We hold your spot and sort the payment details with you directly.</div></form></aside></div></section>
+<div class="note">Steve &amp; Liisa confirm availability within hours and send you the plan for your trip.</div></form></aside></div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More adventures</div><h2 style="font-size:30px">You might also like</h2></div><a class="btn btn-ghost btn-sm" href="{r}adventures/">All adventures</a></div><div class="grid g3">{''.join(adv_card(x, r) for x in others)}</div></div></section>'''
     bar = f'<div class="bookbar"><div><b>{fr or "Ask"}</b><small>{"per person" if fr else "for rates"}</small></div><a class="btn btn-primary btn-sm" href="#adv-book">Request this tour</a></div>'
     head = '<script>window.ADV_RATES=%s;</script>' % json.dumps(a.get('rates') or None)
@@ -617,7 +617,7 @@ def blog():
 # ---------------------------------------------------------------- TRIP PLANNER
 def planner():
     r = ''
-    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No obligation to ask. Steve &amp; Liisa reply within hours with availability and a quote.</p></div></header>
+    body = f'''<header class="page-hero" style="padding-bottom:120px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>Trip planner</span></div><h1>Plan your trip in <em style="color:var(--foam)">four steps</em></h1><p>Tell us what kind of day you want and we match you to a boat or a tour that fits. No obligation to ask. Steve &amp; Liisa confirm availability within hours and send you the plan for your trip.</p></div></header>
 <section style="margin-top:-100px;padding-top:0;position:relative;z-index:2"><div class="wrap"><div class="wiz" id="wizard">
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
@@ -693,7 +693,7 @@ def trip_page():
     <div class="fld"><label for="t-tr">Need transportation?</label><select id="t-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
     <div class="fld"><label for="t-notes" data-notes-label>Anything else we should know?</label><textarea id="t-notes" name="notes" placeholder="What you want to catch, anything you are celebrating."></textarea></div>
     <button class="btn btn-primary btn-block" type="submit">Send my trip</button>
-    <div class="note">No payment online. Steve &amp; Liisa confirm availability within hours and send you one plan for the whole trip.</div>
+    <div class="note">Steve &amp; Liisa confirm availability within hours and send you the plan for your whole trip.</div>
   </form>
 </div>
 
