@@ -123,6 +123,22 @@
     return out;
   }
 
+  // ---- ONLY ASK ABOUT KIDS' AGES WHEN THERE ARE KIDS -----------------------
+  var NOTES_PLAIN = 'Anything else we should know?', NOTES_KIDS = 'Ages of the kids, anything else?';
+  function paintNotesLabel(scope) {
+    var root = scope || document;
+    $$('[data-notes-label]', root).forEach(function (l) {
+      var form = l.closest('form') || document;
+      var kidsSel = form.querySelector('select[name=kids]') || document.querySelector('select[name=kids]');
+      var kids = kidsSel ? +kidsSel.value || 0 : 0;
+      l.textContent = kids > 0 ? NOTES_KIDS : NOTES_PLAIN;
+    });
+  }
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.name === 'kids') paintNotesLabel();
+  });
+  paintNotesLabel();
+
   // ---- ACCOMMODATION MAP PICKER (Leaflet + OpenStreetMap, no API key) -------
   var TAMARINDO = [10.2993, -85.8371], leafletP;
   function loadLeaflet() {
