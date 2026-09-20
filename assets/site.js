@@ -9,6 +9,7 @@
     cc: document.documentElement.getAttribute('data-cc') || '',                             // set EMAIL_CC in build.py
     endpoint: document.documentElement.getAttribute('data-endpoint') || '',                 // set MAIL_ENDPOINT in build.py
     phone: '1-888-434-7491',
+    phoneCR: '+506 8393 7555',
     whatsapp: '',
     behold: ''   // Behold.so feed ID for @gofishcostarica; leave empty until Steve creates one at behold.so
   };
@@ -377,7 +378,7 @@
     div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">' + (failed ? 'Our sender is busy, so send it from your email app instead. ' : 'Send it by email and ') + 'Steve &amp; Liisa reply within hours.</p>'
       + '<a class="btn btn-primary btn-block" href="' + req.mailto + '">Send by email</a>'
       + (req.wa ? '<a class="btn btn-ghost btn-block" style="margin-top:8px" target="_blank" rel="noopener" href="' + req.wa + '">Send on WhatsApp</a>' : '')
-      + '<div class="alt"><button type="button" class="btn btn-ghost btn-sm" data-copy>Copy details</button><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a></div>'
+      + '<div class="alt"><button type="button" class="btn btn-ghost btn-sm" data-copy>Copy details</button><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phoneCR.replace(/[^0-9+]/g, '') + '">' + CONFIG.phoneCR + '</a></div>'
       + '<div class="copybox">' + req.text.replace(/</g, '&lt;') + '</div>';
     form.style.display = 'none'; wrap.appendChild(div);
     $('[data-copy]', div).addEventListener('click', function () { copy(req.text); });
@@ -394,10 +395,14 @@
     return tripBlank();
   }
   function tripSave(t) { try { localStorage.setItem(TRIP_KEY, JSON.stringify(t)); } catch (e) { } paintTripCount(); }
+  // The link is always there so people can find their trip; the badge only shows once something is in it.
   function paintTripCount() {
     var n = tripLoad().items.length;
-    $$('.nav-trip').forEach(function (a) { a.hidden = !n; var s = a.querySelector('span'); if (s) s.textContent = n; });
-    $$('.drawer-trip').forEach(function (a) { a.hidden = !n; var s = a.querySelector('span'); if (s) s.textContent = n; });
+    $$('.nav-trip, .drawer-trip').forEach(function (a) {
+      a.classList.toggle('has-items', !!n);
+      var s = a.querySelector('span');
+      if (s) { s.hidden = !n; s.textContent = n; }
+    });
   }
   function tripAdd(item) {
     var t = tripLoad();

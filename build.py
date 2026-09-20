@@ -17,6 +17,7 @@ E = html.escape
 
 SITE = 'Go Fish Costa Rica'
 EMAIL, PHONE, PHONE_TEL = 'gofishcr@gmail.com', '1-888-434-7491', '+18884347491'
+PHONE_CR, PHONE_CR_TEL = '+506 8393 7555', '+50683937555'  # Costa Rica mobile
 EMAIL_CC = ''  # optional second inbox copied on every booking request (blank = none)
 MAIL_ENDPOINT = 'https://gofish-mail.vercel.app/api/request'  # gofish-mail service (Vercel) that emails the guest + Go Fish; blank = email-app fallback only
 SOCIAL = dict(fb='https://www.facebook.com/GoFishCr', ig='https://www.instagram.com/gofishcostarica', yt='https://www.youtube.com/@GoFishCostaRica',
@@ -128,13 +129,13 @@ def nav(root, light=False):
 <ul class="nav-links">
 <li><a href="{root}charters/">Fishing Charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}dining/">Dining</a></li>
 <li><a href="{root}discover/">Discover</a><ul class="dd">{dd}<li><a href="{root}blog/">Blog</a></li></ul></li><li><a href="{root}gallery.html">Gallery</a></li></ul>
-<a class="nav-trip" href="{root}trip.html" hidden aria-label="My trip"><b>My trip</b><span>0</span></a><a class="nav-cta" href="{root}book.html">Plan my trip</a>
+<a class="nav-trip" href="{root}trip.html" aria-label="My trip"><b>My trip</b><span hidden>0</span></a><a class="nav-cta" href="{root}book.html">Plan my trip</a>
 <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
 <div class="drawer"><button class="close" aria-label="Close">&times;</button>
 <a href="{root}charters/">Fishing Charters</a><a href="{root}adventures/">Adventures</a><a href="{root}dining/">Dining</a><a href="{root}gallery.html">Gallery</a><a href="{root}blog/">Blog</a><a href="{root}discover/">Discover</a>
 <a class="sub" href="{root}discover/about-us.html">About Steve &amp; Liisa</a><a class="sub" href="{root}discover/fish-seasons.html">Fish &amp; Seasons</a><a class="sub" href="{root}discover/crews-equipment.html">Crews &amp; Equipment</a><a class="sub" href="{root}discover/weather.html">Weather</a><a class="sub" href="{root}discover/contact-us.html">Contact</a>
 <a class="btn btn-sand" style="margin-top:22px;font-family:Inter;font-size:16px" href="{root}book.html">Plan my trip</a>
-<a class="sub drawer-trip" href="{root}trip.html" hidden>My trip<span>0</span></a>
+<a class="sub drawer-trip" href="{root}trip.html">My trip<span hidden>0</span></a>
 {social_links('drawer-social')}</div>'''
 
 def footer(root):
@@ -144,7 +145,7 @@ def footer(root):
 {social_links('socials')}</div>
 <div><h4>Book</h4><ul><li><a href="{root}charters/">Fishing charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}charters/?base=Tamarindo">Tamarindo boats</a></li><li><a href="{root}charters/?base=Flamingo">Flamingo boats</a></li><li><a href="{root}book.html">Trip planner</a></li></ul></div>
 <div><h4>Discover</h4><ul><li><a href="{root}discover/about-us.html">About us</a></li><li><a href="{root}discover/fish-seasons.html">Fish &amp; seasons</a></li><li><a href="{root}discover/crews-equipment.html">Crews &amp; equipment</a></li><li><a href="{root}discover/guanacaste-fishing.html">Why fish Tamarindo</a></li><li><a href="{root}dining/">Where to eat</a></li><li><a href="{root}discover/weather.html">Weather</a></li><li><a href="{root}blog/">Blog</a></li></ul></div>
-<div><h4>Contact</h4><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{PHONE_TEL}">{PHONE} (toll-free)</a></li><li>Mon–Sat 8:00am–6:00pm</li><li>Playa Tamarindo &amp; Playa Flamingo<br>Costa Rica 50309</li></ul></div>
+<div><h4>Contact</h4><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{PHONE_TEL}">{PHONE} (toll-free)</a></li><li><a href="tel:{PHONE_CR_TEL}">{PHONE_CR}</a> (Costa Rica)</li><li>Mon–Sat 8:00am–6:00pm</li><li>Playa Tamarindo &amp; Playa Flamingo<br>Costa Rica 50309</li></ul></div>
 </div><div class="bottom"><span>&copy; {datetime.date.today().year} Go Fish Costa Rica. All billfish released. Prices in USD, subject to change.</span><span>Site by <a href="https://coastalcr.com" target="_blank" rel="noopener">Coastal CR</a></span></div></div></footer>'''
 
 def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
@@ -173,6 +174,8 @@ ORG_LD = json.dumps({
   "name": SITE, "url": SITE_URL, "logo": SITE_URL + "img/logo.svg", "image": SITE_URL + "img/hero-split.jpg",
   "description": "Sport fishing charters, private catamarans and adventure tours in Tamarindo and Flamingo, Costa Rica. Booked by Steve & Liisa Quinn since 2010.",
   "email": EMAIL, "telephone": PHONE_TEL, "priceRange": "$700 - $2,100",
+  "contactPoint": [{"@type": "ContactPoint", "telephone": PHONE_TEL, "contactType": "reservations", "areaServed": "US", "availableLanguage": ["English", "Spanish"]},
+                   {"@type": "ContactPoint", "telephone": PHONE_CR_TEL, "contactType": "customer service", "areaServed": "CR", "availableLanguage": ["English", "Spanish"]}],
   "address": {"@type": "PostalAddress", "addressLocality": "Tamarindo", "addressRegion": "Guanacaste", "postalCode": "50309", "addressCountry": "CR"},
   "areaServed": ["Tamarindo", "Playa Flamingo", "Playa Grande", "Playa Conchal", "Guanacaste"],
   "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "08:00", "closes": "18:00"},
@@ -514,7 +517,7 @@ def discover():
 <ul><li>A boat fully equipped for the trip you booked</li><li>A captain and crew fluent in English</li><li>Years of experience on these specific waters</li><li>Comprehensive insurance for your peace of mind</li><li>Premium tackle, rods and reels on board</li><li>Complimentary drinks and snacks, plus a light lunch on 3/4 and full days</li><li>Full compliance with Costa Rican regulations</li><li>Catch and release on all billfish</li><li>Responsible creel limits on table fish</li><li>Flexibility for different group sizes and special requests</li></ul>
 <h2>Knowledge is power</h2>
 <p>Attempting to navigate this alone will not save you time or money. Before you book anywhere, reach out. Even if you decide not to book through Go Fish, we want your Costa Rican fishing trip to be a good one.</p>
-<p>Call us seven days a week at <a href="tel:{PHONE_TEL}">{PHONE}</a> or email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+<p>Call us seven days a week at <a href="tel:{PHONE_TEL}">{PHONE}</a>, reach us in Costa Rica on <a href="tel:{PHONE_CR_TEL}">{PHONE_CR}</a>, or email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 <p><a class="btn btn-primary" href="{r}charters/">See the fleet</a></p>''')
 
     # fish & seasons — calendar. 0 = possible, 1 = good, 2 = peak
@@ -562,6 +565,7 @@ def discover():
 <section><div class="wrap contact"><div class="info">
 <div><h4>Email</h4><a href="mailto:{EMAIL}">{EMAIL}</a></div>
 <div><h4>Toll-free</h4><a href="tel:{PHONE_TEL}">{PHONE}</a><p class="small muted">Seven days a week for fishing questions.</p></div>
+<div><h4>In Costa Rica</h4><a href="tel:{PHONE_CR_TEL}">{PHONE_CR}</a><p class="small muted">Call or message us once you are here.</p></div>
 <div><h4>Office hours</h4>Monday to Saturday, 8:00am to 6:00pm<br>Sunday closed</div>
 <div><h4>Playa Tamarindo</h4>Tamarindo Beach, Guanacaste, Costa Rica 50309</div>
 <div><h4>Playa Flamingo</h4>Flamingo Beach, Guanacaste, Costa Rica</div>
@@ -573,7 +577,7 @@ def discover():
 <div class="fld"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required style="min-height:140px"></textarea></div>
 <button class="btn btn-primary btn-block" type="submit">Send message</button>
 <p class="small muted" style="margin-top:10px">Booking a boat? The <a href="{r}book.html">trip planner</a> is faster.</p></form></div></div></section>'''
-    write('discover/contact-us.html', page(r, 'Contact Go Fish Costa Rica', f'Email {EMAIL} or call toll-free {PHONE}. Offices at Playa Tamarindo and Playa Flamingo, Guanacaste.', body))
+    write('discover/contact-us.html', page(r, 'Contact Go Fish Costa Rica', f'Email {EMAIL}, call toll-free {PHONE} or reach us in Costa Rica on {PHONE_CR}. Offices at Playa Tamarindo and Playa Flamingo, Guanacaste.', body))
 
 # ---------------------------------------------------------------- GALLERY
 def gallery():
