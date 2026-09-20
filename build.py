@@ -52,7 +52,10 @@ def fleet_js():
 
 
 # ---------------------------------------------------------------- booking form fields (Tyler 09-20)
-FISH_TARGETS = ['Sailfish', 'Marlin', 'Tuna', 'Mahi mahi', 'Roosterfish', 'Snapper', 'Wahoo', "Whatever's biting"]
+FISH_INSHORE = ['Roosterfish', 'Snapper', 'Jacks', 'African pompano', 'Needlefish']
+FISH_OFFSHORE = ['Marlin', 'Sailfish', 'Tuna', 'Mahi mahi', 'Wahoo']
+FISH_ANY = ["Whatever's biting"]
+FISH_TARGETS = [(f, 'in') for f in FISH_INSHORE] + [(f, 'off') for f in FISH_OFFSHORE] + [(f, 'both') for f in FISH_ANY]
 PIN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>'
 
 def pax_fields(pre, max_pax=None, adults=2):
@@ -73,7 +76,7 @@ def style_field(pre):
             f'<span class="hint">Inshore is roosterfish, snapper and jacks close to the beach. Offshore runs out to the shelf for billfish, tuna and mahi.</span></div>')
 
 def fish_field(pre):
-    opts = ''.join(f'<label><input type="checkbox" name="fish" value="{E(f)}">{E(f)}</label>' for f in FISH_TARGETS)
+    opts = ''.join(f'<label data-zone="{z}"><input type="checkbox" name="fish" value="{E(f)}">{E(f)}</label>' for f, z in FISH_TARGETS)
     return (f'<div class="fld"><label for="{pre}-fish-g">What do you want to catch?</label>'
             f'<div class="chip-group" id="{pre}-fish-g" data-fish>{opts}</div></div>')
 
@@ -125,12 +128,13 @@ def nav(root, light=False):
 <ul class="nav-links">
 <li><a href="{root}charters/">Fishing Charters</a></li><li><a href="{root}adventures/">Adventures</a></li><li><a href="{root}dining/">Dining</a></li>
 <li><a href="{root}discover/">Discover</a><ul class="dd">{dd}</ul></li><li><a href="{root}gallery.html">Gallery</a></li><li><a href="{root}blog/">Blog</a></li></ul>
-{social_links('nav-social')}<a class="nav-cta" href="{root}book.html">Plan my trip</a>
+{social_links('nav-social')}<a class="nav-trip" href="{root}trip.html" hidden>My trip<span>0</span></a><a class="nav-cta" href="{root}book.html">Plan my trip</a>
 <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
 <div class="drawer"><button class="close" aria-label="Close">&times;</button>
 <a href="{root}charters/">Fishing Charters</a><a href="{root}adventures/">Adventures</a><a href="{root}dining/">Dining</a><a href="{root}gallery.html">Gallery</a><a href="{root}blog/">Blog</a><a href="{root}discover/">Discover</a>
 <a class="sub" href="{root}discover/about-us.html">About Steve &amp; Liisa</a><a class="sub" href="{root}discover/fish-seasons.html">Fish &amp; Seasons</a><a class="sub" href="{root}discover/crews-equipment.html">Crews &amp; Equipment</a><a class="sub" href="{root}discover/weather.html">Weather</a><a class="sub" href="{root}discover/contact-us.html">Contact</a>
 <a class="btn btn-sand" style="margin-top:22px;font-family:Inter;font-size:16px" href="{root}book.html">Plan my trip</a>
+<a class="sub drawer-trip" href="{root}trip.html" hidden>My trip<span>0</span></a>
 {social_links('drawer-social')}</div>'''
 
 def footer(root):
@@ -297,7 +301,7 @@ def charters():
 <form id="fleet-filters" class="filters">
 <div class="f"><label>Base</label><select name="base"><option value="">Both</option><option>Tamarindo</option><option>Flamingo</option></select></div>
 <div class="f"><label>Guests</label><select name="pax"><option value="">Any</option>{''.join(f'<option value="{i}">{i}</option>' for i in range(1,10))}</select></div>
-<div class="f"><label>Half-day budget</label><select name="budget"><option value="">Any</option><option value="800">Under $800</option><option value="1100">Under $1,100</option><option value="1500">Under $1,500</option><option value="2200">Under $2,200</option></select></div>
+<div class="f"><label>Budget</label><select name="budget"><option value="">Any</option><option value="800">Under $800</option><option value="1100">Under $1,100</option><option value="1500">Under $1,500</option><option value="2200">Under $2,200</option></select></div>
 <div class="f"><label>Washroom</label><select name="wash"><option value="">Either</option><option value="yes">Yes please</option></select></div>
 <div class="f"><label>Sort</label><select name="sort"><option value="">Recommended</option><option value="price">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="size">Size: small to big</option><option value="size-desc">Size: big to small</option></select></div>
 <button type="button" class="reset">Reset</button></form>
@@ -360,12 +364,13 @@ def boat_page(b):
 <div class="fld"><label for="bk-tr">Need transportation?</label><select id="bk-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 {'<div class="est" id="est"><span><small>Estimated total</small></span><span style="text-align:right"><b></b><small></small></span></div>' if not b['quote'] else ''}
 <button class="btn btn-primary btn-block" type="submit">Request this boat</button>
+<button class="btn btn-ghost btn-block" type="button" data-add-trip style="margin-top:8px">Add to my trip</button>
 <div class="note">Rates exclude taxes. A 50% deposit reserves the boat and the balance is paid on the day. All gear, bait, drinks{' and lunch on longer trips' if not b['quote'] else ''} included. Fishing licence and crew tips extra.</div>
 </form></aside>
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>
 <div class="grid g3">{''.join(boat_card(x, r) for x in sorted([x for x in FLEET if x['slug']!=b['slug'] and set(x['locations'])&set(b['locations']) and x['quote']==b['quote']], key=lambda x: abs((x['half'] or 0)-(b['half'] or 0)))[:3])}</div></div></section>'''
-    boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], max_pax=b['max_pax'], quote=b['quote']))
+    boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(slug=b['slug'], image=img(b['images'][0]), name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], max_pax=b['max_pax'], quote=b['quote']))
     bar = f'<div class="bookbar"><div><b>{("$%s" % f"{b["half"]:,}") if b["half"] else "Quote"}</b><small>{"half day · per boat" if b["half"] else "private sail"}</small></div><a class="btn btn-primary btn-sm" href="#boat-book">Request this boat</a></div>'
     ld = {"@context": "https://schema.org", "@graph": [
       {"@type": "Product", "name": f"{b['name']} fishing charter", "image": [SITE_URL + 'img/' + i for i in b['images'][:3]],
@@ -430,7 +435,7 @@ def adv_page(a):
 <div class="prose" style="margin-top:28px">{content}</div>{factbox}
 <div class="prose">{rate_table}</div>
 <div class="prose"><p class="small muted">Pickup from Tamarindo or Flamingo on most tours. Hotels in Pinilla, JW Marriott or Westin may carry a small transport supplement, noted above where it applies.</p></div></div>
-<aside><form class="book" id="adv-book" data-name="{E(a['name'])}">
+<aside><form class="book" id="adv-book" data-name="{E(a['name'])}" data-slug="{a['slug']}" data-image="{img(a['images'][0])}">
 <div class="from" id="adv-from"><b>{fr or 'Ask'}</b><span>{('from · per machine' if a.get('rates') else 'per person') if fr else 'for rates'}</span></div>
 <div class="sub">Request this tour. We confirm the date, pickup time and final price within hours.</div>
 {rate_picker}
@@ -442,6 +447,7 @@ def adv_page(a):
 <div class="fld"><label for="ab-notes">Ages of the kids, anything else?</label><textarea id="ab-notes" name="notes"></textarea></div>
 <div class="fld"><label for="ab-tr">Need transportation?</label><select id="ab-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
 <button class="btn btn-primary btn-block" type="submit">Request this tour</button>
+<button class="btn btn-ghost btn-block" type="button" data-add-trip style="margin-top:8px">Add to my trip</button>
 <div class="note">No payment online. A 50% deposit holds your spot and the balance is paid to the operator on the day.</div></form></aside></div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More adventures</div><h2 style="font-size:30px">You might also like</h2></div><a class="btn btn-ghost btn-sm" href="{r}adventures/">All adventures</a></div><div class="grid g3">{''.join(adv_card(x, r) for x in others)}</div></div></section>'''
     bar = f'<div class="bookbar"><div><b>{fr or "Ask"}</b><small>{"per person" if fr else "for rates"}</small></div><a class="btn btn-primary btn-sm" href="#adv-book">Request this tour</a></div>'
@@ -619,8 +625,9 @@ def planner():
 <label class="opt"><input type="radio" name="base" value=""><b>Not sure yet</b><small>Show me both. I will decide with you.</small></label></div>
 <div class="nav-row"><span></span><button type="button" class="btn btn-primary" data-next>Next: dates &amp; group</button></div></div>
 
-<div class="pane"><h2>When, and how many?</h2><p class="lead">Dates can be flexible. We will tell you if the boat you want is taken and offer the next best.</p>
-<div class="row3" style="max-width:560px"><div class="fld"><label for="w-date">Preferred date</label><input id="w-date" type="date" name="date"></div>{pax_fields('w')}</div>
+<div class="pane"><h2>When are you here, and how many?</h2><p class="lead">Give us your arrival and departure. You can pin each activity to a day later, or leave that to us.</p>
+<div class="row3" style="max-width:620px"><div class="fld"><label for="w-arrive">Arrival</label><input id="w-arrive" type="date" name="arrive"></div><div class="fld"><label for="w-depart">Departure</label><input id="w-depart" type="date" name="depart"></div></div>
+<div class="row3" style="max-width:620px;margin-top:12px">{pax_fields('w')}</div>
 <p class="small muted">Charter rates are per boat, so a group of six on a 35-footer is often cheaper per head than two on a 21. Big group? We can run two boats side by side.</p>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: pick your boat</button></div></div>
 
@@ -632,22 +639,67 @@ def planner():
 
 <div class="pane"><h2>Almost there.</h2><p class="lead">Check the summary, add your details, and send. We confirm availability within hours.</p>
 <div class="summary" id="summary"></div>
+<div class="fld" id="wiz-day" style="max-width:340px;margin:20px 0 4px"><label for="w-when">Which day would you like this?</label><select id="w-when" name="when"></select></div>
+<div class="row" style="gap:10px;margin:18px 0 8px"><button type="button" class="btn btn-ghost" id="wiz-add">Add this and plan another day</button></div>
+<div id="wiz-trip"></div>
 <form id="wiz-form"><div class="fld"><label for="w-name">Full name</label><input id="w-name" name="name" required autocomplete="name" placeholder="First and last name"></div>
 <div class="row2"><div class="fld"><label for="w-email">Email</label><input id="w-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="w-phone">Phone / WhatsApp</label><input id="w-phone" name="phone" autocomplete="tel"></div></div>
 {stay_field('w')}
 <div class="fld"><label for="w-notes">Ages of the kids, anything else?</label><textarea id="w-notes" name="notes"></textarea></div>
 <div class="fld"><label for="w-tr">Need transportation?</label><select id="w-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
-<div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button class="btn btn-primary" type="submit">Send my request</button></div></form></div>
+<div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button class="btn btn-primary" type="submit" id="wiz-send">Send my request</button></div></form></div>
 </div>
 <p class="small muted" style="text-align:center;margin-top:24px">Prefer to talk? Call toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a> or email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div></section>'''
     write('book.html', page(r, 'Plan Your Trip | Go Fish Costa Rica', 'Four-step trip planner: pick fishing charter, private catamaran or adventure, choose your base and dates, see the boats that fit your group, send a request.', body, extra_head=fleet_js()))
+
+def trip_page():
+    """trip.html — the running list. The planner still books one thing; this stacks a whole week."""
+    r = ''
+    body = f"""<header class="page-hero" style="padding-bottom:110px"><img class="bg" src="{r}img/{img('offshore-aerial.jpg')}" alt="Sport fishing boat trolling offshore from Tamarindo"><div class="wrap"><div class="crumbs"><a href="{r}index.html">Home</a><span>/</span><span>My trip</span></div>
+<h1>Your <em style="color:var(--foam)">whole trip</em>, in one request.</h1>
+<p>Everything you added lives here. Tell us when you land and when you leave, pin a day to anything you feel strongly about, and send it as one request. Steve &amp; Liisa come back within hours with availability and one price for the lot.</p></div></header>
+
+<section><div class="wrap-n" id="trip">
+
+<div class="trip-block">
+  <div class="sec-head"><div class="kicker">Step one</div><h2 style="font-size:30px">When are you here?</h2></div>
+  <div class="row3" style="max-width:620px">
+    <div class="fld"><label for="t-arrive">Arrival</label><input id="t-arrive" type="date" name="arrive" required></div>
+    <div class="fld"><label for="t-depart">Departure</label><input id="t-depart" type="date" name="depart" required></div>
+  </div>
+  <div class="row3" style="max-width:620px;margin-top:12px">{pax_fields('t')}</div>
+  <p class="small muted" style="margin-top:10px">Dates can be approximate. Once we have them we can tell you what is biting and what is already booked.</p>
+</div>
+
+<div class="trip-block">
+  <div class="sec-head row"><div><div class="kicker">Step two</div><h2 style="font-size:30px">Your trip</h2></div>
+  <div class="row" style="gap:8px"><a class="btn btn-ghost btn-sm" href="{r}charters/">Add a boat</a><a class="btn btn-ghost btn-sm" href="{r}adventures/">Add a tour</a></div></div>
+  <div id="trip-items"></div>
+</div>
+
+<div class="trip-block">
+  <div class="sec-head"><div class="kicker">Step three</div><h2 style="font-size:30px">Where do we send the plan?</h2></div>
+  <form id="trip-form" class="form-card" style="max-width:720px">
+    <div class="fld"><label for="t-name">Full name</label><input id="t-name" name="name" required autocomplete="name" placeholder="First and last name"></div>
+    <div class="row2"><div class="fld"><label for="t-email">Email</label><input id="t-email" type="email" name="email" required autocomplete="email"></div><div class="fld"><label for="t-phone">Phone / WhatsApp</label><input id="t-phone" name="phone" autocomplete="tel"></div></div>
+    {stay_field('t')}
+    <div class="fld"><label for="t-tr">Need transportation?</label><select id="t-tr" name="transport"><option value="">No, we have it covered</option><option>Yes, hotel to the boat and back</option><option>Yes, airport pickup too</option><option>Not sure yet, tell me the options</option></select></div>
+    <div class="fld"><label for="t-notes">Anything else we should know?</label><textarea id="t-notes" name="notes" placeholder="Ages of the kids, what you want to catch, anything you are celebrating."></textarea></div>
+    <button class="btn btn-primary btn-block" type="submit">Send my trip</button>
+    <div class="note">No payment online. Steve &amp; Liisa confirm availability within hours, then a 50% deposit holds everything.</div>
+  </form>
+</div>
+
+</div></section>
+<p class="small muted" style="text-align:center;margin:0 0 60px">Booking just one day? The <a href="{r}book.html">trip planner</a> walks you through it. Or call toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a>.</p>"""
+    write('trip.html', page(r, 'My Trip | Go Fish Costa Rica', 'Your running list of Go Fish charters and adventures. Add your dates and send the whole trip as one request.', body, extra_head=fleet_js()))
 
 # ---------------------------------------------------------------- 404 + sitemap
 def extras():
     r = ''
     body = f'<header class="page-hero" style="min-height:70vh;display:flex;align-items:center"><img class="bg" src="{r}img/{img("sloth.jpg")}" alt=""><div class="wrap"><div class="kicker" style="color:var(--sand)">404</div><h1>That one got away.</h1><p>The page you are after has moved or never existed. The fish are still here though.</p><div class="hero-actions"><a class="btn btn-sand" href="{r}index.html">Back to the beach</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></header>'
     write('404.html', page(r, 'Page not found | Go Fish Costa Rica', 'Page not found.', body))
-    urls = ['', 'charters/', 'adventures/', 'dining/', 'discover/', 'gallery.html', 'blog/', 'book.html'] + [f'charters/{b["slug"]}.html' for b in FLEET] + [f'adventures/{a["slug"]}.html' for a in ADV] + [f'dining/{d["slug"]}.html' for d in DINING] + [f'discover/{s}.html' for s in ['about-us','our-pledge-to-you','crews-equipment','fish-seasons','guanacaste-fishing','weather','contact-us']] + [f'blog/{p["slug"]}.html' for p in BLOG]
+    urls = ['', 'charters/', 'adventures/', 'dining/', 'discover/', 'gallery.html', 'blog/', 'book.html', 'trip.html'] + [f'charters/{b["slug"]}.html' for b in FLEET] + [f'adventures/{a["slug"]}.html' for a in ADV] + [f'dining/{d["slug"]}.html' for d in DINING] + [f'discover/{s}.html' for s in ['about-us','our-pledge-to-you','crews-equipment','fish-seasons','guanacaste-fishing','weather','contact-us']] + [f'blog/{p["slug"]}.html' for p in BLOG]
     write('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join(f'<url><loc>https://gofishcr.com/{u}</loc></url>' for u in urls) + '\n</urlset>\n')
     write('robots.txt', 'User-agent: *\nAllow: /\nSitemap: https://gofishcr.com/sitemap.xml\n')
     # Old-site addresses that have no matching page in the new build -> instant redirect
@@ -657,7 +709,7 @@ def extras():
 
 if __name__ == '__main__':
     import day
-    write('index.html', day.home(dict(E=E, img=img, FLEET=FLEET, ADV=ADV, boat_len=boat_len, SOCIAL=SOCIAL, EMAIL=EMAIL, PHONE=PHONE, PHONE_TEL=PHONE_TEL, REVIEWS=REVIEWS, page=page, fleet_js=fleet_js))); charters(); adventures(); dining(); discover(); n = gallery(); blog(); planner(); extras()
+    write('index.html', day.home(dict(E=E, img=img, FLEET=FLEET, ADV=ADV, boat_len=boat_len, SOCIAL=SOCIAL, EMAIL=EMAIL, PHONE=PHONE, PHONE_TEL=PHONE_TEL, REVIEWS=REVIEWS, page=page, fleet_js=fleet_js))); charters(); adventures(); dining(); discover(); n = gallery(); blog(); planner(); trip_page(); extras()
     pages = sum(len([f for f in fs if f.endswith('.html')]) for _, _, fs in os.walk(ROOT) if '/dl' not in _)
     print('built', pages, 'pages ·', n, 'gallery photos')
     if MISSING: print('MISSING IMAGES:', sorted(MISSING))

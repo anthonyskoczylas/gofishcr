@@ -82,16 +82,36 @@
   function syncChips(group) { $$('label', group).forEach(function (l) { var i = l.querySelector('input'); if (i) l.classList.toggle('on', i.checked); }); }
   $$('.chip-group').forEach(function (g) {
     syncChips(g);
-    g.addEventListener('change', function () { syncChips(g); if (g.hasAttribute('data-style')) g.setAttribute('data-touched', '1'); });
+    g.addEventListener('change', function () {
+      syncChips(g);
+      if (g.hasAttribute('data-style')) { g.setAttribute('data-touched', '1'); filterFish(g.closest('form') || g.parentNode.parentNode || document); }
+    });
   });
   function checkedValues(scope, name) {
     return $$('[name="' + name + '"]', scope).filter(function (i) { return i.checked && i.value; }).map(function (i) { return i.value; });
   }
   // Charter length implies where the boat fishes, until the guest says otherwise.
   function autoStyle(scope, dur) {
-    var g = $('[data-style]', scope); if (!g || g.getAttribute('data-touched')) return;
-    var want = dur === 'half' ? 'Inshore' : 'Offshore';
-    var el = g.querySelector('input[value="' + want + '"]'); if (el) { el.checked = true; syncChips(g); }
+    var g = $('[data-style]', scope);
+    if (g && !g.getAttribute('data-touched')) {
+      var want = dur === 'half' ? 'Inshore' : 'Offshore';
+      var el = g.querySelector('input[value="' + want + '"]'); if (el) { el.checked = true; syncChips(g); }
+    }
+    filterFish(scope);
+  }
+  // Show only the fish you can actually catch where the boat is going.
+  function filterFish(scope) {
+    var sg = $('[data-style]', scope), fg = $('[data-fish]', scope);
+    if (!fg) return;
+    var style = sg ? ((sg.querySelector('input:checked') || {}).value || '') : '';
+    var want = style === 'Inshore' ? 'in' : style === 'Offshore' ? 'off' : '';
+    $$('label', fg).forEach(function (l) {
+      var zone = l.getAttribute('data-zone');
+      var show = !want || zone === 'both' || zone === want;
+      l.hidden = !show;
+      if (!show) { var i = l.querySelector('input'); if (i) i.checked = false; }
+    });
+    syncChips(fg);
   }
 
   // ---- GUESTS (adults + kids) ----------------------------------------------
@@ -357,10 +377,33 @@
     div.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  // ---- TRIP BUILDER (add to my trip + book.html) --------------------------
+  var TRIP_KEY = 'gf_trip_v1';
+  function tripBlank() {
+    return { arrive: '', depart: '', adults: 2, kids: 0, items: [], name: '', email: '', phone: '', stay: '', stay_geo: '', stay_map: '', transport: '', notes: '' };
+  }
+  function tripLoad() {
+    try { var t = JSON.parse(localStorage.getItem(TRIP_KEY) || 'null'); if (t && t.items) return t; } catch (e) { }
+    return tripBlank();
+  }
+  function tripSave(t) { try { localStorage.setItem(TRIP_KEY, JSON.stringify(t)); } catch (e) { } paintTripCount(); }
+  function paintTripCount() {
+    var n = tripLoad().items.length;
+    $$('.nav-trip').forEach(function (a) { a.hidden = !n; var s = a.querySelector('span'); if (s) s.textContent = n; });
+    $$('.drawer-trip').forEach(function (a) { a.hidden = !n; var s = a.querySelector('span'); if (s) s.textContent = n; });
+  }
+  function tripAdd(item) {
+    var t = tripLoad();
+    item.id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    t.items.push(item); tripSave(t);
+    toast(item.name + ' added to your trip');
+  }
+  paintTripCount();
+
   // ---- TRIP PLANNER WIZARD -------------------------------------------------
   var wz = $('#wizard');
   if (wz && window.FLEET) {
-    var state = { type: '', base: '', date: '', pax: 4, adults: 2, kids: 0, style: '', fish: [], boat: '', dur: 'half', adv: '' };
+    var state = { type: '', base: '', arrive: '', depart: '', when: '', pax: 4, adults: 2, kids: 0, style: '', fish: [], boat: '', dur: 'half', adv: '' };
     function totalPax() { return (+state.adults || 0) + (+state.kids || 0); }
     function wizGuestText() { return guestText({ adults: +state.adults || 0, kids: +state.kids || 0 }); }
     try { var saved = JSON.parse(localStorage.getItem('gf_wizard') || 'null'); if (saved) state = Object.assign(state, saved); } catch (e) { }
@@ -384,12 +427,19 @@
     function syncOpts() { $$('.opt', wz).forEach(function (o) { o.classList.toggle('on', $('input', o).checked); }); }
     syncOpts();
     // step 2: date + pax
-    var dateI = $('input[name=date]', wz), adultsI = $('select[name=adults]', wz), kidsI = $('select[name=kids]', wz);
-    if (state.date) dateI.value = state.date;
+    var arriveI = $('#w-arrive', wz), departI = $('#w-depart', wz), adultsI = $('select[name=adults]', wz), kidsI = $('select[name=kids]', wz);
+    var stored = tripLoad();
+    if (!state.arrive && stored.arrive) state.arrive = stored.arrive;
+    if (!state.depart && stored.depart) state.depart = stored.depart;
+    if (state.arrive) arriveI.value = state.arrive;
+    if (state.depart) departI.value = state.depart;
     if (adultsI) adultsI.value = state.adults; if (kidsI) kidsI.value = state.kids;
-    dateI.addEventListener('change', function () { state.date = dateI.value; });
-    if (adultsI) adultsI.addEventListener('change', function () { state.adults = +adultsI.value; save(); });
-    if (kidsI) kidsI.addEventListener('change', function () { state.kids = +kidsI.value; save(); });
+    function syncTripDates() { var t = tripLoad(); t.arrive = state.arrive; t.depart = state.depart; t.adults = state.adults; t.kids = state.kids; tripSave(t); }
+    arriveI.addEventListener('change', function () { state.arrive = arriveI.value; departI.min = arriveI.value; if (departI.value && departI.value < arriveI.value) { departI.value = arriveI.value; state.depart = arriveI.value; } syncTripDates(); save(); });
+    departI.addEventListener('change', function () { state.depart = departI.value; syncTripDates(); save(); });
+    if (state.arrive) departI.min = state.arrive;
+    if (adultsI) adultsI.addEventListener('change', function () { state.adults = +adultsI.value; syncTripDates(); save(); });
+    if (kidsI) kidsI.addEventListener('change', function () { state.kids = +kidsI.value; syncTripDates(); save(); });
     // fishing style + target fish live in step 3, outside the step-4 form
     var styleG = $('[data-style]', wz), fishG = $('[data-fish]', wz);
     if (styleG) {
@@ -442,11 +492,95 @@
     }
     function renderSummary() {
       var c = chosen(), s = $('#summary');
-      if (!c) { s.innerHTML = '<div class="empty">Go back and pick a boat or adventure first.</div>'; return; }
-      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Base</dt><dd>' + (state.base || 'Either') + '</dd><dt>Date</dt><dd>' + (fmtDate(state.date) || 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + (state.style ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + ((state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
+      if (!c) { s.innerHTML = '<div class="empty">Go back and pick a boat or adventure first.</div>'; paintDayPicker(); paintWizTrip(); return; }
+      paintDayPicker(); paintWizTrip();
+      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Base</dt><dd>' + (state.base || 'Either') + '</dd><dt>Your dates</dt><dd>' + ((state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + ((state.type !== 'adventure' && state.style) ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + ((state.type !== 'adventure' && state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
         + '<div class="tot"><span class="muted small">' + (c.est ? (state.type === 'adventure' ? 'Estimated total' : 'Estimated total, excluding taxes') : '') + '</span><b>' + (c.est || c.price) + '</b></div>'
         + (c.est && c.est !== 'Quote' ? '<div class="muted small" style="margin-top:6px">Per boat, all gear, bait, drinks' + (state.dur !== 'half' ? ' and light lunch' : '') + ' included. Taxes, fishing licences and crew tips are not included.</div>' : '');
     }
+    // --- multi-activity: day picker, add-another, running list ---------------
+    function wizDays() {
+      var out = [];
+      if (!state.arrive || !state.depart) return out;
+      var d = new Date(state.arrive + 'T12:00:00'), end = new Date(state.depart + 'T12:00:00');
+      for (var i = 0; i < 40 && d <= end; i++) {
+        out.push({ iso: d.toISOString().slice(0, 10), label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) });
+        d.setDate(d.getDate() + 1);
+      }
+      return out;
+    }
+    var daySel = $('#w-when'), dayWrap = $('#wiz-day'), wizTrip = $('#wiz-trip'), addBtn = $('#wiz-add'), sendBtn = $('#wiz-send');
+    function paintDayPicker() {
+      if (!daySel) return;
+      var days = wizDays();
+      dayWrap.style.display = days.length ? '' : 'none';
+      daySel.innerHTML = '<option value="">Any day that works</option>' + days.map(function (d) {
+        return '<option value="' + d.iso + '"' + (state.when === d.iso ? ' selected' : '') + '>' + d.label + '</option>';
+      }).join('');
+    }
+    if (daySel) daySel.addEventListener('change', function () { state.when = daySel.value; save(); });
+
+    function currentItem() {
+      var c = chosen(); if (!c) return null;
+      var days = {}; wizDays().forEach(function (d) { days[d.iso] = d.label; });
+      var isAdv = state.type === 'adventure';
+      var src = isAdv ? (window.ADV || {})[state.adv] : (window.FLEET || {})[state.boat];
+      var bits = [];
+      if (!isAdv && c.boat && !c.boat.quote) bits.push(durLabel2[state.dur]);
+      if (!isAdv && state.style) bits.push(state.style);
+      if (!isAdv && state.fish && state.fish.length) bits.push(state.fish.join(', '));
+      if (isAdv && src && src.tag) bits.push(src.tag);
+      return {
+        kind: isAdv ? 'tour' : 'boat', slug: isAdv ? state.adv : state.boat, name: c.name,
+        image: isAdv ? (src && src.image) : (src && src.images && src.images[0]),
+        base: state.base, detail: bits.join(' · '), rate: c.price, price: (c.est && c.est !== 'Quote') ? (({ half: (c.boat || {}).half, tq: (c.boat || {}).three_quarter, full: (c.boat || {}).full })[state.dur] || 0) : 0,
+        when: state.when, whenLabel: state.when ? (days[state.when] || state.when) : 'Any day that works'
+      };
+    }
+    function resetPick() {
+      state.boat = ''; state.adv = ''; state.when = ''; state.fish = [];
+      $$('input[name=boat], input[name=adv]', wz).forEach(function (i) { i.checked = false; });
+      var fg = $('[data-fish]', wz); if (fg) { $$('input', fg).forEach(function (i) { i.checked = false; }); syncChips(fg); }
+      save();
+    }
+    function paintWizTrip() {
+      if (!wizTrip) return;
+      var items = tripLoad().items;
+      if (!items.length) { wizTrip.innerHTML = ''; if (sendBtn) sendBtn.textContent = 'Send my request'; return; }
+      var total = 0, allPriced = true;
+      var rows = items.map(function (it, n) {
+        if (it.price) total += it.price; else allPriced = false;
+        return '<div class="trip-item" data-id="' + it.id + '">'
+          + '<img src="' + ROOT + 'img/' + (it.image || '') + '" alt="">'
+          + '<div><h3>' + wesc(it.name) + '</h3><div class="meta">' + wesc([it.detail, it.base].filter(Boolean).join(' · ')) + '</div>'
+          + '<div class="meta" style="color:var(--sea);font-weight:600;margin-top:3px">' + wesc(it.whenLabel || 'Any day that works') + '</div>'
+          + '<button type="button" class="rm" data-rm>Remove</button></div>'
+          + '<div class="price">' + (it.price ? money(it.price) : 'Quote') + '</div></div>';
+      }).join('');
+      wizTrip.innerHTML = '<div class="sec-head" style="margin:26px 0 12px"><div class="kicker">Already in your trip</div>'
+        + '<h2 style="font-size:24px">' + items.length + ' other day' + (items.length > 1 ? 's' : '') + ' planned</h2></div>' + rows
+        + '<div class="trip-total"><span class="t">Plus the one above</span><span style="text-align:right"><b>' + (total ? money(total) : 'Quote') + '</b>'
+        + '<small class="muted small" style="display:block">' + (allPriced ? 'Added so far, excluding taxes' : 'Added so far, some quoted on request') + '</small></span></div>';
+      if (sendBtn) sendBtn.textContent = 'Send my trip';
+    }
+    function wesc(x) { return String(x == null ? '' : x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    if (wizTrip) wizTrip.addEventListener('click', function (e) {
+      var rm = e.target.closest('[data-rm]'); if (!rm) return;
+      var id = rm.closest('.trip-item').getAttribute('data-id');
+      var t = tripLoad(); t.items = t.items.filter(function (i) { return i.id !== id; }); tripSave(t);
+      paintWizTrip();
+    });
+    if (addBtn) addBtn.addEventListener('click', function () {
+      var item = currentItem();
+      if (!item) return toast('Pick a boat or an adventure first');
+      var t = tripLoad();
+      item.id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+      t.items.push(item); t.arrive = state.arrive; t.depart = state.depart; t.adults = state.adults; t.kids = state.kids;
+      tripSave(t);
+      toast(item.name + ' added. Plan the next one.');
+      resetPick(); go(0);
+    });
+
     $$('[data-next]', wz).forEach(function (b) { b.addEventListener('click', function () {
       if (step === 0 && !state.type) return toast('Pick what kind of day you want');
       if (step === 0 && !state.base && state.type !== 'adventure') return toast('Pick a base: Tamarindo or Flamingo');
@@ -455,26 +589,214 @@
     }); });
     $$('[data-prev]', wz).forEach(function (b) { b.addEventListener('click', function () { go(step - 1); }); });
     $('#wiz-form').addEventListener('submit', function (e) {
-      e.preventDefault(); var c = chosen(); if (!c) return go(2);
+      e.preventDefault();
       var f = e.target.elements;
-      var req = buildRequest([
-        'Request: ' + c.name + (state.base ? ' (' + state.base + ')' : ''),
-        (state.type !== 'adventure' && c.boat && !c.boat.quote) ? 'Charter length: ' + durLabel2[state.dur] : '',
-        'Rate: ' + c.price,
-        state.style ? 'Fishing style: ' + state.style : '',
-        (state.fish && state.fish.length) ? 'Target fish: ' + state.fish.join(', ') : '',
-        'Date: ' + (fmtDate(state.date) || 'flexible'),
-        'Guests: ' + wizGuestText(),
-        'Name: ' + f.name.value, 'Email: ' + f.email.value,
+      // everything already added, plus whatever is on screen right now
+      var stored = tripLoad(), items = (stored.items || []).slice();
+      var now = currentItem(); if (now) items.push(now);
+      if (!items.length) { toast('Pick a boat or an adventure first'); return go(2); }
+      var dates = (state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : '';
+      var single = items.length === 1 ? items[0] : null;
+
+      var head = single
+        ? ['Request: ' + single.name + (single.base ? ' (' + single.base + ')' : ''),
+           single.detail ? 'Details: ' + single.detail : '',
+           single.rate ? 'Rate: ' + single.rate : '',
+           'Preferred day: ' + (single.whenLabel || 'any day that works')]
+        : ['Request: Whole trip, ' + items.length + ' activities'];
+      var lines = head.concat([
+        dates ? 'Dates: ' + dates : 'Dates: flexible',
+        'Guests: ' + wizGuestText(), ''
+      ]);
+      if (!single) items.forEach(function (i, n) {
+        lines.push((n + 1) + '. ' + i.name + ' \u2014 ' + [i.detail, i.base].filter(Boolean).join(' \u00b7 ') + ' \u2014 ' + (i.rate || 'quote') + ' \u2014 ' + (i.whenLabel || 'Any day'));
+      });
+      lines = lines.concat(['', 'Name: ' + f.name.value, 'Email: ' + f.email.value,
         f.phone.value ? 'Phone / WhatsApp: ' + f.phone.value : ''
-      ].concat(stayLines(f), [
+      ], stayLines(f), [
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ]), Object.assign({ kind: state.type === 'adventure' ? 'tour' : 'boat', trip: c.name, base: state.base, length: (state.type !== 'adventure' && c.boat && !c.boat.quote) ? durLabel2[state.dur] : '', rate: c.price, style: state.style, fish: (state.fish || []).join(', '), dateText: fmtDate(state.date), pax: totalPax(), adults: state.adults, kids: state.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
-      showSent(e.target, req, 'Your trip request is ready.');
-      try { localStorage.removeItem('gf_wizard'); } catch (x) { }
+      ]);
+
+      var common = { dateText: dates || 'Flexible', arrive: state.arrive, depart: state.depart,
+        pax: totalPax(), adults: state.adults, kids: state.kids,
+        name: f.name.value, email: f.email.value, phone: f.phone.value,
+        transport: f.transport.value, notes: f.notes.value };
+      var data = single
+        ? Object.assign({ kind: single.kind, trip: single.name, base: single.base, length: single.detail,
+            rate: single.rate, style: state.style, fish: (state.fish || []).join(', ') }, common)
+        : Object.assign({ kind: 'trip', trip: items.length + ' activities',
+            items: items.map(function (i) { return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' \u00b7 '), rate: i.rate || 'quote on request', when: i.whenLabel || 'Any day' }; }) }, common);
+
+      showSent(e.target, req_or(buildRequest(lines, Object.assign({}, data, stayPayload(f)))), single ? 'Your request is ready.' : 'Your trip is ready to send.');
+      try { localStorage.removeItem('gf_wizard'); localStorage.removeItem(TRIP_KEY); } catch (x) { }
+      paintTripCount();
     });
+    function req_or(x) { return x; }
     go(qsw.get('boat') || qsw.get('adv') ? 1 : 0, true);
+  }
+
+  // add-to-trip: boat page
+  if (bp && window.BOAT) {
+    var addBoat = bp.querySelector('[data-add-trip]');
+    if (addBoat) addBoat.addEventListener('click', function () {
+      var f = bp.elements, d = f.dur ? f.dur.value : 'half', g = guests(f);
+      if (B.max_pax && g.total > B.max_pax) return toast('This boat takes up to ' + B.max_pax + ' guests.');
+      var style = (f.style && f.style.value) || '', fish = checkedValues(bp, 'fish');
+      var bits = [durLabel[d]]; if (style) bits.push(style); if (fish.length) bits.push(fish.join(', '));
+      tripAdd({
+        kind: 'boat', slug: B.slug, name: B.name, image: B.image, base: B.locations.join(' / '),
+        detail: bits.join(' · '), rate: price[d] ? money(price[d]) + ' per boat, excluding taxes' : 'custom quote',
+        price: price[d] || 0, when: ''
+      });
+    });
+  }
+
+  // add-to-trip: adventure page
+  if (ap) {
+    var addAdv = ap.querySelector('[data-add-trip]');
+    if (addAdv) addAdv.addEventListener('click', function () {
+      var f = ap.elements, rate = advRate ? advRate() : null;
+      tripAdd({
+        kind: 'tour', slug: ap.getAttribute('data-slug'), name: ap.getAttribute('data-name'), image: ap.getAttribute('data-image'),
+        base: f.base ? f.base.value : '',
+        detail: rate ? rate.duration + ' · ' + rate.vehicle : (ap.getAttribute('data-tag') || ''),
+        rate: rate ? money(rate.price) + ' ' + rate.unit + ', excluding taxes' : '',
+        price: rate ? rate.price : 0, when: ''
+      });
+    });
+  }
+
+  // ---- the trip page itself ------------------------------------------------
+  var tripRoot = $('#trip');
+  if (tripRoot) {
+    var T = tripLoad();
+    var arriveI = $('#t-arrive'), departI = $('#t-depart'), tAdults = $('#t-adults'), tKids = $('#t-kids');
+    var itemsBox = $('#trip-items'), form = $('#trip-form');
+
+    // deep links: /trip.html?boat=slug or ?adv=slug drop straight into the list
+    var q = new URLSearchParams(location.search);
+    if (q.get('boat') && window.FLEET && window.FLEET[q.get('boat')]) {
+      var b0 = window.FLEET[q.get('boat')];
+      if (!T.items.some(function (i) { return i.slug === b0.slug; })) {
+        T.items.push({ id: 'i' + Date.now().toString(36), kind: 'boat', slug: b0.slug, name: b0.name, image: b0.images[0],
+          base: b0.locations.join(' / '), detail: '5 hours · inshore', rate: b0.half ? money(b0.half) + ' per boat, excluding taxes' : 'custom quote', price: b0.half || 0, when: '' });
+      }
+    }
+    if (q.get('adv') && window.ADV && window.ADV[q.get('adv')]) {
+      var a0 = window.ADV[q.get('adv')];
+      if (!T.items.some(function (i) { return i.slug === q.get('adv'); })) {
+        T.items.push({ id: 'i' + Date.now().toString(36) + 'a', kind: 'tour', slug: q.get('adv'), name: a0.name, image: a0.image,
+          base: '', detail: a0.tag || '', rate: a0.from ? a0.from + ' per person' : '', price: 0, when: '' });
+      }
+    }
+    if (q.get('boat') || q.get('adv')) { tripSave(T); history.replaceState(null, '', location.pathname); }
+
+    // restore what they filled in last time
+    if (T.arrive) arriveI.value = T.arrive;
+    if (T.depart) departI.value = T.depart;
+    if (tAdults) tAdults.value = T.adults; if (tKids) tKids.value = T.kids;
+    ['name', 'email', 'phone', 'stay', 'transport', 'notes'].forEach(function (k) { if (form.elements[k] && T[k]) form.elements[k].value = T[k]; });
+    if (T.stay_geo && form.elements.stay_geo) form.elements.stay_geo.value = T.stay_geo;
+    if (T.stay_map && form.elements.stay_map) form.elements.stay_map.value = T.stay_map;
+
+    function stash() {
+      T.arrive = arriveI.value; T.depart = departI.value;
+      T.adults = +tAdults.value || 0; T.kids = +tKids.value || 0;
+      ['name', 'email', 'phone', 'stay', 'stay_geo', 'stay_map', 'transport', 'notes'].forEach(function (k) { if (form.elements[k]) T[k] = form.elements[k].value; });
+      tripSave(T);
+    }
+    tripRoot.addEventListener('change', function () { stash(); if (this._d) return; });
+    arriveI.addEventListener('change', function () { if (departI.value && departI.value < arriveI.value) departI.value = arriveI.value; departI.min = arriveI.value; render(); });
+    departI.addEventListener('change', render);
+
+    // every date of the stay, so each activity can be pinned to a day
+    function stayDays() {
+      var out = [];
+      if (!T.arrive || !T.depart) return out;
+      var d = new Date(T.arrive + 'T12:00:00'), end = new Date(T.depart + 'T12:00:00');
+      for (var i = 0; i < 40 && d <= end; i++) {
+        out.push({ iso: d.toISOString().slice(0, 10), label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) });
+        d.setDate(d.getDate() + 1);
+      }
+      return out;
+    }
+
+    function render() {
+      T.arrive = arriveI.value; T.depart = departI.value;
+      var days = stayDays();
+      if (!T.items.length) {
+        itemsBox.innerHTML = '<div class="trip-empty"><b>Nothing in your trip yet.</b>Browse the boats and the tours, and hit <em>Add to my trip</em> on anything you like. It all lands here.</div>';
+        tripSave(T); return;
+      }
+      var html = '', total = 0, allPriced = true;
+      T.items.forEach(function (it) {
+        if (it.price) total += it.price; else allPriced = false;
+        var opts = '<option value="">Any day that works</option>' + days.map(function (d) {
+          return '<option value="' + d.iso + '"' + (it.when === d.iso ? ' selected' : '') + '>' + d.label + '</option>';
+        }).join('');
+        html += '<div class="trip-item" data-id="' + it.id + '">'
+          + '<img src="' + ROOT + 'img/' + (it.image || '') + '" alt="">'
+          + '<div><h3>' + esc(it.name) + '</h3><div class="meta">' + esc([it.detail, it.base].filter(Boolean).join(' · ')) + '</div>'
+          + '<div class="when"><label for="w-' + it.id + '">Preferred day</label><select id="w-' + it.id + '" data-when>' + opts + '</select></div>'
+          + '<button type="button" class="rm" data-rm>Remove</button></div>'
+          + '<div class="price">' + (it.price ? money(it.price) : 'Quote') + '<small>' + esc(it.rate || 'we will quote it') + '</small></div>'
+          + '</div>';
+      });
+      html += '<div class="trip-total"><span class="t">' + T.items.length + ' item' + (T.items.length > 1 ? 's' : '')
+        + (days.length ? ' · ' + days.length + ' day' + (days.length > 1 ? 's' : '') + ' here' : '')
+        + '</span><span style="text-align:right"><b>' + (total ? money(total) : 'Quote') + '</b>'
+        + '<small class="muted small" style="display:block">' + (allPriced ? 'Estimated total, excluding taxes' : 'Estimate so far, some items quoted on request') + '</small></span></div>';
+      itemsBox.innerHTML = html;
+      if (!days.length) $$('[data-when]', itemsBox).forEach(function (s) { s.disabled = true; s.title = 'Add your dates first'; });
+      tripSave(T);
+    }
+    function esc(x) { return String(x == null ? '' : x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+    itemsBox.addEventListener('click', function (e) {
+      var rm = e.target.closest('[data-rm]'); if (!rm) return;
+      var id = rm.closest('.trip-item').getAttribute('data-id');
+      T.items = T.items.filter(function (i) { return i.id !== id; });
+      render();
+    });
+    itemsBox.addEventListener('change', function (e) {
+      var sel = e.target.closest('[data-when]'); if (!sel) return;
+      var id = sel.closest('.trip-item').getAttribute('data-id');
+      T.items.forEach(function (i) { if (i.id === id) i.when = sel.value; });
+      tripSave(T);
+    });
+
+    if (arriveI.value) departI.min = arriveI.value;
+    render();
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); stash();
+      if (!T.items.length) { toast('Add a boat or a tour first'); return window.scrollTo({ top: itemsBox.offsetTop - 120, behavior: 'smooth' }); }
+      if (!T.arrive || !T.depart) { toast('Tell us your arrival and departure'); arriveI.focus(); return; }
+      var f = form.elements, g = { adults: +tAdults.value || 0, kids: +tKids.value || 0 };
+      g.total = g.adults + g.kids;
+      if (!g.total) return toast('Add at least one guest');
+      var dayLabel = {}; stayDays().forEach(function (d) { dayLabel[d.iso] = d.label; });
+      var payloadItems = T.items.map(function (i) {
+        return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' · '), rate: i.rate || 'quote on request', when: i.when ? dayLabel[i.when] || i.when : 'Any day' };
+      });
+      var dates = fmtDate(T.arrive) + ' – ' + fmtDate(T.depart);
+      var lines = ['Request: Whole trip, ' + T.items.length + ' item' + (T.items.length > 1 ? 's' : ''), 'Dates: ' + dates, 'Guests: ' + guestText(g), ''];
+      payloadItems.forEach(function (i, n) { lines.push((n + 1) + '. ' + i.name + ' — ' + i.detail + ' — ' + i.rate + ' — ' + i.when); });
+      lines.push('', 'Name: ' + f.name.value, 'Email: ' + f.email.value);
+      if (f.phone.value) lines.push('Phone / WhatsApp: ' + f.phone.value);
+      lines = lines.concat(stayLines(f), ['Transportation: ' + (f.transport.value || 'not needed'), f.notes.value ? 'Notes: ' + f.notes.value : '']);
+      var req = buildRequest(lines, Object.assign({
+        kind: 'trip', trip: T.items.length + ' item trip', items: payloadItems,
+        arrive: T.arrive, depart: T.depart, dateText: dates,
+        pax: g.total, adults: g.adults, kids: g.kids,
+        name: f.name.value, email: f.email.value, phone: f.phone.value,
+        transport: f.transport.value, notes: f.notes.value
+      }, stayPayload(f)));
+      showSent(form, req, 'Your trip is ready to send.');
+      try { localStorage.removeItem(TRIP_KEY); } catch (x) { }
+      paintTripCount();
+    });
   }
 
   // ---- MOBILE BOOK BAR -----------------------------------------------------
