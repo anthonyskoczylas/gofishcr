@@ -333,8 +333,8 @@ def boat_page(b):
     rates = '' if b['quote'] else f'''<h2 style="font-size:26px;margin-top:34px">Rates for this boat</h2>
 <table class="rates-t"><tr><th>Charter</th><th>Hours</th><th>Rate per boat</th></tr>
 <tr><td>Half day</td><td>5 hours · inshore</td><td><b>${b['half']:,}</b></td></tr>
-<tr><td>3/4 day</td><td>7 hours · offshore, light lunch</td><td><b>${b['three_quarter']:,}</b></td></tr>
-<tr><td>Full day</td><td>9 hours · offshore, light lunch</td><td><b>${b['full']:,}</b></td></tr></table>
+<tr><td>3/4 day</td><td>7 hours · inshore or offshore</td><td><b>${b['three_quarter']:,}</b></td></tr>
+<tr><td>Full day</td><td>9 hours · inshore or offshore</td><td><b>${b['full']:,}</b></td></tr></table>
 <p class="small muted">Rates are per boat, excluding taxes, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Prices subject to change. To target billfish, book the 7 or 9 hour trip.</p>'''
     seg = '' if b['quote'] else f'''<div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>5 hrs<small>${b['half']:,}</small></label><label><input type="radio" name="dur" value="tq">7 hrs<small>${b['three_quarter']:,}</small></label><label><input type="radio" name="dur" value="full">9 hrs<small>${b['full']:,}</small></label></div>'''
     pax_opts = ''.join(f'<option value="{i}"{" selected" if i==min(4,b["max_pax"] or 4) else ""}>{i}</option>' for i in range(1, (b['max_pax'] or 20) + 1))
@@ -351,7 +351,7 @@ def boat_page(b):
 <h2 style="font-size:26px">What this boat offers</h2><div class="chips" style="margin:14px 0 8px">{''.join(f'<span class="chip">{E(f)}</span>' for f in b['features'])}<span class="chip">{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>
 {rates}
 <div class="incl"><div><h4>Included</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul></div></div>
-<div class="prose"><h3>Charter lengths</h3><ul><li><b>Half day</b> · 5 hours. Boats stay inshore: roosterfish, snapper, jacks.</li><li><b>3/4 day</b> · 7 hours. Enough time to run offshore for sailfish, marlin, tuna and mahi.</li><li><b>Full day</b> · 9 hours. The serious billfish day.</li></ul>
+<div class="prose"><h3>Charter lengths</h3><ul><li><b>Half day</b> · 5 hours. Boats stay inshore: roosterfish, snapper, jacks.</li><li><b>3/4 day</b> · 7 hours. Stay inshore, or run out to the shelf for sailfish, marlin, tuna and mahi.</li><li><b>Full day</b> · 9 hours. The serious billfish day, or a long inshore day if that is your thing.</li></ul>
 <p>Tips are not expected but very much appreciated. If the crew works hard for you, 15 to 20% is customary.</p></div>
 </div>
 <aside><form class="book" id="boat-book">
@@ -639,7 +639,7 @@ def planner():
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: pick your boat</button></div></div>
 
 <div class="pane"><div id="picks-head"></div>
-<div id="dur-row" style="max-width:420px;margin-bottom:22px"><label class="small muted" style="display:block;margin-bottom:6px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px">Charter length</label><div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>Half day<small>inshore · 5 hrs</small></label><label><input type="radio" name="dur" value="tq">3/4 day<small>offshore · 7 hrs</small></label><label><input type="radio" name="dur" value="full">Full day<small>offshore · 9 hrs</small></label></div></div>
+<div id="dur-row" style="max-width:420px;margin-bottom:22px"><label class="small muted" style="display:block;margin-bottom:6px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px">Charter length</label><div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>Half day<small>inshore · 5 hrs</small></label><label><input type="radio" name="dur" value="tq">3/4 day<small>inshore/offshore · 7 hrs</small></label><label><input type="radio" name="dur" value="full">Full day<small>inshore/offshore · 9 hrs</small></label></div></div>
 <div id="fish-row" style="max-width:560px;margin-bottom:24px">{style_field('w')}{fish_field('w')}</div>
 <div class="picks" id="picks"></div>
 <div class="nav-row"><button type="button" class="btn btn-ghost" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next: your details</button></div></div>

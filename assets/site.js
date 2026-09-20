@@ -97,6 +97,10 @@
       .catch(function () { });
   })();
 
+  // Absolute URLs for the confirmation email (it cannot resolve relative paths).
+  function absUrl(rel) { try { return new URL(rel, location.href).href; } catch (e) { return ''; } }
+  function imgUrl(name) { return name ? absUrl(ROOT + 'img/' + name) : ''; }
+
   // ---- CHOICE CHIPS (inshore/offshore, target fish) ------------------------
   function syncChips(group) { $$('label', group).forEach(function (l) { var i = l.querySelector('input'); if (i) l.classList.toggle('on', i.checked); }); }
   $$('.chip-group').forEach(function (g) {
@@ -112,9 +116,20 @@
   // Charter length implies where the boat fishes, until the guest says otherwise.
   function autoStyle(scope, dur) {
     var g = $('[data-style]', scope);
-    if (g && !g.getAttribute('data-touched')) {
-      var want = dur === 'half' ? 'Inshore' : 'Offshore';
-      var el = g.querySelector('input[value="' + want + '"]'); if (el) { el.checked = true; syncChips(g); }
+    if (g) {
+      var half = dur === 'half';
+      // a 5 hour trip never leaves the coast, so offshore is not on the table
+      $$('label', g).forEach(function (l) {
+        var v = (l.querySelector('input') || {}).value;
+        var off = v === 'Offshore';
+        l.hidden = half && off;
+        if (half && off) { var i = l.querySelector('input'); if (i) i.checked = false; }
+      });
+      if (half) { var ins = g.querySelector('input[value="Inshore"]'); if (ins) ins.checked = true; }
+      else if (!g.getAttribute('data-touched') && !g.querySelector('input:checked').value) {
+        var ns = g.querySelector('input[value=""]'); if (ns) ns.checked = true;
+      }
+      syncChips(g);
     }
     filterFish(scope);
   }
@@ -289,7 +304,7 @@
   var bp = $('#boat-book');
   if (bp && window.BOAT) {
     var B = window.BOAT;
-    var durLabel = { half: '5 hours · inshore', tq: '7 hours · offshore', full: '9 hours · offshore' };
+    var durLabel = { half: '5 hours · inshore', tq: '7 hours · inshore or offshore', full: '9 hours · inshore or offshore' };
     var price = { half: B.half, tq: B.three_quarter, full: B.full };
     function refresh() {
       $$('.seg label', bp).forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });
@@ -329,7 +344,7 @@
       ].concat(stayLines(f), [
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ]), Object.assign({ kind: 'boat', trip: B.name, base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d]) + ' per boat' : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
+      ]), Object.assign({ kind: 'boat', trip: B.name, image: imgUrl(B.image), url: absUrl(location.pathname), base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d]) + ' per boat' : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
       showSent(bp, req, 'Your request for the ' + B.name + ' is ready to send.');
     });
   }
@@ -371,7 +386,7 @@
     ].concat(stayLines(f), [
       'Transportation: ' + (f.transport.value || 'not needed'),
       f.notes.value ? 'Notes: ' + f.notes.value : ''
-    ]), Object.assign({ kind: 'tour', trip: ap.getAttribute('data-name'), length: rate ? rate.duration + ' \u00b7 ' + rate.vehicle : '', rate: rate ? money(rate.price) + ' ' + rate.unit + ', excluding taxes' : '', base: f.base ? f.base.value : '', dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
+    ]), Object.assign({ kind: 'tour', trip: ap.getAttribute('data-name'), image: imgUrl(ap.getAttribute('data-image')), url: absUrl(location.pathname), length: rate ? rate.duration + ' \u00b7 ' + rate.vehicle : '', rate: rate ? money(rate.price) + ' ' + rate.unit + ', excluding taxes' : '', base: f.base ? f.base.value : '', dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
     showSent(ap, req, 'Your request is ready to send.');
   });
 
@@ -675,10 +690,11 @@
         name: f.name.value, email: f.email.value, phone: f.phone.value,
         transport: f.transport.value, notes: f.notes.value };
       var data = single
-        ? Object.assign({ kind: single.kind, trip: single.name, base: single.base, length: single.detail,
+        ? Object.assign({ kind: single.kind, trip: single.name, image: imgUrl(single.image), url: absUrl(ROOT + (single.kind === 'tour' ? 'adventures/' : 'charters/') + single.slug + '.html'), base: single.base, length: single.detail,
             rate: single.rate, style: state.style, fish: (state.fish || []).join(', ') }, common)
         : Object.assign({ kind: 'trip', trip: items.length + ' activities',
-            items: items.map(function (i) { return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' \u00b7 '), rate: i.rate || 'quote on request', when: i.whenLabel || 'Any day' }; }) }, common);
+            items: items.map(function (i) { return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' \u00b7 '), rate: i.rate || 'quote on request', when: i.whenLabel || 'Any day',
+          image: imgUrl(i.image), url: absUrl(ROOT + (i.kind === 'tour' ? 'adventures/' : 'charters/') + i.slug + '.html') }; }) }, common);
 
       showSent(e.target, req_or(buildRequest(lines, Object.assign({}, data, stayPayload(f)))), single ? 'Your request is ready.' : 'Your trip is ready to send.');
       try { localStorage.removeItem('gf_wizard'); localStorage.removeItem(TRIP_KEY); } catch (x) { }
@@ -830,7 +846,8 @@
       if (!g.total) return toast('Add at least one guest');
       var dayLabel = {}; stayDays().forEach(function (d) { dayLabel[d.iso] = d.label; });
       var payloadItems = T.items.map(function (i) {
-        return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' · '), rate: i.rate || 'quote on request', when: i.when ? dayLabel[i.when] || i.when : 'Any day' };
+        return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' · '), rate: i.rate || 'quote on request', when: i.when ? dayLabel[i.when] || i.when : 'Any day',
+                 image: imgUrl(i.image), url: absUrl(ROOT + (i.kind === 'tour' ? 'adventures/' : 'charters/') + i.slug + '.html') };
       });
       var dates = fmtDate(T.arrive) + ' – ' + fmtDate(T.depart);
       var lines = ['Request: Whole trip, ' + T.items.length + ' item' + (T.items.length > 1 ? 's' : ''), 'Dates: ' + dates, 'Guests: ' + guestText(g), ''];
