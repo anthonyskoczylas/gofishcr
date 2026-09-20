@@ -71,13 +71,13 @@ em{font-style:normal;color:var(--sea)}
 
 /* NAV */
 nav.top{position:fixed;top:0;left:0;right:0;z-index:var(--z-nav);transition:background .5s var(--ease),border-color .5s;background:transparent;border-bottom:1px solid transparent;color:var(--ink)}
-nav.top .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px}
-.logo{display:flex;align-items:center;text-decoration:none}
+nav.top .wrap{display:flex;align-items:center;justify-content:flex-start;height:72px;gap:0}
+.logo{display:flex;align-items:center;text-decoration:none;margin-right:30px;flex:none}
 .logo img{height:40px;width:auto;transition:filter .5s}
 nav.top.over-photo{color:#fff}
 nav.top.over-photo .logo .lm{filter:brightness(0) invert(1)}
 nav.top.scrolled{background:color-mix(in srgb,var(--sky) 86%,transparent);backdrop-filter:blur(14px);border-bottom-color:color-mix(in srgb,var(--ink) 10%,transparent)}
-.nav-links{display:flex;gap:21px;align-items:center;list-style:none}
+.nav-links{display:flex;gap:34px;align-items:center;list-style:none;flex:1;justify-content:center}
 .nav-links a{white-space:nowrap;font-family:var(--display);font-weight:600;font-size:14px;font-variation-settings:'wdth' 115;text-decoration:none;color:inherit;opacity:.85;transition:opacity .3s;padding:8px 0}
 .nav-links a:hover{opacity:1}
 .nav-links li{position:relative}
@@ -572,13 +572,16 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 /* ---- trip builder (book.html) + add-to-trip (Tyler round two) ---- */
 .nav-trip span[hidden],.drawer-trip span[hidden]{display:none!important}
 .nav-trip.has-items{border-color:var(--sea)}
-.nav-trip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--display);font-weight:600;font-size:13.5px;
+.nav-trip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;margin-left:auto;flex:none;font-family:var(--display);font-weight:600;font-size:13.5px;
   padding:9px 14px;border-radius:var(--r);border:1.5px solid var(--line);color:var(--ink);margin-right:10px;transition:.2s}
+.nav-cta{flex:none}
+.burger{margin-left:auto}
 .nav-trip span{display:grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--sea);color:#fff;font-size:12px}
 .nav-trip:hover{border-color:var(--sea)}
 nav.top.over-photo .nav-trip{border-color:rgba(255,255,255,.4);color:#fff}
 @media(max-width:1000px){
-  .nav-trip{margin-right:8px;padding:8px 11px;gap:6px}
+  .nav-trip{margin-left:auto;margin-right:8px;padding:8px 11px;gap:6px}
+  .burger{margin-left:0}
   .nav-trip b{display:none}
   .nav-trip::before{content:"";width:17px;height:17px;background:currentColor;
     -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18l-1.5 11.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5z'/%3E%3Cpath d='M8 6V4.5a4 4 0 0 1 8 0V6'/%3E%3C/svg%3E") center/contain no-repeat;
@@ -615,7 +618,8 @@ nav.top.over-photo .nav-trip{border-color:rgba(255,255,255,.4);color:#fff}
 
 /* nav breathing room once the socials and the trip chip are in */
 @media(max-width:1150px){.nav-social{display:none}}
-@media(max-width:1150px){.nav-links{gap:17px}.nav-trip{margin-right:6px;padding:8px 11px}}
+@media(max-width:1250px){.nav-links{gap:24px}}
+@media(max-width:1100px){.nav-links{gap:18px}.nav-trip{margin-right:8px;padding:8px 11px}}
 
 /* scraped copy sometimes carries a bare URL; never let it push the page wide */
 .prose p,.prose li,blockquote p{overflow-wrap:anywhere}
