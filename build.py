@@ -157,7 +157,7 @@ def page(root, title, desc, body, light=False, extra_head='', bookbar=''):
 <title>{E(html.unescape(title))}</title>
 <meta name="description" content="{E(html.unescape(desc))}">
 <link rel="icon" type="image/svg+xml" href="{root}img/logo.svg">
-<meta property="og:title" content="{E(html.unescape(title))}"><meta property="og:description" content="{E(html.unescape(desc))}"><meta property="og:image" content="https://gofishcr.com/img/hero-split.jpg"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:title" content="{E(html.unescape(title))}"><meta property="og:description" content="{E(html.unescape(desc))}"><meta property="og:image" content="https://gofishcr.com/img/og-card.jpg"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@100..150,400..900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/style.css?v={BUILD}">{extra_head}
