@@ -425,9 +425,7 @@
     var wrap = form.parentNode, isMsg = req.data.kind === 'message';
     var div = document.createElement('div'); div.className = 'sent';
     div.innerHTML = '<div class="ok">&#10003;</div><h3>' + (isMsg ? 'Message sent.' : 'Request sent.') + '</h3>'
-      + '<p class="muted" style="margin:8px 0 18px">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve &amp; Liisa reply within hours' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>'
-      + '<div class="copybox">' + req.text.replace(/</g, '&lt;') + '</div>'
-      + '<div class="alt" style="margin-top:14px"><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a></div>';
+      + '<p class="muted" style="margin:8px 0 0">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve &amp; Liisa reply within hours' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>';
     form.style.display = 'none'; wrap.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
