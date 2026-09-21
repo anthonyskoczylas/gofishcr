@@ -245,13 +245,23 @@
   }
 
   // ---- REQUEST HELPERS (static site: email / WhatsApp / phone) ------------
+  // wa.me is built for phones: on a laptop it often dead-ends unless WhatsApp
+  // Desktop grabs the handoff. Send desktop visitors to WhatsApp Web instead.
+  function waUrl(text) {
+    if (!CONFIG.whatsapp) return '';
+    var phone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+    var base = phone ? 'https://wa.me/' + CONFIG.whatsapp
+                     : 'https://web.whatsapp.com/send?phone=' + CONFIG.whatsapp;
+    if (!text) return base;
+    return base + (phone ? '?' : '&') + 'text=' + encodeURIComponent(text);
+  }
   function buildRequest(lines, data) {
     var body = lines.filter(Boolean).join('\n');
     return {
       text: body,
       data: data || null,
       mailto: 'mailto:' + CONFIG.email + '?' + (CONFIG.cc ? 'cc=' + encodeURIComponent(CONFIG.cc) + '&' : '') + 'subject=' + encodeURIComponent(lines[0].replace(/^Request: /, '') + ' — booking request') + '&body=' + encodeURIComponent(body + '\n\nSent from gofishcr.com'),
-      wa: CONFIG.whatsapp ? 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(body) : ''
+      wa: waUrl(body)
     };
   }
   function todayISO(offsetDays) { var d = new Date(); d.setDate(d.getDate() + (offsetDays || 0)); return d.toISOString().slice(0, 10); }
@@ -881,8 +891,15 @@
   }
 
   // ---- HIDE WHATSAPP LINKS IF NOT CONFIGURED -------------------------------
-  if (!CONFIG.whatsapp) $$('[data-wa]').forEach(function (a) { a.style.display = 'none'; });
-  else $$('[data-wa]').forEach(function (a) { a.href = 'https://wa.me/' + CONFIG.whatsapp; });
+  // :not(html) matters — <html> carries data-wa to pass the number to CONFIG,
+  // so without it the hide branch would display:none the whole document.
+  if (!CONFIG.whatsapp) $$('[data-wa]:not(html)').forEach(function (el) { el.style.display = 'none'; });
+  else $$('[data-wa]:not(html)').forEach(function (el) {
+    // data-wa sits on the <a> in some places and on a wrapping <li>/<div> in
+    // others; setting .href on a wrapper silently does nothing.
+    var a = el.tagName === 'A' ? el : el.querySelector('a[href*="wa.me"], a[href*="whatsapp"]');
+    if (a) a.href = waUrl('');
+  });
 })();
 
 /* ---- THE DAY (home): sky, clock, rail, scrub, fleet rail ---- */
