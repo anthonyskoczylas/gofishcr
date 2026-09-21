@@ -570,7 +570,8 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .pin-ok svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--sea)}
 
 /* ---- trip builder (book.html) + add-to-trip (Tyler round two) ---- */
-.nav-trip span[hidden],.drawer-trip span[hidden]{display:none!important}
+/* hidden must win over any display rule (chips set display:inline-flex, so a half day still showed Offshore) */
+[hidden]{display:none!important}
 .nav-trip.has-items{border-color:var(--sea)}
 .nav-trip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;margin-left:auto;flex:none;font-family:var(--display);font-weight:600;font-size:13.5px;
   padding:9px 14px;border-radius:var(--r);border:1.5px solid var(--line);color:var(--ink);margin-right:10px;transition:.2s}
