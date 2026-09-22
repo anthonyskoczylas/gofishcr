@@ -47,7 +47,7 @@ ADV_SHORT = {'mega-combo-adventure-tour':'Mega Combo Tour','volcano-hike-mud-bat
 def adv_short(a): return ADV_SHORT.get(a['slug'], a['name'])
 
 def fleet_js():
-    d = {b['slug']: dict(slug=b['slug'], name=b['name'], locations=b['locations'], top=b['top'], top_label=b.get('top_label',''), washroom=b['washroom'], max_pax=b['max_pax'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], quote=b['quote'], length=boat_len(b), images=b['images'][:1]) for b in FLEET}
+    d = {b['slug']: dict(slug=b['slug'], name=b['name'], locations=b['locations'], top=b['top'], top_label=b.get('top_label',''), washroom=b['washroom'], priced_for=b['priced_for'], max_pax=b['max_pax'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], quote=b['quote'], length=boat_len(b), images=b['images'][:1]) for b in FLEET}
     a = {x['slug']: dict(name=adv_short(x), image=x['images'][0], tag=ADV_TAG[x['slug']], from_=adv_from(x)) for x in ADV}
     for v in a.values(): v['from'] = v.pop('from_')
     return '<script>window.FLEET=%s;window.ADV=%s;</script>' % (json.dumps(d), json.dumps(a))
@@ -335,7 +335,7 @@ def boat_page(b):
 <tr><td>Half day</td><td>5 hours · inshore</td><td><b>${b['half']:,}</b></td></tr>
 <tr><td>3/4 day</td><td>7 hours · inshore or offshore</td><td><b>${b['three_quarter']:,}</b></td></tr>
 <tr><td>Full day</td><td>9 hours · inshore or offshore</td><td><b>${b['full']:,}</b></td></tr></table>
-<p class="small muted">Rates are per boat, excluding taxes, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Prices subject to change. To target billfish, book the 7 or 9 hour trip.</p>'''
+<p class="small muted">Rates are per boat, excluding taxes, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Beyond {b['priced_for']}, add $50 per adult and $30 per child on a half day, $100 per adult and $50 per child on 3/4 and full days. Prices subject to change. To target billfish, book the 7 or 9 hour trip.</p>'''
     seg = '' if b['quote'] else f'''<div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>5 hrs<small>${b['half']:,}</small></label><label><input type="radio" name="dur" value="tq">7 hrs<small>${b['three_quarter']:,}</small></label><label><input type="radio" name="dur" value="full">9 hrs<small>${b['full']:,}</small></label></div>'''
     pax_opts = ''.join(f'<option value="{i}"{" selected" if i==min(4,b["max_pax"] or 4) else ""}>{i}</option>' for i in range(1, (b['max_pax'] or 20) + 1))
     intro = {
@@ -375,7 +375,7 @@ def boat_page(b):
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>
 <div class="grid g3">{''.join(boat_card(x, r) for x in sorted([x for x in FLEET if x['slug']!=b['slug'] and set(x['locations'])&set(b['locations']) and x['quote']==b['quote']], key=lambda x: abs((x['half'] or 0)-(b['half'] or 0)))[:3])}</div></div></section>'''
-    boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(slug=b['slug'], image=img(b['images'][0]), name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], max_pax=b['max_pax'], quote=b['quote']))
+    boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(slug=b['slug'], image=img(b['images'][0]), name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], priced_for=b['priced_for'], max_pax=b['max_pax'], quote=b['quote']))
     bar = f'<div class="bookbar"><div><b>{("$%s" % f"{b["half"]:,}") if b["half"] else "Quote"}</b><small>{"half day · per boat" if b["half"] else "private sail"}</small></div><a class="btn btn-primary btn-sm" href="#boat-book">Request this boat</a></div>'
     ld = {"@context": "https://schema.org", "@graph": [
       {"@type": "Product", "name": f"{b['name']} fishing charter", "image": [SITE_URL + 'img/' + i for i in b['images'][:3]],
@@ -530,10 +530,16 @@ def discover():
            ('Mahi mahi (dorado)','mahi-mahi.jpg','Best with the rains, Nov – Jan',[2,1,0,0,1,1,1,1,1,2,2,2],"Bright, acrobatic and delicious. Dorado stack up around floating debris when the green-season rivers push out to sea, and stay strong into the early dry season."),
            ('Roosterfish','roosterfish.jpg','Year-round inshore',[1,1,1,1,2,2,2,2,2,2,1,1],"The signature inshore fish of Guanacaste, that comb of a dorsal fin cutting the surface behind a live bait. Roosters are caught along the rocks and beaches all year, and even a half day can put you on one."),
            ('Wahoo','wahoo.jpg','Year-round, best on the rocks',[1,1,1,1,1,1,1,1,1,1,1,1],"Streamlined and fast, often 5 to 6 feet, with fish to 8 feet on record. The rocky coastline around Las Catalinas is the classic wahoo ground."),
-           ('Snapper','snapper.jpg','Year-round inshore',[1,1,1,1,1,1,1,1,1,1,1,1],"Red snapper (pargo rojo) and the big cubera, the Pacific dog snapper, which runs 50 to 80 pounds and more. Half-day territory, and the best thing on the grill that night.")]
+           ('Snapper','snapper.jpg','Year-round inshore',[1,1,1,1,1,1,1,1,1,1,1,1],"Red snapper (pargo rojo) and the big cubera, the Pacific dog snapper, which runs 50 to 80 pounds and more. Half-day territory, and the best thing on the grill that night."),
+           ('Grouper','6f6ac426-c58a-46f3-aaa6-0a3134575a49.jpg','Year-round on the bottom',[1,1,1,1,1,1,1,1,1,1,1,1],"Broomtail and other groupers sit on rocky bottom and pinnacles close to shore. A steady half-day target, and one of the best fish you can take home for dinner."),
+           ('Amberjack','steve_crew_client.jpg','Year-round on structure',[1,1,1,1,1,1,1,1,1,1,1,1],"Short, brutal fights over rock piles and pinnacles. Amberjack pull harder for their size than almost anything inshore."),
+           ('Mackerel','mackerel.jpg','Year-round, thickest in the windy months',[1,1,1,1,1,1,1,1,1,1,1,1],"Sierra mackerel run the beaches and rock edges in fast schools. Light tackle, quick strikes, and good bait for bigger fish.")]
     months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
     rows = ''.join(f'<tr><td>{n}</td>{"".join(f"<td><i class=\"{ {0:'',1:'g',2:'p'}[v] }\"></i></td>" for v in v12)}</tr>' for n, im, w, v12, t in cal)
-    fishcards = ''.join(f'<div class="f rv"><img src="{r}img/{img(im)}" alt=""><div><h3>{n}</h3><div class="when">{w}</div><p>{t}</p></div></div>' for n, im, w, v12, t in cal)
+    # some species have no photo yet; the card just runs without one until a file lands in img/
+    fishcards = ''.join(
+        f'<div class="f rv">{f"<img src=\"{r}img/{img(im)}\" alt=\"\">" if im and os.path.exists(os.path.join(ROOT, "img", im)) else ""}'
+        f'<div><h3>{n}</h3><div class="when">{w}</div><p>{t}</p></div></div>' for n, im, w, v12, t in cal)
     body = page_hero(r, 'Fish &amp; seasons', 'There is no bad month on the Gold Coast, only different fish. Here is what bites when.', 'sailfish.jpg', [('Home', r+'index.html'), ('Discover', r+'discover/'), ('Fish & seasons', None)]) + f'''
 <section><div class="wrap"><div class="sec-head"><div class="kicker">Season calendar</div><h2>What's biting, <em>month by month</em></h2><p>A guide, not a promise. Fish move with water temperature and bait. Ask us about the week you are coming and we will tell you what the boats have been seeing.</p></div>
 <div class="season"><table><tr><th>Species</th>{''.join(f'<th>{m}</th>' for m in months)}</tr>{rows}</table></div>

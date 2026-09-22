@@ -149,6 +149,22 @@
   }
 
   // ---- GUESTS (adults + kids) ----------------------------------------------
+  // Extra guests beyond what a boat's rate covers. Kids take the cheaper slots first.
+  var EXTRA_RATE = { half: { adult: 50, kid: 30 }, tq: { adult: 100, kid: 50 }, full: { adult: 100, kid: 50 } };
+  function extraGuests(boat, dur, g) {
+    var covered = boat && boat.priced_for;
+    if (!covered || !g || !g.total) return null;
+    var over = g.total - covered;
+    if (over <= 0) return null;
+    var kids = Math.min(g.kids || 0, over), adults = over - kids, r = EXTRA_RATE[dur] || EXTRA_RATE.full;
+    return { over: over, kids: kids, adults: adults, amount: kids * r.kid + adults * r.adult };
+  }
+  function extraText(x) {
+    var bits = [];
+    if (x.adults) bits.push(x.adults + ' extra adult' + (x.adults === 1 ? '' : 's'));
+    if (x.kids) bits.push(x.kids + ' extra kid' + (x.kids === 1 ? '' : 's'));
+    return money(x.amount) + ' for ' + bits.join(' and ');
+  }
   function guests(f) { var a = +((f.adults || {}).value || 0), k = +((f.kids || {}).value || 0); return { adults: a, kids: k, total: a + k }; }
   function guestText(g) {
     var out = g.adults + ' adult' + (g.adults === 1 ? '' : 's');
@@ -319,7 +335,13 @@
     function refresh() {
       $$('.seg label', bp).forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });
       var d = (bp.elements.dur && bp.elements.dur.value) || 'half';
-      var est = $('#est'); if (est) { est.querySelector('b').textContent = price[d] ? money(price[d]) : 'Quote'; est.querySelector('small').textContent = price[d] ? 'per boat, excluding taxes · ' + durLabel[d] : 'custom quote for private catamarans'; }
+      var xg = price[d] ? extraGuests(B, d, guests(bp.elements)) : null;
+      var est = $('#est'); if (est) {
+        est.querySelector('b').textContent = price[d] ? money(price[d] + (xg ? xg.amount : 0)) : 'Quote';
+        est.querySelector('small').textContent = price[d]
+          ? 'per boat, excluding taxes · ' + durLabel[d] + (xg ? ' · includes ' + extraText(xg) : '')
+          : 'custom quote for private catamarans';
+      }
       var bb = $('.bookbar b'); if (bb) bb.textContent = price[d] ? money(price[d]) : 'Quote';
       var bs = $('.bookbar small'); if (bs) bs.textContent = price[d] ? durLabel[d].split(' \u00b7 ')[0] + ' \u00b7 per boat' : 'private sail';
       // the headline price follows the charter length too
@@ -341,9 +363,11 @@
       if (B.max_pax && g.total > B.max_pax) return toast('This boat takes up to ' + B.max_pax + ' guests. Tell us in the notes and we will pair two boats.');
       if (!g.total) return toast('Add at least one guest');
       var style = (f.style && f.style.value) || '', fish = checkedValues(bp, 'fish');
+      var xtra = price[d] ? extraGuests(B, d, g) : null;
       var req = buildRequest([
         'Request: ' + B.name + ' (' + B.locations.join(' / ') + ')',
         'Charter length: ' + durLabel[d] + (price[d] ? ' — ' + money(price[d]) + ' per boat' : ' — custom quote'),
+        xtra ? 'Extra guests: ' + extraText(xtra) + ' (the rate covers ' + B.priced_for + ')' : '',
         style ? 'Fishing style: ' + style : '',
         fish.length ? 'Target fish: ' + fish.join(', ') : '',
         'Date: ' + (fmtDate(f.date.value) || 'flexible'),
@@ -354,7 +378,7 @@
       ].concat(stayLines(f), [
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ]), Object.assign({ kind: 'boat', trip: B.name, image: imgUrl(B.image), url: absUrl(location.pathname), base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d]) + ' per boat' : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
+      ]), Object.assign({ kind: 'boat', trip: B.name, image: imgUrl(B.image), url: absUrl(location.pathname), base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d] + (xtra ? xtra.amount : 0)) + ' per boat' + (xtra ? ' (includes ' + extraText(xtra) + ')' : '') : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
       showSent(bp, req, 'Your request for the ' + B.name + ' is ready to send.');
     });
   }
@@ -569,13 +593,17 @@
       if (state.type === 'adventure') { var a = window.ADV[state.adv]; return a ? { name: a.name, price: a.from ? a.from + ' per person' : 'rates on request', est: '' } : null; }
       var b = window.FLEET[state.boat]; if (!b) return null;
       var p = { half: b.half, tq: b.three_quarter, full: b.full }[state.dur];
-      return { name: b.name, price: p ? money(p) + ' per boat · ' + durLabel2[state.dur] : 'custom quote', est: p ? money(p) : 'Quote', boat: b };
+      var xg = p ? extraGuests(b, state.dur, { adults: state.adults, kids: state.kids, total: totalPax() }) : null;
+      var total = p ? p + (xg ? xg.amount : 0) : 0;
+      return { name: b.name,
+        price: p ? money(total) + ' per boat · ' + durLabel2[state.dur] + (xg ? ' · includes ' + extraText(xg) : '') : 'custom quote',
+        est: p ? money(total) : 'Quote', extra: xg, boat: b };
     }
     function renderSummary() {
       var c = chosen(), s = $('#summary');
       if (!c) { s.innerHTML = '<div class="empty">Go back and pick a boat or adventure first.</div>'; paintDayPicker(); paintWizTrip(); return; }
       paintDayPicker(); paintWizTrip();
-      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Location</dt><dd>' + (state.base || 'Either') + '</dd><dt>Your dates</dt><dd>' + ((state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + ((state.type !== 'adventure' && state.style) ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + ((state.type !== 'adventure' && state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
+      s.innerHTML = '<dl><dt>Trip</dt><dd>' + c.name + '</dd><dt>Location</dt><dd>' + (state.base || 'Either') + '</dd><dt>Your dates</dt><dd>' + ((state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : 'Flexible') + '</dd><dt>Guests</dt><dd>' + wizGuestText() + '</dd>' + ((state.type !== 'adventure' && state.style) ? '<dt>Fishing</dt><dd>' + state.style + '</dd>' : '') + (c.extra ? '<dt>Extra guests</dt><dd>' + extraText(c.extra) + '</dd>' : '') + ((state.type !== 'adventure' && state.fish && state.fish.length) ? '<dt>Target</dt><dd>' + state.fish.join(', ') + '</dd>' : '') + (state.type !== 'adventure' && !c.boat.quote ? '<dt>Length</dt><dd>' + durLabel2[state.dur] + '</dd>' : '') + '</dl>'
         + '<div class="tot"><span class="muted small">' + (c.est ? (state.type === 'adventure' ? 'Estimated total' : 'Estimated total, excluding taxes') : '') + '</span><b>' + (c.est || c.price) + '</b></div>'
         + (c.est && c.est !== 'Quote' ? '<div class="muted small" style="margin-top:6px">Per boat, all gear, bait, drinks' + (state.dur !== 'half' ? ' and light lunch' : '') + ' included. Taxes, fishing licences and crew tips are not included.</div>' : '');
     }
