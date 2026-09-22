@@ -498,7 +498,7 @@ def discover():
 <p>We are your one-stop shop for adventure and relaxation on the Gold Coast. We handle the boats, the tours, restaurant and car rental recommendations and the little things that make a week here effortless. Prefer to soak it in from your villa? Want a town tour? Want to know which beach the locals surf? Ask.</p>
 <p>Every client we have served has become a friend, and we intend to keep it that way. Whether you are after adrenaline or a hammock, our job is to make sure your trip is nothing short of extraordinary.</p>
 <h2>Community</h2>
-<p>Ten years as a Ducks Unlimited partner and counting. We live here, our kids grew up here, and we put money and time back into the town that made this possible.</p>
+<p>Ten years as a Ducks Unlimited partner and counting. We live here, and we put money and time back into the town that made this possible.</p>
 <p><a class="btn btn-primary" href="{r}book.html">Plan a trip with us</a></p>''', pos='50% 18%')
 
     simple('our-pledge-to-you', 'Our pledge to you', 'To elevate your angling experience, by any means necessary.', 'sloth.jpg', f'''

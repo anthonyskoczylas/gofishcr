@@ -109,7 +109,7 @@ def home(ctx):
 <section class="tight"><div class="wrap split">
 <div class="ph wide rv"><img src="{r}img/{img('04.jpg')}" alt="Steve and Liisa Quinn" loading="lazy" style="object-position:50% 30%"><div class="cap">Steve &amp; Liisa Quinn, Go Fish Costa Rica. Tamarindo since 2010.</div></div>
 <div class="ch-copy"><div class="t">Who answers the email</div><h2>We're not a call center. We're the two people you'll wave to on the beach.</h2>
-<p>We came down from Canada in 2004, stayed for good in 2010, and raised our kids here. This is our community, and we ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
+<p>We came down from Canada in 2004 and stayed for good in 2010. This town is our community, and we ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
 <p><a class="link" href="{r}discover/about-us.html">Our story</a> &nbsp;&nbsp; <a class="link" href="{r}discover/our-pledge-to-you.html">Our pledge</a></p></div></div></section>
 
 <section class="awards dark"><div class="wrap">
