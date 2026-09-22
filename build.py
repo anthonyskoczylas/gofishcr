@@ -21,7 +21,7 @@ PHONE_CR, PHONE_CR_TEL = '+506 8393 7555', '+50683937555'  # Costa Rica mobile
 WHATSAPP = '50683937555'  # same number on WhatsApp; blank hides every WhatsApp button
 EMAIL_CC = ''  # optional second inbox copied on every booking request (blank = none)
 MAIL_ENDPOINT = 'https://gofish-mail.vercel.app/api/request'  # gofish-mail service (Vercel) that emails the guest + Go Fish; blank = email-app fallback only
-SOCIAL = dict(ig='https://www.instagram.com/gofishcostarica', yt='https://www.youtube.com/@GoFishCostaRica',
+SOCIAL = dict(ig='https://www.instagram.com/gofishcostarica', fb='https://www.facebook.com/GoFishCr', yt='https://www.youtube.com/@GoFishCostaRica',
               ta='https://www.tripadvisor.com/Attraction_Review-g309253-d1474067-Reviews-Go_Fish_Costa_Rica-Tamarindo_Province_of_Guanacaste.html')
 
 # ---------------------------------------------------------------- helpers
@@ -117,11 +117,11 @@ SOCIAL_ICONS = {
   'yt': '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.2" y="5.6" width="19.6" height="12.8" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10.3 9.5l5.1 2.5-5.1 2.5z" fill="currentColor"/></svg>',
   'ta': '<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="10.1" ry="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="7.7" cy="12" r="2.85" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16.3" cy="12" r="2.85" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="7.7" cy="12" r="1.15" fill="currentColor"/><circle cx="16.3" cy="12" r="1.15" fill="currentColor"/></svg>',
 }
-SOCIAL_NAMES = {'ig': 'Instagram', 'yt': 'YouTube', 'ta': 'TripAdvisor'}
+SOCIAL_NAMES = {'ig': 'Instagram', 'fb': 'Facebook', 'yt': 'YouTube', 'ta': 'TripAdvisor'}
 def social_links(cls):
     return f'<div class="{cls}">' + ''.join(
         f'<a href="{SOCIAL[k]}" target="_blank" rel="noopener" aria-label="{SOCIAL_NAMES[k]}" title="{SOCIAL_NAMES[k]}">{SOCIAL_ICONS[k]}</a>'
-        for k in ('ig', 'yt', 'ta')) + '</div>'
+        for k in ('ig', 'fb', 'yt', 'ta')) + '</div>'
 
 def nav(root, light=False):
     dd = ''.join('<li><a href="%sdiscover/%s.html">%s</a></li>' % (root, s, t) for s, t in [('about-us','About Steve & Liisa'),('our-pledge-to-you','Our Pledge'),('crews-equipment','Crews & Equipment'),('fish-seasons','Fish & Seasons'),('guanacaste-fishing','Why Fish Tamarindo'),('weather','Weather'),('contact-us','Contact')])
@@ -572,7 +572,7 @@ def discover():
 <div><h4>Office hours</h4>Monday to Saturday, 8:00am to 6:00pm<br>Sunday closed</div>
 <div><h4>Playa Tamarindo</h4>Tamarindo Beach, Guanacaste, Costa Rica 50309</div>
 <div><h4>Playa Flamingo</h4>Flamingo Beach, Guanacaste, Costa Rica</div>
-<div><h4>Follow</h4><a href="{SOCIAL['ig']}" target="_blank" rel="noopener">Instagram</a> · <a href="{SOCIAL['yt']}" target="_blank" rel="noopener">YouTube</a> · <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">TripAdvisor</a></div>
+<div><h4>Follow</h4><a href="{SOCIAL['ig']}" target="_blank" rel="noopener">Instagram</a> · <a href="{SOCIAL['fb']}" target="_blank" rel="noopener">Facebook</a> · <a href="{SOCIAL['yt']}" target="_blank" rel="noopener">YouTube</a> · <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">TripAdvisor</a></div>
 </div>
 <div><form class="form-card" id="contact-form"><h3 style="margin-bottom:18px">Send a message</h3>
 <div class="fld"><label for="c-name">Your name</label><input id="c-name" name="name" required></div>

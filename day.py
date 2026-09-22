@@ -133,7 +133,7 @@ def home(ctx):
 </div></div>
 </div></section>
 
-<section class="tight"><div class="wrap"><div class="ig"><div><div class="t">Follow the action</div><h2 style="font-size:clamp(28px,3vw,40px)">@gofishcostarica</h2></div><a class="btn btn-ghost" href="{SOCIAL['ig']}" target="_blank" rel="noopener">Follow on Instagram</a></div>
+<section class="tight"><div class="wrap"><div class="ig"><div><div class="t">Follow the action</div><h2 style="font-size:clamp(28px,3vw,40px)">@gofishcostarica</h2><div class="muted small" style="margin-top:6px">Also on <a href="{SOCIAL['fb']}" target="_blank" rel="noopener">Facebook</a></div></div><a class="btn btn-ghost" href="{SOCIAL['ig']}" target="_blank" rel="noopener">Follow on Instagram</a></div>
 <div id="ig-feed" style="margin-top:26px"></div>
 <div id="ig-fallback" class="strip" style="margin-top:26px">{''.join(f'<a href="{r}img/{img(g)}" data-lb="ig"><img src="{r}img/{img(g)}" alt="" loading="lazy"></a>' for g in ['9a000add-c9c3-4b54-8f98-1a677dcc7a50.jpg','img_0928.jpg','24fc1498-da0a-47ce-8efb-bf1912a823da.jpg','c3ab02f9-e7ba-41a2-9329-e6dad4d32470.jpg','liisa_crew.jpg'])}</div></div></section>
 
