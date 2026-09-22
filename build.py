@@ -379,7 +379,7 @@ def boat_page(b):
     bar = f'<div class="bookbar"><div><b>{("$%s" % f"{b["half"]:,}") if b["half"] else "Quote"}</b><small>{"half day · per boat" if b["half"] else "private sail"}</small></div><a class="btn btn-primary btn-sm" href="#boat-book">Request this boat</a></div>'
     ld = {"@context": "https://schema.org", "@graph": [
       {"@type": "Product", "name": f"{b['name']} fishing charter", "image": [SITE_URL + 'img/' + i for i in b['images'][:3]],
-       "description": re.sub('<[^>]+>', '', intro), "brand": {"@id": SITE_URL + "#org"},
+       "description": re.sub('<[^>]+>', '', intro), "brand": {"@type": "Brand", "name": "Go Fish Costa Rica"},
        "offers": [] if b['quote'] else [
          {"@type": "Offer", "name": n, "price": str(pr), "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": SITE_URL + f"charters/{b['slug']}.html", "seller": {"@id": SITE_URL + "#org"}}
          for n, pr in (("Half day", b['half']), ("3/4 day", b['three_quarter']), ("Full day", b['full']))]},
