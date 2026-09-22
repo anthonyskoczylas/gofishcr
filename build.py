@@ -407,7 +407,7 @@ def adventures():
     body = page_hero(r, 'Adventures in Guanacaste', 'Fishing holds a special place in our hearts, but the Gold Coast has more to give. Tours we have personally done, with guides and operators we trust. Pickup in Tamarindo or Flamingo on most.', 'atv-ridge.jpg', [('Home', r+'index.html'), ('Adventures', None)]) + f'''
 <section><div class="wrap"><div class="grid g3">{''.join(adv_card(a, r) for a in ADV)}</div>
 <div class="cta" style="margin-top:60px;border-radius:var(--radius);padding:64px 28px"><img class="bg" src="{r}img/{img('sunset-catamarn.jpg')}" alt=""><div class="kicker">Mix and match</div><h2>Fish one day, fly through the canopy the next.</h2><p>Tell us how many days you have and we build the whole week: charters, tours, dinner reservations, the lot.</p><div class="row"><a class="btn btn-sand" href="{r}book.html?type=adventure">Plan my trip</a></div></div></div></section>'''
-    write('adventures/index.html', page(r, 'Adventures — Zipline, ATV, Catamaran, Volcano & more | Go Fish Costa Rica', 'Sixteen adventures around Tamarindo and Flamingo: sunset catamaran, ATV, zipline, Rio Celeste, Monteverde, rafting, surf lessons, turtle tours and spa days. Real prices, trusted operators.', body))
+    write('adventures/index.html', page(r, 'Adventures — Zipline, ATV, Catamaran, Volcano & more | Go Fish Costa Rica', 'Adventures around Tamarindo and Flamingo: sunset catamaran, ATV, zipline, Rio Celeste, Monteverde, rafting, surf lessons, turtle tours and spa days. Real prices, trusted operators.', body))
     for a in ADV: adv_page(a)
 
 def adv_page(a):
@@ -719,7 +719,7 @@ def extras():
     # Old-site addresses that have no matching page in the new build -> instant redirect
     for src, dst in [('reservation.html', 'book.html'), ('discover/blog.html', 'blog/'), ('locations/tamarindo.html', 'discover/guanacaste-fishing.html'),
                      ('locations/flamingo.html', 'discover/guanacaste-fishing.html'), ('locations/index.html', 'discover/guanacaste-fishing.html'), ('sitemap.html', 'index.html')]:
-        write(src, f'<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/{dst}"><link rel="canonical" href="https://gofishcr.com/{dst}"><title>Redirecting</title></head><body><a href="/{dst}">Continue</a></body></html>')
+        write(src, f'<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/{dst}"><link rel="canonical" href="https://gofishcr.com/{dst}"><meta name="robots" content="noindex,follow"><title>Redirecting</title></head><body><a href="/{dst}">Continue</a></body></html>')
 
 if __name__ == '__main__':
     import day

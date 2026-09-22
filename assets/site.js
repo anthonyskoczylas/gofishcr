@@ -451,11 +451,16 @@
     div.innerHTML = '<div class="ok">&#10003;</div><h3>' + (isMsg ? 'Message sent.' : 'Request sent.') + '</h3>'
       + '<p class="muted" style="margin:8px 0 0">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve, Liisa and Tyler reply as soon as possible' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>'
       // booking requests only: what happens once they say yes. Nothing is paid on this site.
-      + (isMsg ? '' : '<div class="paybox"><div class="pb-t">How payment works</div>'
-        + '<p>Everything is quoted and invoiced in US dollars. Once you confirm, we send the invoice and hold the boat while it is paid: 24 hours, or 12 hours if your charter is less than a week away.</p>'
-        + '<p><b>More than a week away.</b> Pay in full, or 50&#37; now with the rest invoiced a week before, or 50&#37; now with the balance in cash on the morning of your charter, which saves you a bit.</p>'
-        + '<p><b>Less than a week away.</b> Pay in full, or 50&#37; now with the balance in cash on the morning of your charter.</p>'
-        + '<p class="pb-n">Paying a balance in cash? Please bring the exact amount, as there is no change on the beach.</p></div>');
+      + (isMsg ? '' : (function () {
+        // same terms, worded for what they actually booked
+        var kind = req.data.kind, hold = kind === 'tour' ? 'your spot' : kind === 'trip' ? 'your dates' : 'the boat',
+            what = kind === 'tour' ? 'your tour' : kind === 'trip' ? 'your trip' : 'your charter';
+        return '<div class="paybox"><div class="pb-t">How payment works</div>'
+          + '<p>Everything is quoted and invoiced in US dollars. Once you confirm, we send the invoice and hold ' + hold + ' while it is paid: 24 hours, or 12 hours if ' + what + ' is less than a week away.</p>'
+          + '<p><b>More than a week away.</b> Pay in full, or 50&#37; now with the rest invoiced a week before, or 50&#37; now with the balance in cash on the morning of ' + what + ', which saves you a bit.</p>'
+          + '<p><b>Less than a week away.</b> Pay in full, or 50&#37; now with the balance in cash on the morning of ' + what + '.</p>'
+          + '<p class="pb-n">Paying a balance in cash? Please bring the exact amount, as there is no change on the beach.</p></div>';
+      }()));
     form.style.display = 'none'; wrap.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
