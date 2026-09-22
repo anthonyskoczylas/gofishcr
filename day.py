@@ -97,7 +97,7 @@ def home(ctx):
 <!-- your day -->
 <section class="chapter" id="plan" style="min-height:auto;padding:clamp(80px,12vh,140px) 0"><div class="wrap plan">
 <div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve, Liisa and Tyler answer as soon as they can.</h2>
-<p>No obligation to ask. Steve, Liisa and Tyler confirm availability as soon as possible and send you the plan for your trip, one charter or a whole week.</p>
+<p>No obligation to ask. They confirm availability as soon as possible and send you the plan for your trip, one charter or a whole week.</p>
 <p class="small muted">Prefer to talk? Toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a>, call or text <a href="tel:{PHONE_CR_TEL}">{PHONE_CR}</a> on WhatsApp, or <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div>
 <form id="qb"><div class="fld"><label for="qb-base">Where are you staying?</label><select id="qb-base" name="base"><option value="">Tamarindo or Flamingo, not sure yet</option><option>Tamarindo</option><option>Flamingo</option></select></div>
 <div class="row"><div class="fld"><label for="qb-date">Date</label><input id="qb-date" type="date" name="date"></div><div class="fld"><label for="qb-pax">Guests</label><select id="qb-pax" name="pax">{''.join(f'<option value="{i}"{" selected" if i==4 else ""}>{i}</option>' for i in range(1,13))}<option value="13">13 or more</option></select></div></div>
