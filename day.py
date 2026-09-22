@@ -74,7 +74,7 @@ def home(ctx):
 <!-- chapter -->
 <section class="chapter two" id="lunch"><div class="stamp" aria-hidden="true">Lunch</div>
 <div class="wrap"><div class="ph rv"><img src="{r}img/{img('lunch-cooler.jpg')}" alt="Cooler open on deck: cold beer, fruit and a sandwich" loading="lazy"><div class="cap">Every charter: fruit, soda, water, beer. Light lunch on 3/4 and full days.</div></div>
-<div class="ch-copy"><div class="t">Lunch on the bridge</div>
+<div class="ch-copy"><div class="t">Lunch aboard</div>
 <h2>Cold beer, a sandwich, and the story you'll tell for years.</h2>
 <p>Table fish come home with you; most restaurants in town will cook your catch that night. Billfish go back in the water, every one. Tips aren't expected, but a crew that worked hard for you will remember 15 to 20 percent.</p>
 <p><a class="link" href="{r}dining/">Where we eat in Tamarindo</a></p></div></div></section>
