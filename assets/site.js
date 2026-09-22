@@ -283,7 +283,7 @@
     var cards = $$('[data-boat]');
     var qs = new URLSearchParams(location.search);
     ['base', 'pax', 'budget', 'wash', 'sort'].forEach(function (k) { if (qs.get(k) && fl.elements[k]) fl.elements[k].value = qs.get(k); });
-    if (qs.get('date')) { var d = $('#fleet-date'); if (d) d.textContent = 'Availability for ' + fmtDate(qs.get('date')) + ' is confirmed by email within hours.'; }
+    if (qs.get('date')) { var d = $('#fleet-date'); if (d) d.textContent = 'Availability for ' + fmtDate(qs.get('date')) + ' is confirmed by email as soon as possible.'; }
     function apply() {
       var base = fl.elements.base.value, pax = +fl.elements.pax.value || 0, budget = +fl.elements.budget.value || 0, wash = fl.elements.wash.value, sort = fl.elements.sort.value;
       var shown = 0, list = [];
@@ -425,14 +425,14 @@
     var wrap = form.parentNode, isMsg = req.data.kind === 'message';
     var div = document.createElement('div'); div.className = 'sent';
     div.innerHTML = '<div class="ok">&#10003;</div><h3>' + (isMsg ? 'Message sent.' : 'Request sent.') + '</h3>'
-      + '<p class="muted" style="margin:8px 0 0">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve &amp; Liisa reply within hours' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>';
+      + '<p class="muted" style="margin:8px 0 0">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve, Liisa and the crew reply as soon as possible' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>';
     form.style.display = 'none'; wrap.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   function showFallback(form, req, title, failed) {
     var wrap = form.parentNode;
     var div = document.createElement('div'); div.className = 'sent';
-    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">' + (failed ? 'Our sender is busy, so send it from your email app instead. ' : 'Send it by email and ') + 'Steve &amp; Liisa reply within hours.</p>'
+    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">' + (failed ? 'Our sender is busy, so send it from your email app instead. ' : 'Send it by email and ') + 'Steve, Liisa and the crew reply as soon as possible.</p>'
       + '<a class="btn btn-primary btn-block" href="' + req.mailto + '">Send by email</a>'
       + (req.wa ? '<a class="btn btn-ghost btn-block" style="margin-top:8px" target="_blank" rel="noopener" href="' + req.wa + '">Send on WhatsApp</a>' : '')
       + '<div class="alt"><button type="button" class="btn btn-ghost btn-sm" data-copy>Copy details</button><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phoneCR.replace(/[^0-9+]/g, '') + '">' + CONFIG.phoneCR + '</a></div>'
@@ -542,7 +542,7 @@
         return;
       }
       var cat = state.type === 'catamaran';
-      h.innerHTML = cat ? '<h2>Private catamarans</h2><p class="lead">Morning or sunset sails, priced by request. Pick one and we quote within hours.</p>'
+      h.innerHTML = cat ? '<h2>Private catamarans</h2><p class="lead">Morning or sunset sails, priced by request. Pick one and we quote as soon as possible.</p>'
         : '<h2>Boats that fit your group</h2><p class="lead">Showing ' + (state.base || 'Tamarindo &amp; Flamingo') + ' boats that take ' + totalPax() + (totalPax() > 1 ? ' guests' : ' guest') + '. Every boat is one we know personally.</p>';
       var list = Object.keys(window.FLEET).map(function (k) { return window.FLEET[k]; }).filter(function (b) {
         if (cat !== !!b.quote) return false;

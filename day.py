@@ -33,7 +33,7 @@ def home(ctx):
 <section class="chapter hero on-photo" id="dawn"><div class="media"><img src="{r}img/hero-split.jpg" alt="Sailfish on a baitball beneath a Go Fish boat off Tamarindo" fetchpriority="high" style="object-position:50% 50%"><div class="scrim hero-scrim-l"></div></div>
 <div class="wrap"><div class="ch-copy hero-copy"><div class="t">Go Fish Costa Rica · Tamarindo &amp; Flamingo</div>
 <h1>Costa Rica's #1 <em>sportfishing operation.</em></h1>
-<p class="lead">Seventeen boats out of Tamarindo and Flamingo, captains we know by name, and fifteen straight years of TripAdvisor Travelers' Choice. Scroll through a day with us, then tell us your dates.</p>
+<p class="lead">Sportfishing boats out of Tamarindo and Flamingo, captains we know by name, and fifteen straight years of TripAdvisor Travelers' Choice. Scroll through a day with us, then tell us your dates.</p>
 <div class="hero-row"><a class="btn btn-ghost" href="{r}book.html">Plan my day</a><a class="btn btn-ghost" href="{r}charters/">Skip to the boats</a></div>
 <div class="hero-foot"><div class="cols"><div><b>5 stars</b>TripAdvisor Travelers' Choice, every year since 2012</div><div><b>1,000+</b>anglers a year</div><div><b>All billfish released</b>marlin and sailfish, every trip</div></div><div>Tamarindo &amp; Flamingo, Costa Rica</div></div>
 </div></div></section>
@@ -42,9 +42,9 @@ def home(ctx):
 <section class="chapter" id="sand"><div class="stamp" aria-hidden="true">Boats</div>
 <div class="wrap" style="padding-top:clamp(110px,16vh,180px);padding-bottom:clamp(48px,7vh,80px)"><div class="ch-copy"><div class="t">On the sand</div>
 <h2>Pick your boat. We already picked the top captains.</h2>
-<p>Every hull here is one Steve and Liisa have fished from, and every captain is one they'd put their own family with. Rates are per boat and include gear, bait, drinks and lunch on the longer days. Tell us your group and budget, and we'll tell you which one.</p></div>
+<p>Every hull here is one Steve and Liisa have fished from, and every captain is one they'd put their own family with. Rates are per boat and include gear, bait, drinks and lunch on the longer days. Tell us your group and budget, and we'll recommend the best fit for you.</p></div>
 <div class="fleet-rail" id="fleet-rail">{''.join(boat(b) for b in rail_boats)}</div>
-<div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><a class="link" href="{r}charters/">All seventeen boats and rates</a><div class="rail-nav"><button type="button" data-rail="-1" aria-label="Previous boats">&#8249;</button><button type="button" data-rail="1" aria-label="More boats">&#8250;</button></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><a class="link" href="{r}charters/">All boats and rates</a><div class="rail-nav"><button type="button" data-rail="-1" aria-label="Previous boats">&#8249;</button><button type="button" data-rail="1" aria-label="More boats">&#8250;</button></div></div>
 </div></section>
 
 <!-- chapter -->
@@ -52,7 +52,7 @@ def home(ctx):
 <div class="media"><video autoplay muted loop playsinline poster="{r}img/launch-poster.jpg" data-src="{r}video/launch.mp4"></video><img class="poster" src="{r}img/launch-poster.jpg" alt=""><div class="scrim"></div></div>
 <div class="wrap"><div class="ch-copy" style="max-width:56ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">Lines off</div>
 <h2>Off the beach, or off the dock.</h2>
-<p>In Tamarindo the boats launch straight off the sand, a panga runs you out and you're fishing while the town is still waking up. In Flamingo you step off the dock at the marina. Either way the crew has already loaded ice, bait and the lunch.</p>
+<p>In Tamarindo the boats launch straight off the sand, a panga runs you out to your boat and you're fishing while the town is still waking up. In Flamingo you step off the dock at the marina, or a panga takes you out from the beach, depending on the boat. Either way the crew has already loaded ice, bait and the lunch.</p>
 <p><a class="link" href="{r}charters/?base=Tamarindo">Tamarindo boats</a> &nbsp;&nbsp; <a class="link" href="{r}charters/?base=Flamingo">Flamingo boats</a></p></div></div></section>
 
 <!-- chapter -->
@@ -60,13 +60,13 @@ def home(ctx):
 <div class="media"><video autoplay muted loop playsinline poster="{r}img/offshore-aerial.jpg" data-src="{r}video/offshore.mp4"></video><img class="poster" src="{r}img/offshore-aerial.jpg" alt=""><div class="scrim r"></div></div>
 <div class="wrap" style="display:flex;justify-content:flex-end"><div class="ch-copy" style="max-width:52ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">The shelf</div>
 <h2>Forty minutes out, a thousand feet down.</h2>
-<p>About forty minutes at cruise and the bottom falls away to a thousand feet. That edge is where the sailfish, marlin, tuna and mahi live, and it is why this stretch of the North Pacific holds so many IGFA records. Half days stay inshore; 3/4 and full days make the run.</p>
+<p>About forty minutes at cruise, roughly 15 to 30 miles out, and the bottom falls away to a thousand feet. That edge is where the sailfish, marlin, tuna and mahi live, and it is why this stretch of the North Pacific holds so many IGFA records. Half days stay inshore; 3/4 and full days make the run.</p>
 <p><a class="link" href="{r}discover/guanacaste-fishing.html">Why Tamarindo fishes differently</a></p></div></div></section>
 
 <!-- chapter -->
 <section class="chapter two flip" id="bite"><div class="stamp" aria-hidden="true">Hookup</div>
 <div class="wrap"><div class="trio"><a href="{r}img/{img('sailfish.jpg')}" data-lb="bite"><img src="{r}img/{img('sailfish.jpg')}" alt="Sailfish boatside, about to be released" loading="lazy" style="object-position:70% 50%"></a><a href="{r}img/{img('marlin.jpg')}" data-lb="bite"><img src="{r}img/{img('marlin.jpg')}" alt="Marlin jumping" loading="lazy"></a><a href="{r}img/{img('roosterfish.jpg')}" data-lb="bite"><img src="{r}img/{img('roosterfish.jpg')}" alt="Roosterfish" loading="lazy"></a></div>
-<div class="ch-copy"><div class="t">Sailfish up</div>
+<div class="ch-copy"><div class="t">Tight lines</div>
 <h2>Roosters inshore. Sails and marlin off the edge.</h2>
 <p>Half days stay along the rocks for roosterfish, snapper and jacks. Go 3/4 or full and you're offshore for sailfish, marlin, tuna and mahi. Sailfish peak May to August, blue marlin November to April, and there is no month here with nothing biting.</p>
 <p><a class="link" href="{r}discover/fish-seasons.html">The month by month calendar</a></p></div></div></section>
@@ -76,28 +76,28 @@ def home(ctx):
 <div class="wrap"><div class="ph rv"><img src="{r}img/{img('lunch-cooler.jpg')}" alt="Cooler open on deck: cold beer, fruit and a sandwich" loading="lazy"><div class="cap">Every charter: fruit, soda, water, beer. Light lunch on 3/4 and full days.</div></div>
 <div class="ch-copy"><div class="t">Lunch on the bridge</div>
 <h2>Cold beer, a sandwich, and the story you'll tell for years.</h2>
-<p>Table fish come home with you; half the restaurants in town will cook your catch that night. Billfish go back in the water, every one. Tips aren't expected, but a crew that worked hard for you will remember 15 to 20 percent.</p>
+<p>Table fish come home with you; most restaurants in town will cook your catch that night. Billfish go back in the water, every one. Tips aren't expected, but a crew that worked hard for you will remember 15 to 20 percent.</p>
 <p><a class="link" href="{r}dining/">Where we eat in Tamarindo</a></p></div></div></section>
 
 <!-- chapter -->
 <section class="chapter photo on-photo" id="beach"><div class="stamp" aria-hidden="true">Beach</div>
 <div class="media"><canvas id="scrub" data-frames="{r}video/day/pg_" data-count="120" width="1440" height="810"></canvas><img class="poster" src="{r}video/playa-grande-poster.jpg" alt="Tamarindo bay from the air at golden hour"><div class="scrim b"></div></div>
 <div class="wrap" style="display:flex;align-items:flex-end;min-height:100svh;padding-bottom:clamp(48px,8vh,88px)"><div class="ch-copy" style="max-width:54ch"><div class="t">Back on the sand</div>
-<h2>Golden hour over Tamarindo bay, and dinner already booked.</h2>
-<p>The boat drops you where it picked you up. Shower, sunset, a table Liisa reserved at Pangas or El Chiringuito. Tomorrow could be the zipline, the estuary with the kids, or the boat again.</p></div></div></section>
+<h2>Golden hour over Tamarindo bay.</h2>
+<p>The boat drops you where it picked you up. Shower, sunset, dinner at Pangas or El Chiringuito. Tomorrow could be the zipline, the estuary with the kids, or the boat again.</p></div></div></section>
 
 <!-- chapter -->
 <section class="chapter two flip" id="sunset"><div class="stamp" aria-hidden="true">Sunset</div>
 <div class="wrap"><div class="ph land rv"><img src="{r}img/{img('42-sunset.jpg')}" alt="Sunset from the 42-foot catamaran off Tamarindo" loading="lazy"><div class="cap">Sunset catamaran: sail, snorkel, paddleboard, open bar. $125 per adult, kids $74.</div></div>
 <div class="ch-copy"><div class="t">Sunset sail</div>
-<h2>The half of the family that didn't fish gets their day too.</h2>
-<p>Sixteen adventures we've done ourselves: the sunset catamaran, ATVs through the back roads, the estuary crocodiles, Rio Celeste, a spa afternoon. Most pick up from your hotel in Tamarindo or Flamingo. We book them all in one email.</p>
-<p><a class="link" href="{r}adventures/">All sixteen adventures</a></p></div></div></section>
+<h2>Those who didn't get to fish get their day too.</h2>
+<p>A variety of adventures we've done ourselves: the sunset catamaran, ATVs through the back roads, the estuary crocodiles, Rio Celeste, a spa afternoon, to name a few. Most pick up from your hotel in Tamarindo or Flamingo. We book them all in one email.</p>
+<p><a class="link" href="{r}adventures/">All adventures</a></p></div></div></section>
 
 <!-- your day -->
 <section class="chapter" id="plan" style="min-height:auto;padding:clamp(80px,12vh,140px) 0"><div class="wrap plan">
-<div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve and Liisa answer within hours.</h2>
-<p>No obligation to ask. Steve &amp; Liisa confirm availability within hours and send you the plan for your trip, one boat or a whole week.</p>
+<div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve, Liisa and the crew answer as soon as they can.</h2>
+<p>No obligation to ask. Steve, Liisa and the crew confirm availability as soon as possible and send you the plan for your trip, one charter or a whole week.</p>
 <p class="small muted">Prefer to talk? Toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a>, call or text <a href="tel:{PHONE_CR_TEL}">{PHONE_CR}</a> on WhatsApp, or <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div>
 <form id="qb"><div class="fld"><label for="qb-base">Where are you staying?</label><select id="qb-base" name="base"><option value="">Tamarindo or Flamingo, not sure yet</option><option>Tamarindo</option><option>Flamingo</option></select></div>
 <div class="row"><div class="fld"><label for="qb-date">Date</label><input id="qb-date" type="date" name="date"></div><div class="fld"><label for="qb-pax">Guests</label><select id="qb-pax" name="pax">{''.join(f'<option value="{i}"{" selected" if i==4 else ""}>{i}</option>' for i in range(1,13))}<option value="13">13 or more</option></select></div></div>
@@ -109,7 +109,7 @@ def home(ctx):
 <section class="tight"><div class="wrap split">
 <div class="ph wide rv"><img src="{r}img/{img('04.jpg')}" alt="Steve and Liisa Quinn" loading="lazy" style="object-position:50% 30%"><div class="cap">Steve &amp; Liisa Quinn, Go Fish Costa Rica. Tamarindo since 2010.</div></div>
 <div class="ch-copy"><div class="t">Who answers the email</div><h2>We're not a call center. We're the two people you'll wave to on the beach.</h2>
-<p>We came down from Canada in 2004, stayed for good in 2010, and ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
+<p>We came down from Canada in 2004, stayed for good in 2010, and raised our kids here. This is our community, and we ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
 <p><a class="link" href="{r}discover/about-us.html">Our story</a> &nbsp;&nbsp; <a class="link" href="{r}discover/our-pledge-to-you.html">Our pledge</a></p></div></div></section>
 
 <section class="awards dark"><div class="wrap">
@@ -143,4 +143,4 @@ def home(ctx):
 <div class="rw-grid">{''.join(f'<figure class="rw"><div class="stars">★★★★★</div><blockquote>{E(x["q"])}</blockquote><figcaption><b>{E(x["n"])}</b><span>{E(", ".join(v for v in (x["w"], x["s"] + (" · " + x["d"] if x["d"] else "")) if v))}</span></figcaption></figure>' for x in REVIEWS_ALL)}</div>
 <p class="small muted" style="margin-top:28px">Excerpts from public reviews. <a href="{SOCIAL['ta']}" target="_blank" rel="noopener">Read all 590 on TripAdvisor</a> · <a href="{SOCIAL['ig']}" target="_blank" rel="noopener">@gofishcostarica</a></p>
 </div></section>'''
-    return page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Tamarindo's number one sport fishing operation. Seventeen vetted boats in Tamarindo and Flamingo, sixteen adventures, booked by Steve and Liisa, who live here. See what a day on the water looks like, hour by hour.", body, extra_head=ctx['fleet_js']())
+    return page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Tamarindo's number one sport fishing operation. Vetted boats in Tamarindo and Flamingo, adventures on the Gold Coast, booked by Steve and Liisa, who live here. See what a day on the water looks like, hour by hour.", body, extra_head=ctx['fleet_js']())
