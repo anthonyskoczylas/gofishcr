@@ -425,14 +425,14 @@
     var wrap = form.parentNode, isMsg = req.data.kind === 'message';
     var div = document.createElement('div'); div.className = 'sent';
     div.innerHTML = '<div class="ok">&#10003;</div><h3>' + (isMsg ? 'Message sent.' : 'Request sent.') + '</h3>'
-      + '<p class="muted" style="margin:8px 0 0">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve, Liisa and the crew reply as soon as possible' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>';
+      + '<p class="muted" style="margin:8px 0 0">A confirmation is on its way to <b>' + req.data.email.replace(/</g, '&lt;') + '</b>. Steve, Liisa and Tyler reply as soon as possible' + (isMsg ? '.' : ' with the plan for your trip.') + '</p>';
     form.style.display = 'none'; wrap.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   function showFallback(form, req, title, failed) {
     var wrap = form.parentNode;
     var div = document.createElement('div'); div.className = 'sent';
-    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">' + (failed ? 'Our sender is busy, so send it from your email app instead. ' : 'Send it by email and ') + 'Steve, Liisa and the crew reply as soon as possible.</p>'
+    div.innerHTML = '<div class="ok">&#10003;</div><h3>' + title + '</h3><p class="muted" style="margin:8px 0 18px">' + (failed ? 'Our sender is busy, so send it from your email app instead. ' : 'Send it by email and ') + 'Steve, Liisa and Tyler reply as soon as possible.</p>'
       + '<a class="btn btn-primary btn-block" href="' + req.mailto + '">Send by email</a>'
       + (req.wa ? '<a class="btn btn-ghost btn-block" style="margin-top:8px" target="_blank" rel="noopener" href="' + req.wa + '">Send on WhatsApp</a>' : '')
       + '<div class="alt"><button type="button" class="btn btn-ghost btn-sm" data-copy>Copy details</button><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phone.replace(/[^0-9+]/g, '') + '">Call ' + CONFIG.phone + '</a><a class="btn btn-ghost btn-sm" href="tel:' + CONFIG.phoneCR.replace(/[^0-9+]/g, '') + '">' + CONFIG.phoneCR + '</a></div>'

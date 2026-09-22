@@ -96,8 +96,8 @@ def home(ctx):
 
 <!-- your day -->
 <section class="chapter" id="plan" style="min-height:auto;padding:clamp(80px,12vh,140px) 0"><div class="wrap plan">
-<div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve, Liisa and the crew answer as soon as they can.</h2>
-<p>No obligation to ask. Steve, Liisa and the crew confirm availability as soon as possible and send you the plan for your trip, one charter or a whole week.</p>
+<div class="ch-copy"><div class="t">Your day</div><h2>Tell us your dates. Steve, Liisa and Tyler answer as soon as they can.</h2>
+<p>No obligation to ask. Steve, Liisa and Tyler confirm availability as soon as possible and send you the plan for your trip, one charter or a whole week.</p>
 <p class="small muted">Prefer to talk? Toll-free <a href="tel:{PHONE_TEL}">{PHONE}</a>, call or text <a href="tel:{PHONE_CR_TEL}">{PHONE_CR}</a> on WhatsApp, or <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div>
 <form id="qb"><div class="fld"><label for="qb-base">Where are you staying?</label><select id="qb-base" name="base"><option value="">Tamarindo or Flamingo, not sure yet</option><option>Tamarindo</option><option>Flamingo</option></select></div>
 <div class="row"><div class="fld"><label for="qb-date">Date</label><input id="qb-date" type="date" name="date"></div><div class="fld"><label for="qb-pax">Guests</label><select id="qb-pax" name="pax">{''.join(f'<option value="{i}"{" selected" if i==4 else ""}>{i}</option>' for i in range(1,13))}<option value="13">13 or more</option></select></div></div>
@@ -108,8 +108,8 @@ def home(ctx):
 
 <section class="tight"><div class="wrap split">
 <div class="ph wide rv"><img src="{r}img/{img('04.jpg')}" alt="Steve and Liisa Quinn" loading="lazy" style="object-position:50% 30%"><div class="cap">Steve &amp; Liisa Quinn, Go Fish Costa Rica. Tamarindo since 2010.</div></div>
-<div class="ch-copy"><div class="t">Who answers the email</div><h2>We're not a call center. We're the two people you'll wave to on the beach.</h2>
-<p>We came down from Canada in 2004 and stayed for good in 2010. This town is our community, and we ended up doing the thing we love most: putting people on fish. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
+<div class="ch-copy"><div class="t">Who answers the email</div><h2>We're not a call center. We're the people you'll wave to on the beach.</h2>
+<p>We came down from Canada in 2004 and stayed for good in 2010. This town is our community, and we ended up doing the thing we love most: putting people on fish. Write to us and Tyler answers, every time, and he knows every boat and every captain on this list. Even if you don't book through us, call. We would rather you have a good trip than a bad one with someone else.</p>
 <p><a class="link" href="{r}discover/about-us.html">Our story</a> &nbsp;&nbsp; <a class="link" href="{r}discover/our-pledge-to-you.html">Our pledge</a></p></div></div></section>
 
 <section class="awards dark"><div class="wrap">
