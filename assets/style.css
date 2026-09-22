@@ -407,6 +407,13 @@ body>footer .bottom a{color:rgba(243,247,249,.75)}
 .summary .tot b{font-family:var(--display);font-weight:700;font-variation-settings:'wdth' 120;font-size:28px}
 .sent{text-align:center;padding:30px 10px}
 .sent .ok{width:64px;height:64px;border-radius:50%;background:var(--sea);color:#fff;display:grid;place-items:center;font-size:30px;margin:0 auto 18px}
+/* payment note on the sent screen: quiet, left-aligned, reads like a card not a wall */
+.paybox{margin:22px auto 0;max-width:46ch;text-align:left;background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--sun);border-radius:12px;padding:16px 18px}
+.paybox .pb-t{font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+.paybox p{margin:0 0 9px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.paybox p:last-child{margin-bottom:0}
+.paybox b{color:var(--ink)}
+.paybox .pb-n{font-size:13px;padding-top:8px;border-top:1px solid var(--line)}
 .copybox{margin-top:16px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:14px;white-space:pre-wrap;text-align:left;max-height:220px;overflow:auto}
 
 /* season calendar */
