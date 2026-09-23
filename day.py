@@ -51,7 +51,7 @@ def home(ctx):
 <section class="chapter photo on-photo" id="launch"><div class="stamp" aria-hidden="true">Launch</div>
 <div class="media"><video autoplay muted loop playsinline poster="{r}img/launch-poster.jpg" data-src="{r}video/launch.mp4"></video><img class="poster" src="{r}img/launch-poster.jpg" alt=""><div class="scrim"></div></div>
 <div class="wrap"><div class="ch-copy" style="max-width:56ch;padding:clamp(140px,22vh,220px) 0 clamp(60px,10vh,100px)"><div class="t">Lines off</div>
-<h2>From the sand, or from the dock.</h2>
+<h2>From the beach, or from the dock.</h2>
 <p>In Tamarindo the boats launch straight from the sand: a panga runs you out to your boat and you're fishing while the town is still waking up. In Flamingo you board at the marina dock, or a panga carries you out from the beach, depending on the boat. Either way the crew has already loaded ice, bait and the lunch.</p>
 <p><a class="link" href="{r}charters/?base=Tamarindo">Tamarindo boats</a> &nbsp;&nbsp; <a class="link" href="{r}charters/?base=Flamingo">Flamingo boats</a></p></div></div></section>
 
