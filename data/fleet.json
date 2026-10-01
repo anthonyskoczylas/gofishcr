@@ -115,6 +115,36 @@
     ]
   },
   {
+    "slug": "30-custom-center-console",
+    "name": "30' Custom Center Console",
+    "locations": [
+      "Flamingo"
+    ],
+    "top": false,
+    "top_label": "",
+    "washroom": false,
+    "priced_for": 4,
+    "max_pax": 5,
+    "features": [
+      "Single 150hp Mercury outboard",
+      "Navigational instruments",
+      "GPS",
+      "Fishfinder",
+      "Radio"
+    ],
+    "half": 800,
+    "three_quarter": 1000,
+    "full": 1200,
+    "quote": false,
+    "images": [
+      "30-custom-cc-1.jpg",
+      "30-custom-cc-2.jpg",
+      "30-custom-cc-3.jpg",
+      "30-custom-cc-4.jpg",
+      "30-custom-cc-5.jpg"
+    ]
+  },
+  {
     "slug": "31-bertram-twin",
     "name": "31' Bertram Classic",
     "locations": [
@@ -411,7 +441,7 @@
     "top_label": "Top offshore boat",
     "washroom": true,
     "priced_for": 8,
-    "max_pax": 9,
+    "max_pax": 10,
     "features": [
       "A/C",
       "Radio",

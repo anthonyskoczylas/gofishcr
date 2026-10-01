@@ -172,6 +172,23 @@
     return out;
   }
 
+  // ---- NEVER MORE GUESTS THAN THE BOAT TAKES --------------------------------
+  // pax_fields() puts data-max on the adults select when the form is for one boat.
+  // Adults + kids can't pass it: options that would go over are disabled.
+  function capPax(form) {
+    var a = form.querySelector('select[name=adults][data-max]'), k = form.querySelector('select[name=kids]');
+    if (!a || !k) return;
+    var max = +a.getAttribute('data-max');
+    if (+a.value + +k.value > max) k.value = String(Math.max(0, max - +a.value));
+    $$('option', a).forEach(function (o) { o.disabled = +o.value + +k.value > max; });
+    $$('option', k).forEach(function (o) { o.disabled = +o.value + +a.value > max; });
+  }
+  $$('select[name=adults][data-max]').forEach(function (a) {
+    var form = a.form; if (!form) return;
+    form.addEventListener('change', function (e) { if (e.target.name === 'adults' || e.target.name === 'kids') capPax(form); });
+    capPax(form);
+  });
+
   // ---- ONLY ASK ABOUT KIDS' AGES WHEN THERE ARE KIDS -----------------------
   var NOTES_PLAIN = 'Anything else we should know?', NOTES_KIDS = 'Ages of the kids, anything else?';
   function paintNotesLabel(scope) {
@@ -313,7 +330,7 @@
         if (wash === 'yes' && !b.washroom) ok = false;
         c.style.display = ok ? '' : 'none'; if (ok) { shown++; list.push(c); }
       });
-      var key = { price: function (b) { return b.half || 99999; }, 'price-desc': function (b) { return -(b.half || 99999); }, size: function (b) { return b.length; }, 'size-desc': function (b) { return -b.length; } }[sort];
+      var key = { price: function (b) { return b.half || 99999; }, 'price-desc': function (b) { return -(b.half || 99999); }, size: function (b) { return b.length; }, 'size-desc': function (b) { return -b.length; } }[sort] || function (b) { return (b.quote ? 1000 : 0) + b.length; };
       if (key) { var grid = cards[0].parentNode; list.sort(function (x, y) { return key(window.FLEET[x.getAttribute('data-boat')]) - key(window.FLEET[y.getAttribute('data-boat')]); }).forEach(function (c) { grid.appendChild(c); }); }
       $('#fleet-count').textContent = shown ? shown + ' boat' + (shown > 1 ? 's' : '') + ' match' : 'No exact match';
       $('#fleet-empty').style.display = shown ? 'none' : '';
@@ -584,10 +601,10 @@
         if (state.base && b.locations.indexOf(state.base) < 0) return false;
         if (!cat && b.max_pax < totalPax()) return false;
         return true;
-      }).sort(function (a, b) { return (a.half || 0) - (b.half || 0); });
+      }).sort(function (a, b) { return a.length - b.length || (a.half || 0) - (b.half || 0); });
       if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + totalPax() + ' guests in ' + state.base + '. With a group this size two boats is usually the better day anyway: more room to work and more lines in the water. Email us and we will pair the right two.</div>'; }
       list.forEach(function (b) {
-        box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · up to ' + (b.max_pax || 'group') + (b.max_pax ? ' guests' : '') + (b.washroom ? ' · washroom' : '') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
+        box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · ' + (b.max_pax ? 'priced up to ' + b.priced_for + ' guests (max ' + b.max_pax + ')' : 'group sails') + (b.washroom ? ' · washroom' : '') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
       });
       $$('input[name=boat]', box).forEach(function (i) { i.addEventListener('change', function () { state.boat = i.value; state.adv = ''; $$('.pick', box).forEach(function (p) { p.classList.toggle('on', $('input', p).checked); }); }); });
       $('#dur-row').style.display = cat ? 'none' : ''; setFishRow(!cat);

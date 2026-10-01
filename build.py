@@ -26,6 +26,7 @@ SOCIAL = dict(ig='https://www.instagram.com/gofishcostarica', fb='https://www.fa
 
 # ---------------------------------------------------------------- helpers
 def boat_len(b): return int(re.match(r"(\d+)", b['name']).group(1))
+def pax_text(b): return f"Priced up to {b['priced_for']} guests (max {b['max_pax']})" if b['max_pax'] else 'Group sails'
 def adv_from(a):
     """lowest headline price: the rate matrix when there is one, otherwise the copy"""
     if a.get('rates'):
@@ -64,7 +65,8 @@ def pax_fields(pre, max_pax=None, adults=2):
     cap = max_pax or 20
     a = ''.join(f'<option value="{i}"{" selected" if i == min(adults, cap) else ""}>{i}</option>' for i in range(1, cap + 1))
     k = ''.join(f'<option value="{i}"{" selected" if i == 0 else ""}>{i}</option>' for i in range(0, cap + 1))
-    return (f'<div class="fld"><label for="{pre}-adults">Adults</label><select id="{pre}-adults" name="adults">{a}</select></div>'
+    mx = f' data-max="{max_pax}"' if max_pax else ''
+    return (f'<div class="fld"><label for="{pre}-adults">Adults</label><select id="{pre}-adults" name="adults"{mx}>{a}</select></div>'
             f'<div class="fld"><label for="{pre}-kids">Kids</label><select id="{pre}-kids" name="kids">{k}</select></div>')
 
 def style_field(pre):
@@ -205,7 +207,7 @@ def page_hero(root, title, lead, bg, crumbs=None, pos=None):
 def boat_card(b, root):
     base = ' · '.join(b['locations'])
     rates = f'<div class="rates"><span>½ day<b>{"$%s" % f"{b["half"]:,}" if b["half"] else "Quote"}</b></span><span>¾ day<b>{"$%s" % f"{b["three_quarter"]:,}" if b["three_quarter"] else "Quote"}</b></span><span>Full<b>{"$%s" % f"{b["full"]:,}" if b["full"] else "Quote"}</b></span></div>'
-    pax = f'up to {b["max_pax"]} guests' if b['max_pax'] else 'group sails'
+    pax = pax_text(b)
     return f'''<a class="card fleet-card" data-boat="{b['slug']}" href="{root}charters/{b['slug']}.html">{f'<span class="tag">{b["top_label"]}</span>' if b['top'] else ''}<span class="tag base">{base}</span>
 <div class="ph"><img src="{root}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
 <div class="body"><h3>{E(b['name'])}</h3><div class="meta"><span>{pax}</span><span>{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>{rates}
@@ -234,9 +236,9 @@ NOT_INCL = ['Fishing licenses','Crew tips (15–20% is customary)']
 # ---------------------------------------------------------------- HOME
 def home():
     r = ''
-    top = sorted([b for b in FLEET if b['top'] and not b['quote']], key=lambda b: -boat_len(b))
+    top = sorted([b for b in FLEET if b['top'] and not b['quote']], key=boat_len)
     featured = [b for b in top if b['slug'] in ('43-riviera-team-edition','38-riviera','35-cabo','31-chris-craft','28-whitewater-center-console','21-custom-center-console')]
-    featured.sort(key=lambda b: -boat_len(b))
+    featured.sort(key=boat_len)
     adv_home = [a for a in ADV if a['slug'] in ('sunset-catamaran','atv-tour','zipline-tour','estuary-tour','rio-celeste-hike','surf-lessons','volcano-hike-mud-baths','horseback-riding')]
     gallery = ['45a2ab32-230b-4e6c-9b1c-4e3f0f723691.jpg','img_1784.jpg','c9ff17da-90f2-4181-ac65-593e65008895.jpg','liisa.jpg','img_1769.jpg','a4889ef6-9481-4836-b203-2d3d01ffd918.jpg','15.jpg','img_1762.jpg','img_2016.jpg','04.jpg']
     body = f'''
@@ -245,9 +247,9 @@ def home():
 <div class="tint"></div><div class="vign"></div><div class="grain"></div></div>
 <div class="wrap"><div class="eyebrow">Tamarindo &amp; Flamingo · Guanacaste, Costa Rica</div>
 <h1>The right boat.<br>The right crew.<br><em>The right day.</em></h1>
-<p class="lead">Costa Rica's number one sport fishing operation. Seventeen vetted boats, captains we know by name, and every adventure on the Gold Coast, planned by two people who actually live here.</p>
+<p class="lead">Costa Rica's number one sport fishing operation. Eighteen vetted boats, captains we know by name, and every adventure on the Gold Coast, planned by two people who actually live here.</p>
 <div class="hero-actions"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div>
-<div class="hero-stats"><div><b>5★</b><span>TripAdvisor, 2018–2025</span></div><div><b>1,000+</b><span>anglers a year</span></div><div><b>17</b><span>boats, 21' to 65'</span></div><div><b>IGFA</b><span>record waters</span></div></div>
+<div class="hero-stats"><div><b>5★</b><span>TripAdvisor, 2018–2025</span></div><div><b>1,000+</b><span>anglers a year</span></div><div><b>18</b><span>boats, 21' to 65'</span></div><div><b>IGFA</b><span>record waters</span></div></div>
 </div><div class="scroll-hint">Scroll</div></header>
 
 <div class="wrap qb"><form id="qb">
@@ -263,7 +265,7 @@ def home():
 <div class="t rv"><i>↺</i><div><b>Billfish released</b><span>Catch and release on all marlin and sailfish, creel limits on table fish</span></div></div>
 </div></div></section>
 
-<section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">The fleet</div><h2>Seventeen boats. <em>One honest recommendation.</em></h2></div><a class="btn btn-ghost" href="{r}charters/">All boats &amp; rates</a></div>
+<section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">The fleet</div><h2>Eighteen boats. <em>One honest recommendation.</em></h2></div><a class="btn btn-ghost" href="{r}charters/">All boats &amp; rates</a></div>
 <div class="grid g3">{''.join(boat_card(b, r) for b in featured)}</div></div></section>
 
 <section class="dark"><div class="wrap"><div class="sec-head rv"><div class="kicker">How it works</div><h2>Booking a charter should feel like <em>calling a friend who lives here.</em></h2></div>
@@ -294,12 +296,12 @@ def home():
 
 <section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><div class="kicker">Ready when you are</div><h2>Let's plan the fishing trip of a lifetime.</h2><p>Tell us your dates and we'll put together a charter built around what you want to catch.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Start planning</a><a class="btn btn-ghost" href="mailto:{EMAIL}">Email Steve &amp; Liisa</a></div></div></section>
 '''
-    write('index.html', page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Costa Rica's #1 sport fishing operation. 17 vetted boats in Tamarindo and Flamingo, plus ATV, zipline, catamaran and volcano adventures. Booked by Steve & Liisa, who live here.", body, extra_head=fleet_js()))
+    write('index.html', page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Costa Rica's #1 sport fishing operation. 18 vetted boats in Tamarindo and Flamingo, plus ATV, zipline, catamaran and volcano adventures. Booked by Steve & Liisa, who live here.", body, extra_head=fleet_js()))
 
 # ---------------------------------------------------------------- CHARTERS
 def charters():
     r = '../'
-    cards = ''.join(boat_card(b, r) for b in sorted(FLEET, key=lambda b: (b['quote'], b['half'] or 0)))
+    cards = ''.join(boat_card(b, r) for b in sorted(FLEET, key=lambda b: (b['quote'], boat_len(b), b['half'] or 0)))
     body = page_hero(r, 'Fishing charters in Tamarindo &amp; Flamingo', 'From 21-foot center consoles to 43-foot sport fishers and private catamarans. Rates are per boat, all gear and drinks included. Pick a location, tell us your group, and we will tell you which boat is right.', 'offshore-aerial.jpg', [('Home', r+'index.html'), ('Charters', None)]) + f'''
 <section style="padding-top:0;position:relative;z-index:2"><div class="wrap">
 <form id="fleet-filters" class="filters">
@@ -307,14 +309,14 @@ def charters():
 <div class="f"><label>Guests</label><select name="pax"><option value="">Any</option>{''.join(f'<option value="{i}">{i}</option>' for i in range(1,10))}</select></div>
 <div class="f"><label>Budget</label><select name="budget"><option value="">Any</option><option value="800">Under $800</option><option value="1100">Under $1,100</option><option value="1500">Under $1,500</option><option value="2200">Under $2,200</option></select></div>
 <div class="f"><label>Washroom</label><select name="wash"><option value="">Either</option><option value="yes">Yes please</option></select></div>
-<div class="f"><label>Sort</label><select name="sort"><option value="">Recommended</option><option value="price">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="size">Size: small to big</option><option value="size-desc">Size: big to small</option></select></div>
+<div class="f"><label>Sort</label><select name="sort"><option value="">Size: small to big</option><option value="price">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="size-desc">Size: big to small</option></select></div>
 <button type="button" class="reset">Reset</button></form>
 <div class="count"><span id="fleet-count"></span> <span id="fleet-date"></span></div>
 <div class="grid g3">{cards}</div>
 <div id="fleet-empty" class="empty" style="display:none;margin-top:20px">No single boat fits every filter. Loosen one, or <a href="mailto:{EMAIL}">email us</a>. With ten or more anglers two boats running together is usually the better day.</div>
 <div class="incl" style="margin-top:50px"><div><h4>Included on every charter</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul><p class="small muted" style="margin-top:12px">Boats stay inshore on half days. To target billfish, book a 3/4 or full day offshore.</p></div></div>
 </div></section>'''
-    write('charters/index.html', page(r, 'Fishing Charters — Tamarindo & Flamingo | Go Fish Costa Rica', 'Compare 17 fishing boats in Tamarindo and Flamingo with real rates: half, 3/4 and full day. Center consoles, Bertrams, Rivieras, Cabos and private catamarans.', body, extra_head=fleet_js()))
+    write('charters/index.html', page(r, 'Fishing Charters — Tamarindo & Flamingo | Go Fish Costa Rica', 'Compare 18 fishing boats in Tamarindo and Flamingo with real rates: half, 3/4 and full day. Center consoles, Bertrams, Rivieras, Cabos and private catamarans.', body, extra_head=fleet_js()))
     for b in FLEET: boat_page(b)
 
 def gallery_html(root, images, group, alt):
@@ -347,7 +349,7 @@ def boat_page(b):
 <h1>{E(b['name'])}</h1><p>{intro}</p></div></header>
 <section><div class="wrap detail">
 <div class="main">{gallery_html(r, b['images'], 'boat', b['name'])}
-<div class="specs"><div><span>Length</span><b>{boat_len(b)} ft</b></div><div><span>Guests</span><b>{('up to %d' % b['max_pax']) if b['max_pax'] else 'Group'}</b></div><div><span>Location</span><b style="font-size:18px">{base}</b></div></div>
+<div class="specs"><div><span>Length</span><b>{boat_len(b)} ft</b></div><div><span>Guests</span><b style="font-size:18px">{('Priced up to %d (max %d)' % (b['priced_for'], b['max_pax'])) if b['max_pax'] else 'Group'}</b></div><div><span>Location</span><b style="font-size:18px">{base}</b></div></div>
 <h2 style="font-size:26px">What this boat offers</h2><div class="chips" style="margin:14px 0 8px">{''.join(f'<span class="chip">{E(f)}</span>' for f in b['features'])}<span class="chip">{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>
 {rates}
 <div class="incl"><div><h4>Included</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul></div></div>
@@ -374,7 +376,7 @@ def boat_page(b):
 </form></aside>
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>
-<div class="grid g3">{''.join(boat_card(x, r) for x in sorted([x for x in FLEET if x['slug']!=b['slug'] and set(x['locations'])&set(b['locations']) and x['quote']==b['quote']], key=lambda x: abs((x['half'] or 0)-(b['half'] or 0)))[:3])}</div></div></section>'''
+<div class="grid g3">{''.join(boat_card(x, r) for x in sorted(sorted([x for x in FLEET if x['slug']!=b['slug'] and set(x['locations'])&set(b['locations']) and x['quote']==b['quote']], key=lambda x: abs((x['half'] or 0)-(b['half'] or 0)))[:3], key=boat_len))}</div></div></section>'''
     boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(slug=b['slug'], image=img(b['images'][0]), name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], priced_for=b['priced_for'], max_pax=b['max_pax'], quote=b['quote']))
     bar = f'<div class="bookbar"><div><b>{("$%s" % f"{b["half"]:,}") if b["half"] else "Quote"}</b><small>{"half day · per boat" if b["half"] else "private sail"}</small></div><a class="btn btn-primary btn-sm" href="#boat-book">Request this boat</a></div>'
     ld = {"@context": "https://schema.org", "@graph": [
@@ -617,7 +619,7 @@ def blog():
 <section><div class="wrap-n prose">{content}
 <hr style="border:0;border-top:1px solid var(--line);margin:40px 0">
 <p class="small muted">Next up: <a href="{r}blog/{nxt['slug']}.html">{E(nxt['title'])}</a> · <a href="{r}blog/">All posts</a></p></div></section>
-<section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><h2>Ready to fish Guanacaste?</h2><p>Seventeen boats, two locations, one honest recommendation.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></section>'''
+<section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><h2>Ready to fish Guanacaste?</h2><p>Eighteen boats, two locations, one honest recommendation.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></section>'''
         write(f"blog/{p['slug']}.html", page(r, f"{p['title']} | Go Fish Costa Rica", (p['desc'] or (p['paras'][0] if p['paras'] else p['title']))[:155], body))
 
 # ---------------------------------------------------------------- TRIP PLANNER
@@ -628,7 +630,7 @@ def planner():
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
 <div class="opts">
-<label class="opt"><input type="radio" name="type" value="fishing"><span class="ic">◐</span><b>Fishing charter</b><small>Half, 3/4 or full day on one of 14 sport fishing boats. Inshore roosters to offshore marlin.</small></label>
+<label class="opt"><input type="radio" name="type" value="fishing"><span class="ic">◐</span><b>Fishing charter</b><small>Half, 3/4 or full day on one of 15 sport fishing boats. Inshore roosters to offshore marlin.</small></label>
 <label class="opt"><input type="radio" name="type" value="catamaran"><span class="ic">◭</span><b>Private catamaran</b><small>Your own 40', 42' or 65' cat for a morning or sunset sail. Snorkel gear, bar, lunch.</small></label>
 <label class="opt"><input type="radio" name="type" value="adventure"><span class="ic">▲</span><b>Adventures</b><small>ATV, zipline, volcano, Rio Celeste, estuary, surf lesson, spa and more.</small></label></div>
 <h2 style="font-size:24px;margin-top:30px">Which location is closer to you?</h2><p class="lead">Boats launch from the beach at both. Tours pick up from either.</p>
