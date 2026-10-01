@@ -210,7 +210,7 @@ def boat_card(b, root):
     pax = pax_text(b)
     return f'''<a class="card fleet-card" data-boat="{b['slug']}" href="{root}charters/{b['slug']}.html">{f'<span class="tag">{b["top_label"]}</span>' if b['top'] else ''}<span class="tag base">{base}</span>
 <div class="ph"><img src="{root}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
-<div class="body"><h3>{E(b['name'])}</h3><div class="meta"><span>{pax}</span><span>{'Washroom onboard' if b['washroom'] else 'No washroom'}</span></div>{rates}
+<div class="body"><h3>{E(b['name'])}</h3><div class="meta"><span>{pax}</span></div>{rates}
 <div class="price">{'<b>$%s</b><small> half day · per boat</small>' % f"{b['half']:,}" if b['half'] else '<b>Quote</b><small> private sail</small>'}<span class="go">View boat →</span></div></div></a>'''
 
 def adv_card(b, root, imgonly=False):

@@ -21,7 +21,7 @@ def home(ctx):
     rail_boats.sort(key=boat_len)
     def boat(b):
         return f'''<a class="boat" href="{r}charters/{b['slug']}.html"><div class="ph">{f'<span class="tb">{b["top_label"]}</span>' if b['top'] else ''}<span class="base">{' · '.join(b['locations'])}</span><img src="{r}img/{img(b['images'][0])}" alt="{E(b['name'])}" loading="lazy"></div>
-<div class="b"><h3>{E(b['name'])}</h3><div class="m">Priced up to {b['priced_for']} guests (max {b['max_pax']}) · {'washroom on board' if b['washroom'] else 'no washroom'}</div>
+<div class="b"><h3>{E(b['name'])}</h3><div class="m">Priced up to {b['priced_for']} guests (max {b['max_pax']})</div>
 <div class="p"><div><b>${b['half']:,}</b><small>half day, per boat</small></div><span>Details</span></div></div></a>'''
     chapters_js = json.dumps([dict(id=i, clock=c, sky=s, photo=p) for i, c, s, p in CHAPTERS])
     rail = ''.join(f'<a href="#{i}" data-ch="{i}">{c}<span></span></a>' for i, c, s, p in CHAPTERS[:-1])
