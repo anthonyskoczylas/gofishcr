@@ -122,7 +122,7 @@
     ],
     "top": false,
     "top_label": "",
-    "washroom": false,
+    "washroom": true,
     "priced_for": 4,
     "max_pax": 5,
     "features": [
