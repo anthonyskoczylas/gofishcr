@@ -467,11 +467,16 @@
     showSent(cf, req, 'Your message is ready to send.');
   });
 
+  // ---- SPAM SIGNALS --------------------------------------------------------
+  // Real people take a few seconds and touch the page; form bots fill and submit instantly.
+  var T0 = Date.now(), touched = false;
+  ['keydown', 'pointerdown', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.isTrusted) touched = true; }, { passive: true, capture: true }); });
+
   function showSent(form, req, title) {
     if (!CONFIG.endpoint || !req.data || !window.fetch) return showFallback(form, req, title);
     var btn = form.querySelector('button[type=submit]'), label = btn ? btn.textContent : '';
     if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
-    var payload = Object.assign({ page: location.href, website: (form.elements.website && form.elements.website.value) || '' }, req.data);
+    var payload = Object.assign({ page: location.href, website: (form.elements.website && form.elements.website.value) || '', secs: Math.round((Date.now() - T0) / 1000), human: touched }, req.data);
     var ctrl = window.AbortController ? new AbortController() : null, timer = ctrl && setTimeout(function () { ctrl.abort(); }, 12000);
     fetch(CONFIG.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl ? ctrl.signal : undefined })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
