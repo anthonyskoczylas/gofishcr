@@ -175,14 +175,31 @@
   // ---- NEVER MORE GUESTS THAN THE BOAT TAKES --------------------------------
   // pax_fields() puts data-max on the adults select when the form is for one boat.
   // Adults + kids can't pass it: options that would go over are disabled.
-  function capPax(form) {
-    var a = form.querySelector('select[name=adults][data-max]'), k = form.querySelector('select[name=kids]');
-    if (!a || !k) return;
-    var max = +a.getAttribute('data-max');
-    if (+a.value + +k.value > max) k.value = String(Math.max(0, max - +a.value));
-    $$('option', a).forEach(function (o) { o.disabled = +o.value + +k.value > max; });
-    $$('option', k).forEach(function (o) { o.disabled = +o.value + +a.value > max; });
+  // limitPax works on any adults/kids pair; max = 0 means no limit. Returns true if it had to lower the count.
+  function limitPax(a, k, max) {
+    if (!a || !k) return false;
+    var cut = false;
+    if (max && +a.value + +k.value > max) {
+      cut = true;
+      k.value = String(Math.max(0, max - +a.value));
+      if (+a.value > max) a.value = String(max);
+    }
+    $$('option', a).forEach(function (o) { o.disabled = !!max && +o.value + +k.value > max; });
+    $$('option', k).forEach(function (o) { o.disabled = !!max && +o.value + +a.value > max; });
+    return cut;
   }
+  function capPax(form) {
+    var a = form.querySelector('select[name=adults][data-max]');
+    if (a) limitPax(a, form.querySelector('select[name=kids]'), +a.getAttribute('data-max'));
+  }
+  // the smallest boat in a list of trip items decides how many people can come (catamarans have no max)
+  function boatMax(slug) { var b = window.FLEET && window.FLEET[slug]; return b && !b.quote && b.max_pax ? b : null; }
+  function smallestBoat(items) {
+    var low = null;
+    (items || []).forEach(function (i) { var b = i.kind === 'boat' && boatMax(i.slug); if (b && (!low || b.max_pax < low.max_pax)) low = b; });
+    return low;
+  }
+  function tooManyMsg(b) { return 'The ' + b.name + ' takes a maximum of ' + b.max_pax + ' guests.'; }
   $$('select[name=adults][data-max]').forEach(function (a) {
     var form = a.form; if (!form) return;
     form.addEventListener('change', function (e) { if (e.target.name === 'adults' || e.target.name === 'kids') capPax(form); });
@@ -539,6 +556,7 @@
       step = Math.max(0, Math.min(panes.length - 1, n));
       panes.forEach(function (p, i) { p.classList.toggle('on', i === step); });
       prog.forEach(function (p, i) { p.classList.toggle('on', i === step); p.classList.toggle('done', i < step); });
+      if (step === 1 && adultsI && kidsI) capWizPax();
       if (step === 2) renderPicks(); if (step === 3) renderSummary();
       if (!noScroll) wz.scrollIntoView({ behavior: 'smooth', block: 'start' }); save();
     }
@@ -555,12 +573,22 @@
     if (state.arrive) arriveI.value = state.arrive;
     if (state.depart) departI.value = state.depart;
     if (adultsI) adultsI.value = state.adults; if (kidsI) kidsI.value = state.kids;
+    function wizSmallest() {
+      var items = tripLoad().items.slice();
+      if (state.type !== 'adventure' && state.boat) items.push({ kind: 'boat', slug: state.boat });
+      return smallestBoat(items);
+    }
+    function capWizPax() {
+      var b = wizSmallest();
+      if (limitPax(adultsI, kidsI, b ? b.max_pax : 0) && b) toast(tooManyMsg(b));
+      state.adults = +adultsI.value; state.kids = +kidsI.value;
+    }
     function syncTripDates() { var t = tripLoad(); t.arrive = state.arrive; t.depart = state.depart; t.adults = state.adults; t.kids = state.kids; tripSave(t); }
     arriveI.addEventListener('change', function () { state.arrive = arriveI.value; departI.min = arriveI.value; if (departI.value && departI.value < arriveI.value) { departI.value = arriveI.value; state.depart = arriveI.value; } syncTripDates(); save(); });
     departI.addEventListener('change', function () { state.depart = departI.value; syncTripDates(); save(); });
     if (state.arrive) departI.min = state.arrive;
-    if (adultsI) adultsI.addEventListener('change', function () { state.adults = +adultsI.value; syncTripDates(); save(); });
-    if (kidsI) kidsI.addEventListener('change', function () { state.kids = +kidsI.value; syncTripDates(); save(); });
+    if (adultsI) adultsI.addEventListener('change', function () { state.adults = +adultsI.value; capWizPax(); syncTripDates(); save(); });
+    if (kidsI) kidsI.addEventListener('change', function () { state.kids = +kidsI.value; capWizPax(); syncTripDates(); save(); });
     // fishing style + target fish live in step 3, outside the step-4 form
     var styleG = $('[data-style]', wz), fishG = $('[data-fish]', wz);
     if (styleG) {
@@ -602,6 +630,7 @@
         if (!cat && b.max_pax < totalPax()) return false;
         return true;
       }).sort(function (a, b) { return a.length - b.length || (a.half || 0) - (b.half || 0); });
+      if (state.boat && !cat && !list.some(function (b) { return b.slug === state.boat; })) state.boat = '';
       if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + totalPax() + ' guests in ' + state.base + '. With a group this size two boats is usually the better day anyway: more room to work and more lines in the water. Email us and we will pair the right two.</div>'; }
       list.forEach(function (b) {
         box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · ' + (b.max_pax ? 'priced up to ' + b.priced_for + ' guests (max ' + b.max_pax + ')' : 'group sails') + (b.washroom ? ' · washroom' : '') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
@@ -726,6 +755,8 @@
       var stored = tripLoad(), items = (stored.items || []).slice();
       var now = currentItem(); if (now) items.push(now);
       if (!items.length) { toast('Pick a boat or an adventure first'); return go(2); }
+      var tight = smallestBoat(items);
+      if (tight && totalPax() > tight.max_pax) { toast(tooManyMsg(tight) + ' Lower the guests or pick a bigger boat.'); return go(1); }
       var dates = (state.arrive && state.depart) ? fmtDate(state.arrive) + ' \u2013 ' + fmtDate(state.depart) : '';
       var single = items.length === 1 ? items[0] : null;
 
@@ -854,8 +885,14 @@
       return out;
     }
 
+    function capTripPax(say) {
+      var b = smallestBoat(T.items);
+      if (limitPax(tAdults, tKids, b ? b.max_pax : 0)) { T.adults = +tAdults.value; T.kids = +tKids.value; if (say && b) toast(tooManyMsg(b)); }
+    }
+    if (tAdults && tKids) [tAdults, tKids].forEach(function (s) { s.addEventListener('change', function () { capTripPax(true); stash(); }); });
     function render() {
       T.arrive = arriveI.value; T.depart = departI.value;
+      capTripPax(false);
       var days = stayDays();
       if (!T.items.length) {
         itemsBox.innerHTML = '<div class="trip-empty"><b>Nothing in your trip yet.</b>Browse the boats and the tours, and hit <em>Add to my trip</em> on anything you like. It all lands here.</div>';
@@ -908,6 +945,8 @@
       var f = form.elements, g = { adults: +tAdults.value || 0, kids: +tKids.value || 0 };
       g.total = g.adults + g.kids;
       if (!g.total) return toast('Add at least one guest');
+      var tight = smallestBoat(T.items);
+      if (tight && g.total > tight.max_pax) return toast(tooManyMsg(tight) + ' Remove it or lower the guests.');
       var dayLabel = {}; stayDays().forEach(function (d) { dayLabel[d.iso] = d.label; });
       var payloadItems = T.items.map(function (i) {
         return { name: i.name, kind: i.kind, detail: [i.detail, i.base].filter(Boolean).join(' · '), rate: i.rate || 'quote on request', when: i.when ? dayLabel[i.when] || i.when : 'Any day',
