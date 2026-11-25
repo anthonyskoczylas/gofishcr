@@ -7,7 +7,8 @@ import json, os, re, html, datetime
 ROOT = os.path.dirname(os.path.abspath(__file__))
 BUILD = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 D = lambda n: json.load(open(os.path.join(ROOT, 'data', n)))
-FLEET, ADV, DINING, BLOG = D('fleet.json'), D('adventures.json'), D('dining.json'), D('blog.json')
+FLEET_ALL, ADV, DINING, BLOG = D('fleet.json'), D('adventures.json'), D('dining.json'), D('blog.json')
+FLEET = [b for b in FLEET_ALL if not b.get('archived')]   # archived boats: kept in fleet.json, hidden from the site
 IMG = set(os.listdir(os.path.join(ROOT, 'img')))
 MISSING = set()
 def img(name):
@@ -247,9 +248,9 @@ def home():
 <div class="tint"></div><div class="vign"></div><div class="grain"></div></div>
 <div class="wrap"><div class="eyebrow">Tamarindo &amp; Flamingo · Guanacaste, Costa Rica</div>
 <h1>The right boat.<br>The right crew.<br><em>The right day.</em></h1>
-<p class="lead">Costa Rica's number one sport fishing operation. Eighteen vetted boats, captains we know by name, and every adventure on the Gold Coast, planned by two people who actually live here.</p>
+<p class="lead">Costa Rica's number one sport fishing operation. Seventeen vetted boats, captains we know by name, and every adventure on the Gold Coast, planned by two people who actually live here.</p>
 <div class="hero-actions"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div>
-<div class="hero-stats"><div><b>5★</b><span>TripAdvisor, 2018–2025</span></div><div><b>1,000+</b><span>anglers a year</span></div><div><b>18</b><span>boats, 21' to 65'</span></div><div><b>IGFA</b><span>record waters</span></div></div>
+<div class="hero-stats"><div><b>5★</b><span>TripAdvisor, 2018–2025</span></div><div><b>1,000+</b><span>anglers a year</span></div><div><b>17</b><span>boats, 21' to 65'</span></div><div><b>IGFA</b><span>record waters</span></div></div>
 </div><div class="scroll-hint">Scroll</div></header>
 
 <div class="wrap qb"><form id="qb">
@@ -265,7 +266,7 @@ def home():
 <div class="t rv"><i>↺</i><div><b>Billfish released</b><span>Catch and release on all marlin and sailfish, creel limits on table fish</span></div></div>
 </div></div></section>
 
-<section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">The fleet</div><h2>Eighteen boats. <em>One honest recommendation.</em></h2></div><a class="btn btn-ghost" href="{r}charters/">All boats &amp; rates</a></div>
+<section><div class="wrap"><div class="sec-head row rv"><div><div class="kicker">The fleet</div><h2>Seventeen boats. <em>One honest recommendation.</em></h2></div><a class="btn btn-ghost" href="{r}charters/">All boats &amp; rates</a></div>
 <div class="grid g3">{''.join(boat_card(b, r) for b in featured)}</div></div></section>
 
 <section class="dark"><div class="wrap"><div class="sec-head rv"><div class="kicker">How it works</div><h2>Booking a charter should feel like <em>calling a friend who lives here.</em></h2></div>
@@ -296,7 +297,7 @@ def home():
 
 <section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><div class="kicker">Ready when you are</div><h2>Let's plan the fishing trip of a lifetime.</h2><p>Tell us your dates and we'll put together a charter built around what you want to catch.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Start planning</a><a class="btn btn-ghost" href="mailto:{EMAIL}">Email Steve &amp; Liisa</a></div></div></section>
 '''
-    write('index.html', page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Costa Rica's #1 sport fishing operation. 18 vetted boats in Tamarindo and Flamingo, plus ATV, zipline, catamaran and volcano adventures. Booked by Steve & Liisa, who live here.", body, extra_head=fleet_js()))
+    write('index.html', page(r, 'Go Fish Costa Rica — Fishing Charters & Adventures in Tamarindo & Flamingo', "Costa Rica's #1 sport fishing operation. 17 vetted boats in Tamarindo and Flamingo, plus ATV, zipline, catamaran and volcano adventures. Booked by Steve & Liisa, who live here.", body, extra_head=fleet_js()))
 
 # ---------------------------------------------------------------- CHARTERS
 def charters():
@@ -316,7 +317,7 @@ def charters():
 <div id="fleet-empty" class="empty" style="display:none;margin-top:20px">No single boat fits every filter. Loosen one, or <a href="mailto:{EMAIL}">email us</a>. With ten or more anglers two boats running together is usually the better day.</div>
 <div class="incl" style="margin-top:50px"><div><h4>Included on every charter</h4><ul>{''.join(f'<li>{x}</li>' for x in INCLUDED)}</ul></div><div class="no"><h4>Not included</h4><ul>{''.join(f'<li>{x}</li>' for x in NOT_INCL)}</ul><p class="small muted" style="margin-top:12px">Boats stay inshore on half days. To target billfish, book a 3/4 or full day offshore.</p></div></div>
 </div></section>'''
-    write('charters/index.html', page(r, 'Fishing Charters — Tamarindo & Flamingo | Go Fish Costa Rica', 'Compare 18 fishing boats in Tamarindo and Flamingo with real rates: half, 3/4 and full day. Center consoles, Bertrams, Rivieras, Cabos and private catamarans.', body, extra_head=fleet_js()))
+    write('charters/index.html', page(r, 'Fishing Charters — Tamarindo & Flamingo | Go Fish Costa Rica', 'Compare 17 fishing boats in Tamarindo and Flamingo with real rates: half, 3/4 and full day. Center consoles, Bertrams, Rivieras, Cabos and private catamarans.', body, extra_head=fleet_js()))
     for b in FLEET: boat_page(b)
 
 def gallery_html(root, images, group, alt):
@@ -619,7 +620,7 @@ def blog():
 <section><div class="wrap-n prose">{content}
 <hr style="border:0;border-top:1px solid var(--line);margin:40px 0">
 <p class="small muted">Next up: <a href="{r}blog/{nxt['slug']}.html">{E(nxt['title'])}</a> · <a href="{r}blog/">All posts</a></p></div></section>
-<section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><h2>Ready to fish Guanacaste?</h2><p>Eighteen boats, two locations, one honest recommendation.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></section>'''
+<section class="cta"><img class="bg" src="{r}img/{img('marlin.jpg')}" alt=""><div class="wrap"><h2>Ready to fish Guanacaste?</h2><p>Seventeen boats, two locations, one honest recommendation.</p><div class="row"><a class="btn btn-sand" href="{r}book.html">Plan my trip</a><a class="btn btn-ghost" href="{r}charters/">See the fleet</a></div></div></section>'''
         write(f"blog/{p['slug']}.html", page(r, f"{p['title']} | Go Fish Costa Rica", (p['desc'] or (p['paras'][0] if p['paras'] else p['title']))[:155], body))
 
 # ---------------------------------------------------------------- TRIP PLANNER
@@ -630,7 +631,7 @@ def planner():
 <div class="prog"><span class="on">1 · Trip</span><span>2 · When</span><span>3 · Pick</span><span>4 · Send</span></div>
 <div class="pane on"><h2>What kind of day are you after?</h2><p class="lead">Pick one. You can add more days once we are talking.</p>
 <div class="opts">
-<label class="opt"><input type="radio" name="type" value="fishing"><span class="ic">◐</span><b>Fishing charter</b><small>Half, 3/4 or full day on one of 15 sport fishing boats. Inshore roosters to offshore marlin.</small></label>
+<label class="opt"><input type="radio" name="type" value="fishing"><span class="ic">◐</span><b>Fishing charter</b><small>Half, 3/4 or full day on one of 14 sport fishing boats. Inshore roosters to offshore marlin.</small></label>
 <label class="opt"><input type="radio" name="type" value="catamaran"><span class="ic">◭</span><b>Private catamaran</b><small>Your own 40', 42' or 65' cat for a morning or sunset sail. Snorkel gear, bar, lunch.</small></label>
 <label class="opt"><input type="radio" name="type" value="adventure"><span class="ic">▲</span><b>Adventures</b><small>ATV, zipline, volcano, Rio Celeste, estuary, surf lesson, spa and more.</small></label></div>
 <h2 style="font-size:24px;margin-top:30px">Which location is closer to you?</h2><p class="lead">Boats launch from the beach at both. Tours pick up from either.</p>
@@ -720,7 +721,7 @@ def extras():
     write('version.json', json.dumps({'build': BUILD}) + '\n')
     # Old-site addresses that have no matching page in the new build -> instant redirect
     for src, dst in [('reservation.html', 'book.html'), ('discover/blog.html', 'blog/'), ('locations/tamarindo.html', 'discover/guanacaste-fishing.html'),
-                     ('locations/flamingo.html', 'discover/guanacaste-fishing.html'), ('locations/index.html', 'discover/guanacaste-fishing.html'), ('sitemap.html', 'index.html')]:
+                     ('locations/flamingo.html', 'discover/guanacaste-fishing.html'), ('locations/index.html', 'discover/guanacaste-fishing.html'), ('sitemap.html', 'index.html')] + [(f'charters/{b["slug"]}.html', 'charters/') for b in FLEET_ALL if b.get('archived')]:
         write(src, f'<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/{dst}"><link rel="canonical" href="https://gofishcr.com/{dst}"><meta name="robots" content="noindex,follow"><title>Redirecting</title></head><body><a href="/{dst}">Continue</a></body></html>')
 
 if __name__ == '__main__':

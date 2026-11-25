@@ -230,7 +230,8 @@
     "quote": false,
     "images": [
       "31-custom-bertram.jpg"
-    ]
+    ],
+    "archived": true
   },
   {
     "slug": "31-gamefisher",

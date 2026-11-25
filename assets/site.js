@@ -522,7 +522,14 @@
     return { arrive: '', depart: '', adults: 2, kids: 0, items: [], name: '', email: '', phone: '', stay: '', stay_geo: '', stay_map: '', transport: '', notes: '' };
   }
   function tripLoad() {
-    try { var t = JSON.parse(localStorage.getItem(TRIP_KEY) || 'null'); if (t && t.items) return t; } catch (e) { }
+    try {
+      var t = JSON.parse(localStorage.getItem(TRIP_KEY) || 'null');
+      if (t && t.items) {
+        // drop boats that have since been taken off the site (archived in fleet.json)
+        if (window.FLEET) t.items = t.items.filter(function (i) { return i.kind !== 'boat' || window.FLEET[i.slug]; });
+        return t;
+      }
+    } catch (e) { }
     return tripBlank();
   }
   function tripSave(t) { try { localStorage.setItem(TRIP_KEY, JSON.stringify(t)); } catch (e) { } paintTripCount(); }
