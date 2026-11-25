@@ -49,7 +49,7 @@ ADV_SHORT = {'mega-combo-adventure-tour':'Mega Combo Tour','volcano-hike-mud-bat
 def adv_short(a): return ADV_SHORT.get(a['slug'], a['name'])
 
 def fleet_js():
-    d = {b['slug']: dict(slug=b['slug'], name=b['name'], locations=b['locations'], top=b['top'], top_label=b.get('top_label',''), washroom=b['washroom'], priced_for=b['priced_for'], max_pax=b['max_pax'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], quote=b['quote'], length=boat_len(b), images=b['images'][:1]) for b in FLEET}
+    d = {b['slug']: dict(slug=b['slug'], name=b['name'], locations=b['locations'], top=b['top'], top_label=b.get('top_label',''), washroom=b['washroom'], priced_for=b['priced_for'], max_pax=b['max_pax'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], quote=b['quote'], length=boat_len(b), images=b['images'][:1], half_locations=b.get('half_locations') or b['locations']) for b in FLEET}
     a = {x['slug']: dict(name=adv_short(x), image=x['images'][0], tag=ADV_TAG[x['slug']], from_=adv_from(x)) for x in ADV}
     for v in a.values(): v['from'] = v.pop('from_')
     return '<script>window.FLEET=%s;window.ADV=%s;</script>' % (json.dumps(d), json.dumps(a))
@@ -333,12 +333,15 @@ def gallery_html(root, images, group, alt):
 def boat_page(b):
     r = '../'
     base = ' / '.join(b['locations'])
+    hl = b.get('half_locations')
+    # some boats only run half days from one location (e.g. Chris Craft: half days Flamingo only, 3/4 + full from both)
+    loc_note = f"Half days leave from {' or '.join(hl)}. 3/4 and full days leave from {' or '.join(b['locations'])}." if hl and set(hl) != set(b['locations']) else ''
     rates = '' if b['quote'] else f'''<h2 style="font-size:26px;margin-top:34px">Rates for this boat</h2>
 <table class="rates-t"><tr><th>Charter</th><th>Hours</th><th>Rate per boat</th></tr>
-<tr><td>Half day</td><td>5 hours · inshore</td><td><b>${b['half']:,}</b></td></tr>
+<tr><td>Half day</td><td>5 hours · inshore{(' · from ' + ' or '.join(hl)) if loc_note else ''}</td><td><b>${b['half']:,}</b></td></tr>
 <tr><td>3/4 day</td><td>7 hours · inshore or offshore</td><td><b>${b['three_quarter']:,}</b></td></tr>
 <tr><td>Full day</td><td>9 hours · inshore or offshore</td><td><b>${b['full']:,}</b></td></tr></table>
-<p class="small muted">Rates are per boat, excluding taxes, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Beyond {b['priced_for']}, add $50 per adult and $30 per child on a half day, $100 per adult and $50 per child on 3/4 and full days. Prices subject to change. To target billfish, book the 7 or 9 hour trip.</p>'''
+<p class="small muted">Rates are per boat, excluding taxes, priced for up to {b['priced_for']} guests, maximum {b['max_pax']} on board. Beyond {b['priced_for']}, add $50 per adult and $30 per child on a half day, $100 per adult and $50 per child on 3/4 and full days. Prices subject to change. To target billfish, book the 7 or 9 hour trip.{(' ' + loc_note) if loc_note else ''}</p>'''
     seg = '' if b['quote'] else f'''<div class="seg"><label class="on"><input type="radio" name="dur" value="half" checked>5 hrs<small>${b['half']:,}</small></label><label><input type="radio" name="dur" value="tq">7 hrs<small>${b['three_quarter']:,}</small></label><label><input type="radio" name="dur" value="full">9 hrs<small>${b['full']:,}</small></label></div>'''
     pax_opts = ''.join(f'<option value="{i}"{" selected" if i==min(4,b["max_pax"] or 4) else ""}>{i}</option>' for i in range(1, (b['max_pax'] or 20) + 1))
     intro = {
@@ -360,7 +363,7 @@ def boat_page(b):
 <aside><form class="book" id="boat-book">
 <div class="from" id="boat-from"><b>{('$%s' % f"{b['half']:,}") if b['half'] else 'Quote'}</b><span>{'5 hours · per boat' if b['half'] else 'private sail'}</span></div>
 <div class="sub">Tell us your dates and we will come straight back with availability and a quote.</div>
-{seg}
+{seg}{f'<p class="small muted" style="margin:10px 0 16px">{loc_note}</p>' if loc_note else ''}
 <div class="row3"><div class="fld"><label for="bk-date">Date</label><input id="bk-date" type="date" name="date" required></div>{pax_fields('bk', b['max_pax'])}</div>
 {style_field('bk') if not b['quote'] else ''}
 {fish_field('bk') if not b['quote'] else ''}
@@ -378,7 +381,7 @@ def boat_page(b):
 </div></section>
 <section class="tight" style="padding-top:0"><div class="wrap"><div class="sec-head row"><div><div class="kicker">More boats in {base.split(' / ')[0]}</div><h2 style="font-size:30px">Compare with these</h2></div><a class="btn btn-ghost btn-sm" href="{r}charters/">All boats</a></div>
 <div class="grid g3">{''.join(boat_card(x, r) for x in sorted(sorted([x for x in FLEET if x['slug']!=b['slug'] and set(x['locations'])&set(b['locations']) and x['quote']==b['quote']], key=lambda x: abs((x['half'] or 0)-(b['half'] or 0)))[:3], key=boat_len))}</div></div></section>'''
-    boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(slug=b['slug'], image=img(b['images'][0]), name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], priced_for=b['priced_for'], max_pax=b['max_pax'], quote=b['quote']))
+    boatjs = '<script>window.BOAT=%s;</script>' % json.dumps(dict(slug=b['slug'], image=img(b['images'][0]), name=b['name'], locations=b['locations'], half=b['half'], three_quarter=b['three_quarter'], full=b['full'], priced_for=b['priced_for'], max_pax=b['max_pax'], quote=b['quote'], half_locations=b.get('half_locations') or b['locations']))
     bar = f'<div class="bookbar"><div><b>{("$%s" % f"{b["half"]:,}") if b["half"] else "Quote"}</b><small>{"half day · per boat" if b["half"] else "private sail"}</small></div><a class="btn btn-primary btn-sm" href="#boat-book">Request this boat</a></div>'
     ld = {"@context": "https://schema.org", "@graph": [
       {"@type": "Product", "name": f"{b['name']} fishing charter", "image": [SITE_URL + 'img/' + i for i in b['images'][:3]],

@@ -633,3 +633,4 @@ nav.top.over-photo .nav-trip{border-color:rgba(255,255,255,.4);color:#fff}
 .prose p,.prose li,blockquote p{overflow-wrap:anywhere}
 
 @media(max-width:400px){.page-hero h1{font-size:clamp(28px,8.6vw,44px)}}
+.seg label.off{opacity:.38;cursor:not-allowed}

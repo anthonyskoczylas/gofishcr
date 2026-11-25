@@ -148,7 +148,8 @@
     "slug": "31-bertram-twin",
     "name": "31' Bertram Classic",
     "locations": [
-      "Flamingo"
+      "Flamingo",
+      "Tamarindo"
     ],
     "top": false,
     "top_label": "",
@@ -172,6 +173,9 @@
       "3985e860-e418-40ae-ae88-2a42792e8ee4.jpg",
       "05173f55-f209-4018-bdf2-54d0885ae882.jpg",
       "df979b0b-8d77-4c76-ae8a-0e272cbc0ab8.jpg"
+    ],
+    "half_locations": [
+      "Flamingo"
     ]
   },
   {
@@ -205,6 +209,9 @@
       "418a3081.jpg",
       "418a3090.jpg",
       "418a3094.jpg"
+    ],
+    "half_locations": [
+      "Flamingo"
     ]
   },
   {

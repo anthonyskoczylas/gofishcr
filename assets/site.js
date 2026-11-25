@@ -194,6 +194,9 @@
   }
   // the smallest boat in a list of trip items decides how many people can come (catamarans have no max)
   function boatMax(slug) { var b = window.FLEET && window.FLEET[slug]; return b && !b.quote && b.max_pax ? b : null; }
+  // some boats run half days from one location only (Chris Craft, Bertram Classic: half days Flamingo, 3/4 + full from both)
+  function halfOk(b, base) { return !base || !b || !b.half_locations || b.half_locations.indexOf(base) >= 0; }
+  function baseFor(b, d) { return (d === 'half' && b.half_locations ? b.half_locations : b.locations).join(' / '); }
   function smallestBoat(items) {
     var low = null;
     (items || []).forEach(function (i) { var b = i.kind === 'boat' && boatMax(i.slug); if (b && (!low || b.max_pax < low.max_pax)) low = b; });
@@ -343,7 +346,7 @@
         if (base && b.locations.indexOf(base) < 0) ok = false;
         if (pax && b.max_pax && b.max_pax < pax) ok = false;
         if (pax && !b.max_pax && pax > 20) ok = false;
-        if (budget && b.half && b.half > budget) ok = false;
+        if (budget && b.half && (halfOk(b, base) ? b.half : b.three_quarter) > budget) ok = false;
         if (wash === 'yes' && !b.washroom) ok = false;
         c.style.display = ok ? '' : 'none'; if (ok) { shown++; list.push(c); }
       });
@@ -399,7 +402,7 @@
       var style = (f.style && f.style.value) || '', fish = checkedValues(bp, 'fish');
       var xtra = price[d] ? extraGuests(B, d, g) : null;
       var req = buildRequest([
-        'Request: ' + B.name + ' (' + B.locations.join(' / ') + ')',
+        'Request: ' + B.name + ' (' + baseFor(B, d) + ')',
         'Charter length: ' + durLabel[d] + (price[d] ? ' — ' + money(price[d]) + ' per boat' : ' — custom quote'),
         xtra ? 'Extra guests: ' + extraText(xtra) + ' (the rate covers ' + B.priced_for + ')' : '',
         style ? 'Fishing style: ' + style : '',
@@ -412,7 +415,7 @@
       ].concat(stayLines(f), [
         'Transportation: ' + (f.transport.value || 'not needed'),
         f.notes.value ? 'Notes: ' + f.notes.value : ''
-      ]), Object.assign({ kind: 'boat', trip: B.name, image: imgUrl(B.image), url: absUrl(location.pathname), base: B.locations.join(' / '), length: durLabel[d], rate: price[d] ? money(price[d] + (xtra ? xtra.amount : 0)) + ' per boat' + (xtra ? ' (includes ' + extraText(xtra) + ')' : '') : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
+      ]), Object.assign({ kind: 'boat', trip: B.name, image: imgUrl(B.image), url: absUrl(location.pathname), base: baseFor(B, d), length: durLabel[d], rate: price[d] ? money(price[d] + (xtra ? xtra.amount : 0)) + ' per boat' + (xtra ? ' (includes ' + extraText(xtra) + ')' : '') : 'custom quote', style: style, fish: fish.join(', '), dateText: fmtDate(f.date.value), pax: g.total, adults: g.adults, kids: g.kids, name: f.name.value, email: f.email.value, phone: f.phone.value, transport: f.transport.value, notes: f.notes.value }, stayPayload(f)));
       showSent(bp, req, 'Your request for the ' + B.name + ' is ready to send.');
     });
   }
@@ -646,12 +649,26 @@
       if (state.boat && !cat && !list.some(function (b) { return b.slug === state.boat; })) state.boat = '';
       if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">No single boat takes ' + totalPax() + ' guests in ' + state.base + '. With a group this size two boats is usually the better day anyway: more room to work and more lines in the water. Email us and we will pair the right two.</div>'; }
       list.forEach(function (b) {
-        box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · ' + (b.max_pax ? 'priced up to ' + b.priced_for + ' guests (max ' + b.max_pax + ')' : 'group sails') + '</span>' + (b.half ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">Quote <small>on request</small></div>') + '</div></label>');
+        box.insertAdjacentHTML('beforeend', '<label class="pick' + (state.boat === b.slug ? ' on' : '') + '"><input type="radio" name="boat" value="' + b.slug + '">' + (b.top ? '<span class="tb">' + b.top_label + '</span>' : '') + '<img src="' + ROOT + 'img/' + b.images[0] + '" alt=""><div class="b"><b>' + b.name + '</b><span class="muted small">' + b.locations.join(' · ') + ' · ' + (b.max_pax ? 'priced up to ' + b.priced_for + ' guests (max ' + b.max_pax + ')' : 'group sails') + '</span>' + (!b.half ? '<div class="p">Quote <small>on request</small></div>' : halfOk(b, state.base) ? '<div class="p">' + money(b.half) + ' <small>half day · per boat</small></div>' : '<div class="p">' + money(b.three_quarter) + ' <small>3/4 day · per boat</small></div><span class="muted small">3/4 and full days from ' + state.base + '</span>') + '</div></label>');
       });
-      $$('input[name=boat]', box).forEach(function (i) { i.addEventListener('change', function () { state.boat = i.value; state.adv = ''; $$('.pick', box).forEach(function (p) { p.classList.toggle('on', $('input', p).checked); }); }); });
+      $$('input[name=boat]', box).forEach(function (i) { i.addEventListener('change', function () { state.boat = i.value; state.adv = ''; $$('.pick', box).forEach(function (p) { p.classList.toggle('on', $('input', p).checked); }); lockHalf(); }); });
       $('#dur-row').style.display = cat ? 'none' : ''; setFishRow(!cat);
       $$('input[name=dur]', wz).forEach(function (i) { i.checked = i.value === state.dur; i.addEventListener('change', function () { state.dur = i.value; $$('#dur-row .seg label').forEach(function (l) { l.classList.toggle('on', $('input', l).checked); }); autoStyle(wz, state.dur); state.style = (($('[data-style] input:checked', wz)) || {}).value || ''; save(); }); });
       $$('#dur-row .seg label').forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });
+      lockHalf();
+    }
+    // no half day for this boat from this location -> grey out 5 hrs and move to 3/4
+    function lockHalf() {
+      var b = window.FLEET[state.boat], no = !!b && !b.quote && !halfOk(b, state.base);
+      var hi = $('#dur-row input[name=dur][value=half]'); if (!hi) return;
+      hi.disabled = no; hi.parentNode.classList.toggle('off', no);
+      hi.parentNode.title = no ? 'Half days on the ' + b.name + ' leave from ' + b.half_locations.join(' or ') : '';
+      if (no && state.dur === 'half') {
+        state.dur = 'tq';
+        $$('input[name=dur]', wz).forEach(function (i) { i.checked = i.value === 'tq'; });
+        $$('#dur-row .seg label').forEach(function (l) { l.classList.toggle('on', $('input', l).checked); });
+        autoStyle(wz, state.dur); state.style = (($('[data-style] input:checked', wz)) || {}).value || ''; save();
+      }
     }
     function chosen() {
       if (state.type === 'adventure') { var a = window.ADV[state.adv]; return a ? { name: a.name, price: a.from ? a.from + ' per person' : 'rates on request', est: '' } : null; }
@@ -821,7 +838,7 @@
       var style = (f.style && f.style.value) || '', fish = checkedValues(bp, 'fish');
       var bits = [durLabel[d]]; if (style) bits.push(style); if (fish.length) bits.push(fish.join(', '));
       tripAdd({
-        kind: 'boat', slug: B.slug, name: B.name, image: B.image, base: B.locations.join(' / '),
+        kind: 'boat', slug: B.slug, name: B.name, image: B.image, base: baseFor(B, d),
         detail: bits.join(' · '), rate: price[d] ? money(price[d]) + ' per boat, excluding taxes' : 'custom quote',
         price: price[d] || 0, when: ''
       });
