@@ -498,7 +498,8 @@
           + '<p>Everything is quoted and invoiced in US dollars. Once you confirm, we send the invoice and hold ' + hold + ' while it is paid: 24 hours, or 12 hours if ' + what + ' is less than a week away.</p>'
           + '<p><b>More than a week away.</b> Pay in full, or 50&#37; now with the rest invoiced a week before, or 50&#37; now with the balance in cash on the morning of ' + what + ', which saves you a bit.</p>'
           + '<p><b>Less than a week away.</b> Pay in full, or 50&#37; now with the balance in cash on the morning of ' + what + '.</p>'
-          + '<p class="pb-n">Paying a balance in cash? Please bring the exact amount, as there is no change on the beach.</p></div>';
+          + '<p class="pb-n">Paying a balance in cash? Please bring the exact amount, as there is no change on the beach.</p>'
+          + '<p class="pb-n" style="border-top:0;padding-top:0">Plans change? Read our <a href="' + ROOT + 'discover/cancellation-policy.html" target="_blank" rel="noopener">cancellation policy</a>.</p></div>';
       }()));
     form.style.display = 'none'; wrap.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'center' });
